@@ -1,1 +1,65 @@
-<p>login works!</p>
+<!-- Main heading for the form section -->
+<div class="ex-container" style="font-family: 'Montserrat', sans-serif; background-image: url(https://i.pinimg.com/originals/6f/7c/63/6f7c63991726d61d63730682e791d78c.gif); display: flex; width: 100%;height: 100%; justify-content: center;align-items: center;">
+    <!-- Main container holding the form sections -->
+    <div class="container" id="container">
+        <!-- Sign-up form container -->
+        <div class="form-container sign-up-container">
+            <!-- Form to handle sign-up submission -->
+            <form (ngSubmit)="onSignUp()">
+                <h1>Tạo Tài Khoản</h1>
+                <!-- Social media login buttons -->
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc dùng email để đăng ký</span>
+                <!-- Input fields for sign-up data -->
+                <input type="text" placeholder="Name" [(ngModel)]="name" name="name" required />
+                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+                <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
+                <!-- Sign-up button -->
+                <button class="bg-primary-gradient" type="submit">Đăng Kí</button>
+            </form>
+        </div>
+        <!-- Sign-in form container -->
+        <div class="form-container sign-in-container">
+            <!-- Form to handle sign-in submission -->
+            <form (ngSubmit)="onSignIn()">
+                <h1>Đăng Nhập</h1>
+                <!-- Social media login buttons -->
+                <div class="font-montserrat social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>hoặc dùng tài khoản có sẵn</span>
+                <!-- Input fields for sign-in data -->
+                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+                <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
+                <!-- Forgot password link -->
+                <span (click)="navigateToForgotPasswordPage()">Quên Mật Khẩu?</span>
+                <!-- Sign-in button -->
+                <button class="bg-primary-gradient" type="submit">Đăng Nhập</button>
+            </form>
+        </div>
+        <!-- Overlay container for the animation and messages -->
+        <div class="overlay-container">
+            <div class="overlay bg-primary-gradient">
+                <div class="bg-primary-gradient overlay-panel overlay-left">
+                    <h1>Mừng Bạn Trở Lại!</h1>
+                    <p>Hãy Nhập Các Thông Tin Cần Thiết Để Được Xem Nhiều Hơn Nhé !</p>
+                    <!-- Button to switch to sign-in form -->
+                    <button class="ghost" id="signIn" (click)="togglePanel()">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Xin Chào Người Lạ Kia Ơi!</h1>
+                    <p>Hãy Cùng Chúng Tôi Khám Phá Vô Tận Phim Nào !!</p>
+                    <!-- Button to switch to sign-up form -->
+                    <button class="ghost" id="signUp" (click)="togglePanel()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
