@@ -4,7 +4,7 @@
         <!-- Sign-up form container -->
         <div class="form-container sign-up-container">
             <!-- Form to handle sign-up submission -->
-            <form name="myForm" (ngSubmit)="onSignUp()">
+            <form (ngSubmit)="onSignUp()">
                 <h1>Tạo Tài Khoản</h1>
                 <!-- Social media login buttons -->
                 <div class="social-container">
@@ -15,7 +15,7 @@
                 <span>hoặc dùng email để đăng ký</span>
                 <!-- Input fields for sign-up data -->
                 <input type="text"      placeholder="Name"      [(ngModel)]="name"      name="name"     required />
-                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required />
+                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required  [email]="true"/>
                 <input type="password"  placeholder="Password"  [(ngModel)]="password"  name="password" required />
                 <!-- Sign-up button -->
                 <button class="bg-primary-gradient" type="submit">Đăng Kí</button>
@@ -34,7 +34,7 @@
                 </div>
                 <span>hoặc dùng tài khoản có sẵn</span>
                 <!-- Input fields for sign-in data -->
-                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required  />
+                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required [email]="true"/>
                 <input type="password"  placeholder="Password"  [(ngModel)]="password"  name="password" required />
                 <!-- Forgot password link -->
                 <span class="forgot-password" (click)="navigateToForgotPasswordPage()">Quên Mật Khẩu?</span>
