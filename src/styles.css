@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+<<<<<<< HEAD
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+=======
+/* styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+>>>>>>> df0743b63cb5c0a47c6858fb1c2145ab2fea2122
