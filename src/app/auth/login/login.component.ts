@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormsModule} from '@angular/forms';
+import { Component, Renderer2 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -16,6 +15,35 @@ export class LoginComponent {
   showPass: string = "password";
   show: boolean = false;
 
+  constructor(private renderer: Renderer2) {
+    this.addScriptToHead();
+  }
+  addScriptToHead(): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const script = this.renderer.createElement('script');
+
+    script.type = "module";
+    script.text = `
+      import { neonCursor } from 'https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js';
+      
+      neonCursor({
+        el: document.getElementById('app'),
+        shaderPoints: 16,
+        curvePoints: 80,
+        curveLerp: 0.5,
+        radius1: 5,
+        radius2: 30,
+        velocityTreshold: 10,
+        sleepRadiusX: 100,
+        sleepRadiusY: 100,
+        sleepTimeCoefX: 0.0025,
+        sleepTimeCoefY: 0.0025
+      });
+    `;
+    this.renderer.appendChild(document.head, script);
+  }
 
   validatePassword() {
     if (this.password.trim() === '') {
@@ -31,11 +59,11 @@ export class LoginComponent {
       this.error += " Mật khẩu chứa kí tự đặc biệt.";
     }
   }
-  validateEmail(){
+  validateEmail() {
     if (this.email.trim() === '') {
       this.error += " Email không được để trống.";
     }
-    if( !/@./.test(this.email)){
+    if (!/@./.test(this.email)) {
       this.error += " Định dạng không giống email.";
     }
   }
@@ -54,11 +82,11 @@ export class LoginComponent {
     alert(this.error);
     // Handle sign-in logic here
   }
-  showPassword():void{
-    if(this.showPass ==="password"){
+  showPassword(): void {
+    if (this.showPass === "password") {
       this.showPass = "text";
       this.show = true;
-    }else{
+    } else {
       this.showPass = "password";
       this.show = false;
     }
