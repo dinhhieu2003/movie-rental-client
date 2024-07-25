@@ -14,10 +14,15 @@
                 </div>
                 <span>hoặc dùng email để đăng ký</span>
                 <!-- Input fields for sign-up data -->
-                <input type="text"      placeholder="Name"      [(ngModel)]="name"      name="name"     required />
-                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required  [email]="true"/>
-                <input type="password"  placeholder="Password"  [(ngModel)]="password"  name="password" required />
-                <!-- Sign-up button -->
+                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
+                <div style="padding-bottom: 20px;">
+                    <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password"
+                        required />
+                    <button  type="button" (click)="showPassword()">
+                        <i *ngIf="show" class="fa fa-eye-slash" aria-hidden="true"></i>
+                        <i *ngIf="!show" class="fa fa-eye" aria-hidden="true"></i>
+                    </button> <!-- Sign-up button -->
+                </div>
                 <button class="bg-primary-gradient" type="submit">Đăng Kí</button>
             </form>
         </div>
@@ -34,8 +39,14 @@
                 </div>
                 <span>hoặc dùng tài khoản có sẵn</span>
                 <!-- Input fields for sign-in data -->
-                <input type="email"     placeholder="Email"     [(ngModel)]="email"     name="email"    required [email]="true"/>
-                <input type="password"  placeholder="Password"  [(ngModel)]="password"  name="password" required />
+                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
+                <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password"
+                    required />
+                <button type="button" (click)="showPassword()">
+                    <i *ngIf="show" class="fa fa-eye-slash" aria-hidden="true"></i>
+                    <i *ngIf="!show" class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+
                 <!-- Forgot password link -->
                 <span class="forgot-password" (click)="navigateToForgotPasswordPage()">Quên Mật Khẩu?</span>
                 <!-- Sign-in button -->
