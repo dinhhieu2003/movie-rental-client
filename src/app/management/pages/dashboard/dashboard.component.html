@@ -1,1 +1,54 @@
-<p>dashboard works!</p>
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar"
+      nzCollapsible
+      nzWidth="256px"
+      nzBreakpoint="md"
+      [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null">
+      <div class="sidebar-logo">
+        <a >
+          <img src="https://dongphucvina.vn/wp-content/uploads/2022/09/Logo-DH-Su-Pham-Ky-Thuat-TP-Ho-Chi-Minh-HCMUTE-623x800.webp" alt="logo">
+          <h1>Admin Dashboard</h1>
+        </a>
+      </div>
+      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+        
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/user-management">Quản lí người dùng</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/film-management">Quản lí phim</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a>Quản lí hóa đơn</a>
+            </li>
+            <li nz-menu-item nzMatchRouter>
+              <a>Quản lí dịch vụ</a>
+            </li>
+          </ul>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <div class="app-header">
+          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+              <span class="trigger"
+                 nz-icon
+                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+              ></span>
+          </span>
+        </div>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+          <div class="text-center mt-10">
+            <h1 class="text-4xl font-bold text-blue-500">
+              Hello, Tailwind CSS with Angular!
+            </h1>
+          </div>
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
