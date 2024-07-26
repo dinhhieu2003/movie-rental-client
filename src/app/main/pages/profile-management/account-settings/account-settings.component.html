@@ -1,0 +1,75 @@
+<div class="account-page">
+    <div class="profile-header">
+      <div class="profile-info">
+        <div class="profile-avatar">
+          <div class="avatar-container">
+            <!-- Hiển thị Avatar -->
+            <img src="https://via.placeholder.com/120" alt="Avatar" class="avatar-img">
+            <!-- Nút Chỉnh Sửa Avatar -->
+            <button nz-button nzType="default" nzShape="circle" nzSize="small" class="edit-button">
+              <span nz-icon nzType="edit" nzTheme="outline" class="edit-icon"></span>
+            </button>
+          </div>
+        </div>
+        <div class="profile-details">
+          <h3>Thông tin cá nhân</h3>
+          <form>
+            <div class="form-group flex-group">
+              <div class="form-field">
+                <label for="firstName">Họ và tên lót *</label>
+                <input nz-input id="firstName" [(ngModel)]="user.firstName" name="firstName" required>
+              </div>
+              <div class="form-field">
+                <label for="lastName">Tên *</label>
+                <input nz-input id="lastName" [(ngModel)]="user.lastName" name="lastName" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="birthDate">Ngày sinh *</label>
+              <nz-date-picker id="birthDate" [(ngModel)]="user.birthDate" name="birthDate" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            </div>
+            <div class="form-group">
+              <label for="gender">Giới tính</label>
+              <nz-select id="gender" [(ngModel)]="user.gender" name="gender">
+                <nz-option nzValue="Nam" nzLabel="Nam"></nz-option>
+                <nz-option nzValue="Nữ" nzLabel="Nữ"></nz-option>
+              </nz-select>
+            </div>
+            <button nz-button nzType="primary" class="submit-button">Hoàn tất</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="login-info">
+      <h3>Tài khoản đăng nhập</h3>
+      <div class="login-details">
+        <p>Số điện thoại: <span class="info-value">{{ user.phone }}</span>
+          <a class="info-link" (click)="openChangeContactModal()">THAY ĐỔI EMAIL/SỐ ĐIỆN THOẠI</a>
+        </p>
+        <p>Email: <span class="info-value">{{ user.email }}</span>
+          <a class="info-link" (click)="openChangePasswordModal()">THAY ĐỔI MẬT KHẨU</a>
+        </p>
+      </div>
+    </div>
+  
+    <!-- Modal for changing contact info -->
+    <nz-modal [(nzVisible)]="isChangeContactModalVisible" nzTitle="Xác nhận OTP" (nzOnCancel)="handleCancel()" (nzOnOk)="handleConfirm()" [nzOkDisabled]="!contactInfo">
+      <div *nzModalContent>
+        <p>Vui lòng nhập email/số điện thoại hiện tại</p>
+        <input nz-input [(ngModel)]="contactInfo" placeholder="Email/Số điện thoại">
+      </div>
+    </nz-modal>
+  
+    <!-- Modal for changing password -->
+    <nz-modal [(nzVisible)]="isChangePasswordModalVisible" nzTitle="Đổi mật khẩu" (nzOnCancel)="handleCancel()" (nzOnOk)="handlePasswordChange()" [nzOkDisabled]="!oldPassword || !newPassword || !confirmNewPassword">
+      <div *nzModalContent>
+        <p>Nhập mật khẩu cũ</p>
+        <input nz-input [(ngModel)]="oldPassword" type="password" placeholder="Mật khẩu cũ">
+        <p>Nhập mật khẩu mới</p>
+        <input nz-input [(ngModel)]="newPassword" type="password" placeholder="Mật khẩu mới">
+        <p>Xác nhận mật khẩu mới</p>
+        <input nz-input [(ngModel)]="confirmNewPassword" type="password" placeholder="Xác nhận mật khẩu mới">
+      </div>
+    </nz-modal>
+  </div>
+  

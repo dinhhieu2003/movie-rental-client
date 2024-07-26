@@ -1,0 +1,108 @@
+.layout {
+    display: flex;
+    flex-direction: column; /* Đảm bảo layout theo cột */
+    min-height: 100vh; /* Đảm bảo chiều cao tối thiểu */
+  }
+  
+  .header {
+    width: 100%;
+    background-color: #001529; /* Màu nền của header */
+    color: white; /* Màu chữ */
+    display: flex;
+    align-items: center;
+    padding: 0 20px; /* Padding cho header */
+  }
+  .footer {
+    width: 100%;
+    background-color: #f0f2f5; /* Màu nền của footer */
+    color: #000; /* Màu chữ của footer */
+    text-align: center; /* Căn giữa nội dung */
+    padding: 16px; /* Padding cho footer */
+    border-top: 1px solid #ddd; /* Viền phía trên của footer */
+  }
+  
+  
+  .sidebar {
+    width: 250px; /* Kích thước của sidebar */
+    background-color: #081b3f; /* Màu nền của sidebar */
+    height: 100vh; /* Chiều cao của sidebar phủ toàn bộ viewport */
+    position: fixed; /* Đặt sidebar cố định */
+    top: 0;
+    left: 0;
+    z-index: 1; /* Đảm bảo sidebar nằm trên nội dung */
+  }
+  
+  .main-layout {
+    margin-left: 250px; /* Đẩy nội dung ra ngoài sidebar */
+    width: calc(100% - 250px); /* Đảm bảo nội dung chính chiếm toàn bộ không gian còn lại */
+    display: flex;
+    flex-direction: column; /* Đảm bảo layout theo cột */
+    min-height: 100vh; /* Đảm bảo chiều cao tối thiểu */
+  }
+  
+  .content {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    max-width: 800px; /* Giới hạn chiều rộng tối đa */
+    padding: 24px; /* Padding cho nội dung */
+    margin-top: 20px; /* Khoảng cách từ phần trên */
+    margin-bottom: 20px; /* Đảm bảo không có khoảng cách thừa phía dưới */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi chiều rộng */
+    background-color: #f0f2f5; /* Màu nền cho nội dung */
+    border-radius: 8px; /* Bo tròn các góc */
+    border: 1px solid #ddd; /* Viền cho nội dung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ để nổi bật */
+    margin-left: auto; /* Căn giữa theo chiều ngang */
+    margin-right: auto; /* Căn giữa theo chiều ngang */
+    flex: 1; /* Chiếm toàn bộ không gian còn lại nếu có */
+    overflow: hidden; /* Đảm bảo không có cuộn dọc hoặc ngang không mong muốn */
+  }
+  
+  /* CSS cho nz-sider */
+  .nz-sider {
+    border-top-right-radius: 15px; /* Bo tròn góc trên bên phải */
+    border-bottom-right-radius: 15px; /* Bo tròn góc dưới bên phải */
+    overflow: hidden; /* Đảm bảo nội dung không vượt quá giới hạn bo tròn */
+    background-color: #001529; /* Màu nền của sidebar */
+    color: white; /* Màu chữ */
+    height: 100vh; /* Đảm bảo sidebar chiếm toàn bộ chiều cao cửa sổ */
+    padding: 0; /* Xóa padding */
+  }
+  
+  /* CSS cho logo */
+  .logo {
+    height: 32px;
+    margin: 0; /* Xóa margin */
+    background: rgba(255, 255, 255, 0.3); /* Màu nền của logo */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* CSS cho menu */
+  ul[nz-menu] {
+    background-color: #001529; /* Màu nền của menu */
+    margin: 0; /* Xóa margin */
+    padding: 0; /* Xóa padding */
+  }
+  
+  li[nz-menu-item] {
+    color: white; /* Màu chữ của menu item */
+    padding: 8px 16px; /* Điều chỉnh padding nếu cần */
+    margin: 0; /* Xóa margin */
+  }
+  
+  .ant-menu-item-selected {
+    background-color: #1890ff !important; /* Màu nền khi được chọn */
+    color: white !important; /* Màu chữ khi được chọn */
+  }
+  
+  .ant-menu-item:hover {
+    background-color: #1890ff !important; /* Màu nền khi hover */
+    color: white !important; /* Màu chữ khi hover */
+  }
+  
+  .ant-layout {
+    background-color: white;
+  }
+  

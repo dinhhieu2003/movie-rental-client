@@ -1,0 +1,55 @@
+<nz-layout class="layout">
+    <nz-header class="header">
+      <!-- Nội dung header -->
+    </nz-header>
+    <nz-layout>
+      <nz-sider nzCollapsible [nzCollapsedWidth]="80" nzTheme="dark" class="sidebar">
+        <div class="logo" (click)="navigateHome()" style="height: 32px; margin: 16px; background: rgba(255, 255, 255, 0.3); cursor: pointer;">
+          <!-- Logo nội dung -->
+        </div>
+        <ul nz-menu nzMode="inline" nzTheme="dark">
+          <li nz-menu-item (click)="navigateToProfile()">
+            <span nz-icon nzType="user" nzTheme="outline"></span>
+            <span>Tài khoản</span>
+          </li>
+          <li nz-menu-item (click)="navigateToTransactionHistory()">
+            <span nz-icon nzType="file-text" nzTheme="outline"></span>
+            <span>Lịch sử giao dịch</span>
+          </li>
+          <li nz-menu-item (click)="navigateToCart()">
+            <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+            <span>Giỏ hàng</span>
+          </li>
+          <li nz-menu-item (click)="navigateToRentalList()">
+            <span nz-icon nzType="unordered-list" nzTheme="outline"></span>
+            <span>Danh sách thuê</span>
+          </li>
+          <li nz-menu-item (click)="navigateToMailbox()">
+            <span nz-icon nzType="mail" nzTheme="outline"></span>
+            <span>Hộp thư</span>
+          </li>
+          <li nz-menu-item (click)="navigateToLoginDevices()">
+            <span nz-icon nzType="tablet" nzTheme="outline"></span>
+            <span>Thiết bị đăng nhập</span>
+          </li>
+          <li nz-menu-item (click)="navigateToFavoriteMovies()">
+            <span nz-icon nzType="heart" nzTheme="outline"></span>
+            <span>Phim yêu thích</span>
+          </li>
+          <li nz-menu-item (click)="navigateToLogout()">
+            <span nz-icon nzType="logout" nzTheme="outline"></span>
+            <span>Đăng xuất</span>
+          </li>
+        </ul>
+      </nz-sider>
+      <nz-layout class="main-layout">
+        <nz-content class="content">
+          <router-outlet></router-outlet>
+        </nz-content>
+        <nz-footer class="footer">
+          <!-- Nội dung footer (tạm thời rỗng) -->
+        </nz-footer>
+      </nz-layout>
+    </nz-layout>
+  </nz-layout>
+  
