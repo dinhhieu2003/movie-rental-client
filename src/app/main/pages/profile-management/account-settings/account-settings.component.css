@@ -1,0 +1,136 @@
+.account-page {
+    padding: 20px;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    margin-left: 50px;
+  }
+  
+  .profile-info {
+    display: flex;
+    align-items: flex-start;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-right: 20px;
+    max-width: 800px;
+    box-sizing: border-box;
+  }
+  
+  .profile-avatar {
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  
+  .avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    box-sizing: border-box;
+  }
+  
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .edit-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 4px;
+    z-index: 10;
+    background-color: #ffffff;
+    border: 1px solid #d9d9d9;
+  }
+  
+  .edit-icon {
+    font-size: 16px;
+    color: #1890ff;
+  }
+  
+  .login-info {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 700px;
+    box-sizing: border-box;
+    margin-top: 20px;
+  }
+  
+  .login-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .login-details p {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+  }
+  
+  .info-value {
+    margin-right: 16px;
+    flex: 1;
+  }
+  
+  .info-link {
+    color: #1890ff;
+    text-decoration: none;
+  }
+  
+  .info-link:hover {
+    text-decoration: underline;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .flex-group {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .form-field {
+    flex: 1;
+  }
+  
+  .submit-button {
+    margin-top: 16px;
+    display: block;
+    width: 100%;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .form-group nz-date-picker,
+  .form-group nz-select {
+    width: 100%;
+  }
+  
+  .nz-modal-content p {
+    margin-bottom: 8px;
+  }
+  
+  .nz-modal-content input {
+    margin-bottom: 16px;
+  }
+  
+  .nz-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
