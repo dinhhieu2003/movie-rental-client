@@ -1,35 +1,49 @@
 import { CommonModule } from '@angular/common';
 import { Component, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+
   email: string = "";
   password: string = "";
   error: string = "";
   showPass: string = "password";
   show: boolean = false;
-
+  // private scriptLoadTimeout: any;
   constructor(private renderer: Renderer2) {
-    this.addScriptToHead();
+
+  }
+  ngOnInit(): void {
+    // this.scriptLoadTimeout = setTimeout(() => {
+      this.addScriptToHead();
+    // }, 2000
+
+    // );
   }
   addScriptToHead(): void {
     if (typeof document === 'undefined') {
       return;
     }
+    const existingScript = document.head.querySelector('#neon-cursor-script');
+      if (existingScript) {
+        return;
+      }
     const script = this.renderer.createElement('script');
-
     script.type = "module";
+    script.id = "neon-cursor-script";
+    script.async = true;
     script.text = `
       import { neonCursor } from 'https://unpkg.com/threejs-toys@0.0.8/build/threejs-toys.module.cdn.min.js';
       
       neonCursor({
-        el: document.getElementById('app'),
+        el: document.body.querySelector('#app'),
         shaderPoints: 16,
         curvePoints: 80,
         curveLerp: 0.5,
@@ -44,7 +58,20 @@ export class LoginComponent {
     `;
     this.renderer.appendChild(document.head, script);
   }
+  ngOnDestroy(): void {
+    // if (typeof document === 'undefined') {
+    //   return;
+    // }
+    // const existingScript = document.head.querySelector('#neon-cursor-script');
 
+    // if (existingScript) {
+    //   this.renderer.removeChild(document.head, existingScript);
+    // }
+
+    // if (this.scriptLoadTimeout) {
+    //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
+    // }
+  }
   validatePassword() {
     if (this.password.trim() === '') {
       this.error += " Mật khẩu không được để trống.";

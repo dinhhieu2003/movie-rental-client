@@ -98,6 +98,11 @@
         justify-content: center;
         align-items: center;
     }
+    .back-button{
+        position: absolute;
+        left: 5%;
+        top: 5%;
+    }
     .container {
         background-color: #000000;
         border-radius: 10px;
