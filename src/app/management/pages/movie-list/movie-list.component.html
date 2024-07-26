@@ -1,0 +1,248 @@
+<div class="container p-4">
+    <div class="card-header mb-5 border-solid border-slate-600 border p-3 rounded-xl ring-offset ring-0">
+        <div class="flex justify-between">
+            <div>
+                <nz-select [(ngModel)]="status">
+                    <nz-option nzValue="no action" nzLabel="No Action"></nz-option>
+                    <nz-option nzValue="status" nzLabel="Status"></nz-option>
+                    <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
+                </nz-select>
+
+                <button class="ml-4 bg-blue-700 text-white" nz-button nzType="primary" nzSize="default">Apply</button>
+
+            </div>
+            <div class="flex space-x-2 ml-10">
+                <button class="text-white bg-blue-700 font-semibold pl-2 pr-2 rounded" (click)="showModalAdd()">
+                    <span class="ml-0" nz-icon nzType="plus" nzTheme="outline"></span>
+                    Add Movie
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body border-solid border-slate-600 border p-3 rounded-xl ring-offset ring-0">
+        <div class="w-full flex justify-between mb-4">
+            <div class="dataTable_length text-white">
+                Show
+                <nz-select name="5" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+                    <nz-option [nzValue]="5" nzLabel="5"></nz-option>
+                    <nz-option [nzValue]="7" nzLabel="10"></nz-option>
+                    <nz-option [nzValue]="10" nzLabel="15"></nz-option>
+                </nz-select>
+                entries
+            </div>
+
+            <div class="dataTable_filter text-right text-white flex">
+                Search:
+                <input class="ml-5 input-search" nz-input placeholder="Basic usage" [(ngModel)]="valueSearch"
+                    (ngModelChange)="onSearchChange()" name="search" type="text" />
+            </div>
+        </div>
+        <div class="form-table">
+            <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize" ngSkipHydration>
+                <thead class="table-head">
+                    <tr>
+                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+                            [nzSortPriority]="column.priority" [ngClass]="{ 'w-1/5': column.title === 'Movie' }">
+                            {{ column.title }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data" class="hover-row table-row">
+                        <td>{{ data.name }}</td>
+                        <td>{{ data.quality }}</td>
+                        <td>{{ data.category }}</td>
+                        <td>{{ data.publishDate }}</td>
+                        <td>{{ data.movieAccess }}</td>
+                        <td>{{ data.status }}</td>
+                        <td class="flex justify-center items-center gap-2.5">
+                            <span class="cursor-pointer bg-green-600 w-6 h-6 text-3xl rounded" nz-icon nzType="edit"
+                                nzTheme="outline" (click)="showModalUpdate()"></span>
+                            <span class="cursor-pointer bg-red-600 w-6 h-6 text-3xl rounded" nz-icon nzType="delete"
+                                nzTheme="outline" (click)="showModalDelete()"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
+
+<nz-modal [nzMaskClosable]="false"  
+    [nzKeyboard]="true"[(nzVisible)]="isVisibleAdd" nzWidth="1000px" nzTitle="Add Movie" (nzOnCancel)="handleAddCancel()"
+    (nzOnOk)="handleAddCancel()">
+    <ng-container *nzModalContent>
+        <span class="text-blue-700 text-2xl"> Movie </span>
+        <form [formGroup]="form" nz-form>
+            <nz-form-item>
+                <nz-form-label nzRequired>Movie Name</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="Please enter movie name" formControlName="movieName" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired>Description</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input placeholder="Autosize height with minimum and maximum number of lines"
+                        [nzAutosize]="{ minRows: 2, maxRows: 7 }" formControlName="description"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div class="form-items-row">
+                <nz-form-item>
+                    <nz-form-label nzFor="movieAccess">Movie Access</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="movieAccess">
+                            <nz-option nzValue="noAction" nzLabel="No Action"></nz-option>
+                            <nz-option nzValue="status" nzLabel="Status"></nz-option>
+                            <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="languages">Languages</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="languages">
+                            <nz-option nzValue="english" nzLabel="English"></nz-option>
+                            <nz-option nzValue="spanish" nzLabel="Spanish"></nz-option>
+                            <nz-option nzValue="french" nzLabel="French"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <nz-form-item>
+                <nz-form-label nzFor="genres">Genres </nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="genres">
+                        <nz-option nzValue="action" nzLabel="Action"></nz-option>
+                        <nz-option nzValue="drama" nzLabel="Drama"></nz-option>
+                        <nz-option nzValue="comedy" nzLabel="Comedy"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <div class="form-items-row-4">
+                <nz-form-item>
+                    <nz-form-label nzFor="contentRating">Content Rating</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Please enter content rating" formControlName="contentRating" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="releaseDate">Release Date</nz-form-label>
+                    <nz-form-control>
+                        <nz-date-picker class="form-date-picker" formControlName="releaseDate"
+                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="publishDate">Publish Date</nz-form-label>
+                    <nz-form-control>
+                        <nz-date-picker class="form-date-picker" formControlName="publishDate"
+                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="duration">Duration</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Please enter duration" formControlName="duration" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>
+
+<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleUpdate" nzWidth="1000px" nzTitle="Update Movie"
+    (nzOnCancel)="handleUpdateCancel()" (nzOnOk)="handleUpdateCancel()">
+    <ng-container *nzModalContent>
+        <span class="text-blue-700 text-2xl"> Movie </span>
+        <form [formGroup]="form" nz-form>
+            <nz-form-item>
+                <nz-form-label nzRequired>Movie Name</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="Please enter movie name" formControlName="movieName" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired>Description</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input placeholder="Autosize height with minimum and maximum number of lines"
+                        [nzAutosize]="{ minRows: 2, maxRows: 7 }" formControlName="description"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div class="form-items-row">
+                <nz-form-item>
+                    <nz-form-label nzFor="movieAccess">Movie Access</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="movieAccess">
+                            <nz-option nzValue="noAction" nzLabel="No Action"></nz-option>
+                            <nz-option nzValue="status" nzLabel="Status"></nz-option>
+                            <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="languages">Languages</nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="languages">
+                            <nz-option nzValue="english" nzLabel="English"></nz-option>
+                            <nz-option nzValue="spanish" nzLabel="Spanish"></nz-option>
+                            <nz-option nzValue="french" nzLabel="French"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <nz-form-item>
+                <nz-form-label nzFor="genres">Genres </nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="genres">
+                        <nz-option nzValue="action" nzLabel="Action"></nz-option>
+                        <nz-option nzValue="drama" nzLabel="Drama"></nz-option>
+                        <nz-option nzValue="comedy" nzLabel="Comedy"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <div class="form-items-row-4">
+                <nz-form-item>
+                    <nz-form-label nzFor="contentRating">Content Rating</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Please enter content rating" formControlName="contentRating" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="releaseDate">Release Date</nz-form-label>
+                    <nz-form-control>
+                        <nz-date-picker class="form-date-picker" formControlName="releaseDate"
+                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="publishDate">Publish Date</nz-form-label>
+                    <nz-form-control>
+                        <nz-date-picker class="form-date-picker" formControlName="publishDate"
+                            nzFormat="yyyy-MM-dd"></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="duration">Duration</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Please enter duration" formControlName="duration" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </form>
+    </ng-container>
+</nz-modal>
+
+<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleDelete" nzWidth="300px"
+    nzTitle="Delete Movie" (nzOnCancel)="handleDeleteCancel()" (nzOnOk)="handleDeleteCancel()">
+    <ng-container *nzModalContent>
+        <div>
+            <span class="bg-blue-700 w-6 h-6 text-3xl rounded" nz-icon nzType="delete" nzTheme="outline"></span>
+            <span class="text-white h-5 text-lg"> Are you sure you want to delete it?</span>
+        </div>
+        
+    </ng-container>
+</nz-modal>
