@@ -1,72 +1,90 @@
 <div class="page-content">
+    <a routerLink="/home">
+    <button type="button" class="back-button">
+            <i class="fa fa-arrow-left"></i> 
+            Về Trang Chủ
+        </button>
+    </a>
     <!-- Main container holding the form sections -->
     <div class="container" id="container">
-        <!-- Sign-up form container -->
-        <div class="form-container sign-up-container">
-            <!-- Form to handle sign-up submission -->
-            <form (ngSubmit)="onSignUp()">
-                <h1>Tạo Tài Khoản</h1>
-                <!-- Social media login buttons -->
-                <div class="social-container">
-                    <a href="#" class="social">
-                        <i class="fa fa-google" style="font-size:24px"></i>
-                    </a>
-                </div>
-                <span>hoặc dùng email để đăng ký</span>
-                <!-- Input fields for sign-up data -->
-                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
-                <div style="padding-bottom: 20px;">
-                    <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password"
-                        required />
-                    <button  type="button" (click)="showPassword()">
+            <!-- Sign-up form container -->
+            <div class="form-container sign-up-container">
+                <!-- Form to handle sign-up submission -->
+                <form (ngSubmit)="onSignUp()">
+                    <h1>Tạo Tài Khoản</h1>
+                    <!-- Social media login buttons -->
+                    <div class="social-container">
+                        <a href="#" class="social">
+                            <i class="fa fa-google" style="font-size:24px"></i>
+                        </a>
+                    </div>
+                    <span>hoặc dùng email để đăng ký</span>
+                    <!-- Input fields for sign-up data -->
+                    <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
+                    <div style="padding-bottom: 20px;">
+                        <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password"
+                            name="password" required />
+                        <button type="button" (click)="showPassword()">
+                            <i *ngIf="show" class="fa fa-eye-slash" aria-hidden="true"></i>
+                            <i *ngIf="!show" class="fa fa-eye" aria-hidden="true"></i>
+                        </button> <!-- Sign-up button -->
+                    </div>
+                    <button class="bg-primary-gradient" type="submit">Đăng Kí</button>
+                </form>
+            </div>
+
+            <!-- Sign-in form container -->
+            <div class="form-container sign-in-container">
+                <!-- Form to handle sign-in submission -->
+                <form (ngSubmit)="onSignIn()">
+                    <h1>Đăng Nhập</h1>
+                    <!-- Social media login buttons -->
+                    <div class="font-montserrat social-container">
+                        <a href="#" class="social">
+                            <i class="fa fa-google" style="font-size:24px"></i>
+                        </a>
+                    </div>
+                    <span>hoặc dùng tài khoản có sẵn</span>
+                    <!-- Input fields for sign-in data -->
+                    <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
+                    <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password"
+                        name="password" required />
+                    <button type="button" (click)="showPassword()">
                         <i *ngIf="show" class="fa fa-eye-slash" aria-hidden="true"></i>
                         <i *ngIf="!show" class="fa fa-eye" aria-hidden="true"></i>
-                    </button> <!-- Sign-up button -->
-                </div>
-                <button class="bg-primary-gradient" type="submit">Đăng Kí</button>
-            </form>
-        </div>
-        <!-- Sign-in form container -->
-        <div class="form-container sign-in-container">
-            <!-- Form to handle sign-in submission -->
-            <form (ngSubmit)="onSignIn()">
-                <h1>Đăng Nhập</h1>
-                <!-- Social media login buttons -->
-                <div class="font-montserrat social-container">
-                    <a href="#" class="social">
-                        <i class="fa fa-google" style="font-size:24px"></i>
-                    </a>
-                </div>
-                <span>hoặc dùng tài khoản có sẵn</span>
-                <!-- Input fields for sign-in data -->
-                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
-                <input [type]="show ? 'text' : 'password'" placeholder="Password" [(ngModel)]="password" name="password"
-                    required />
-                <button type="button" (click)="showPassword()">
-                    <i *ngIf="show" class="fa fa-eye-slash" aria-hidden="true"></i>
-                    <i *ngIf="!show" class="fa fa-eye" aria-hidden="true"></i>
-                </button>
+                    </button>
 
-                <!-- Forgot password link -->
-                <span class="forgot-password" (click)="navigateToForgotPasswordPage()">Quên Mật Khẩu?</span>
-                <!-- Sign-in button -->
-                <button class="bg-primary-gradient" type="submit">Đăng Nhập</button>
-            </form>
-        </div>
-        <!-- Overlay container for the animation and messages -->
-        <div class="overlay-container">
-            <div class="overlay bg-primary-gradient">
-                <div class="bg-primary-gradient overlay-panel overlay-left">
-                    <h1>Mừng Bạn Trở Lại!</h1>
-                    <p>Hãy Nhập Các Thông Tin Cần Thiết Để Được Xem Nhiều Hơn Nhé !</p>
-                    <!-- Button to switch to sign-in form -->
-                    <button class="ghost" id="signIn" (click)="togglePanel()">Đăng Nhập</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Xin Chào Người Lạ Kia Ơi!</h1>
-                    <p>Hãy Cùng Chúng Tôi Khám Phá Vô Tận Phim Nào !!</p>
-                    <!-- Button to switch to sign-up form -->
-                    <button class="ghost" id="signUp" (click)="togglePanel()">Đăng Ký</button>
+                    <!-- Forgot password link -->
+                    <span class="forgot-password" (click)="navigateToForgotPasswordPage()">Quên Mật Khẩu?</span>
+                    <!-- Sign-in button -->
+                    <button class="bg-primary-gradient" type="submit">Đăng Nhập</button>
+                </form>
+            </div>
+            <!-- Overlay container for the animation and messages -->
+            <div class="overlay-container">
+                <div class="overlay bg-primary-gradient">
+                    <div id="app">
+
+                    <div class=" overlay-panel overlay-left">
+                        <h1>Mừng Bạn Trở Lại!</h1>
+                        <p>Hãy Nhập Các Thông Tin Cần Thiết Để Được Xem Nhiều Hơn Nhé !</p>
+                        <!-- Button to switch to sign-in form -->
+                        <button class="ghost" id="signIn" (click)="togglePanel()">Đăng Nhập</button>
+                    </div>
+
+
+                    <div class="overlay-panel overlay-right">
+                        <h1>Xin Chào Người Lạ Kia Ơi!</h1>
+                        <p>Hãy Cùng Chúng Tôi Khám Phá Vô Tận Phim Nào !!</p>
+                        <!-- Button to switch to sign-up form -->
+                        <button class="ghost" id="signUp" (click)="togglePanel()">Đăng Ký</button>
+                    </div>
+
+
+
+
+
+
                 </div>
             </div>
         </div>
