@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzIconModule, NzIconService } from 'ng-zorro-antd/icon';
+import { HomeOutline, UserOutline, HistoryOutline, ShoppingCartOutline, VideoCameraOutline, MailOutline, DesktopOutline, HeartOutline, LogoutOutline, FileTextOutline, UnorderedListOutline, TabletOutline,  } from '@ant-design/icons-angular/icons';
 
 @Component({
   selector: 'app-profile-management',
@@ -15,13 +16,27 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzLayoutModule,
     NzMenuModule,
     NzIconModule,
-
-],
+  ],
   templateUrl: './profile-management.component.html',
   styleUrls: ['./profile-management.component.css']
 })
 export class ProfileManagementComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private iconService: NzIconService) {
+    this.iconService.addIcon(
+      HomeOutline,
+      UserOutline,
+      HistoryOutline,
+      ShoppingCartOutline,
+      VideoCameraOutline,
+      MailOutline,
+      DesktopOutline,
+      HeartOutline,
+      LogoutOutline,
+      FileTextOutline,
+      UnorderedListOutline,
+      TabletOutline
+    );
+  }
 
   navigateHome(): void {
     this.router.navigate(['/']);
@@ -59,4 +74,3 @@ export class ProfileManagementComponent {
     this.router.navigate(['/profilemanagement/logout']);
   }
 }
-

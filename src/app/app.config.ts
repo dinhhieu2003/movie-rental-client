@@ -10,22 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { UserOutline, SettingOutline, TransactionOutline, FileTextOutline, ShoppingCartOutline,UnorderedListOutline,MailOutline,TabletOutline,HeartOutline,LogoutOutline, EditOutline} from '@ant-design/icons-angular/icons';
-import { NZ_ICONS } from 'ng-zorro-antd/icon';
-
 registerLocaleData(en);
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(), provideNzI18n(en_US), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient(),
-    
-    //Đăng ký thêm các icon
-    NzIconModule,
-    {
-      provide: NZ_ICONS,
-      useValue: [UserOutline, SettingOutline, TransactionOutline, FileTextOutline,ShoppingCartOutline,UnorderedListOutline, MailOutline, TabletOutline, HeartOutline, LogoutOutline, EditOutline] // Đăng ký các icon \
-    }
-  ]
-  
+
+  providers: [provideRouter(routes), provideClientHydration(), provideNzI18n(en_US), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient(), provideAnimationsAsync()]
 
 };
