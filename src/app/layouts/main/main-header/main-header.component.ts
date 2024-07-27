@@ -1,23 +1,28 @@
 import { Component } from '@angular/core';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzButtonModule, NzButtonSize } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzDrawerModule, NzDrawerPlacement } from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-main-header',
   standalone: true,
-  imports: [NzMenuModule, NzButtonModule, NzGridModule, 
-    NzBadgeModule, NzPopoverModule,
+  imports: [NzMenuModule, NzGridModule, 
+    NzBadgeModule,
+    NzDrawerModule,
   ],
   templateUrl: './main-header.component.html',
-  styleUrl: './main-header.component.scss'
+  styleUrl: './main-header.component.scss',
+  host: {ngSkipHydration: 'true'},
 })
 export class MainHeaderComponent {
-  size: NzButtonSize = 'default';
-  isActiveToggle: boolean = false;
-  toggleMenu() {
-    this.isActiveToggle = !this.isActiveToggle;
+  visible = false;
+  placement: NzDrawerPlacement = 'right';
+  openMenu(): void {
+    this.visible = true;
+  }
+
+  closeMenu(): void {
+    this.visible = false;
   }
 }
