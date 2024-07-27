@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './management/pages/dashboard/dashboard.component';
 
-
 export const routes: Routes = [
     {
         path: '',

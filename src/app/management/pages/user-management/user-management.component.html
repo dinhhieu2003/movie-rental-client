@@ -1,0 +1,189 @@
+<div class="container p-4">
+  <div class="card-header mb-5">
+    <div class="flex justify-between">
+    <div>
+      <button nz-button nzType="primary" nzSize="default" (click)="applyStatus()">User Management</button>
+
+    </div>
+    <div class="flex space-x-2">
+      <button nz-button nzType="primary" (click)="showModalAdd()">Add User</button>
+    </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="w-full flex justify-between mb-4">
+      <div class="dataTable_length text-white">
+        Show
+        <nz-select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+          <nz-option [nzValue]="5" nzLabel="5"></nz-option>
+          <nz-option [nzValue]="10" nzLabel="10"></nz-option>
+          <nz-option [nzValue]="15" nzLabel="15"></nz-option>
+        </nz-select>
+        entries
+      </div>
+      <div class="dataTable_filter text-right text-white">
+        Search:
+        <input class="ml-2 input-search" nz-input placeholder="Search" [(ngModel)]="valueSearch"
+          (ngModelChange)="onSearchChange()" type="text" />
+      </div>
+    </div>
+    <div class="table-view">
+      <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Action</th>
+            <th>Custom</th>
+          </tr>
+        </thead>
+        <tbody style="color: white ;">
+          <tr *ngFor="let user of basicTable.data; let i = index" class="hover-row table-row">
+            <td>{{ i + 1 }}</td>
+            <td>{{ user.userId }}</td>
+            <td>{{ user.userName }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <span *ngIf="user.action" style="display: inline-block; width: 10px; height: 10px; background-color: #65de24; border-radius: 50%;"></span>
+              <span *ngIf="!user.action" style="display: inline-block; width: 10px; height: 10px; background-color: #dc1922; border-radius: 50%;"></span>
+            </td> 
+            <td>         
+            <button class="badge badge-success mb-2" (click)="showModalUpdate()">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            
+            <span *ngIf="user.action; else restoreButton">
+              <button class="badge badge-danger mr-2" (click)="onDelete(user.userId)">
+                <i class="fas fa-trash"></i> Remove
+              </button>
+            </span>
+            
+            <ng-template #restoreButton>
+              <button class="badge" style="background-color: #007bff; color: white; border: none;" (click)="onRestore(user.userId)">
+                <i class="fas fa-sync-alt"></i> Restore
+              </button>
+            </ng-template>         
+          </td>  
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+</div>
+<nz-drawer id="1"
+  [nzWidth]="720"
+  [nzVisible]="visibleAdd"
+  nzTitle="Add User"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="closeModalAdd()"
+  class="custom-drawer"
+>
+  <form nz-form *nzDrawerContent class="custom-form" >
+    <div nz-row [nzGutter]="8">
+      <!-- User ID Field -->
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>User ID</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter user ID" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- User Name Field -->
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>User Name</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter user name" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="8">
+      <!-- Password Field -->
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>Password</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="password" placeholder="Please enter password" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Role Field -->
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>Role</nz-form-label>
+          <nz-form-control>
+            <nz-select nzPlaceHolder="Please select a role">
+              <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+              <nz-option nzValue="user" nzLabel="User"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="8">
+      <!-- Action Field -->
+      <nz-form-item>
+        <nz-form-label>Action</nz-form-label>
+        <nz-form-control>
+          <nz-select nzPlaceHolder="Action">
+            <nz-option nzValue=1 nzLabel="Active"></nz-option>
+            <nz-option nzValue=0 nzLabel="Unactive"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px;" (click)="closeModalAdd()">Cancel</button>
+      <button nz-button nzType="primary" (click)="closeModalAdd()">Submit</button>
+    </div>
+  </ng-template>
+</nz-drawer>
+
+<!----edit---->
+<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="visibleUpdate" nzWidth="1000px" nzTitle="Update User"
+    (nzOnCancel)="updateCancel()" (nzOnOk)="updateOk()">
+    <ng-container *nzModalContent>
+        <span class="text-blue-700 text-2xl">User</span>
+        <form [formGroup]="form" nz-form>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="userId">User ID</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="Please enter user ID" formControlName="userId" id="userId" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="userName">Username</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="Please enter username" formControlName="userName" id="userName" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
+                <nz-form-control>
+                    <input nz-input type="password" placeholder="Please enter password" formControlName="password" id="password" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="role">Role</nz-form-label>
+                <nz-form-control>
+                    <input nz-input placeholder="Please enter role" formControlName="role" id="role" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired nzFor="action">Action</nz-form-label>
+                <nz-form-control>
+                    <label nz-checkbox formControlName="action" id="action">Active</label>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-container>
+</nz-modal>
