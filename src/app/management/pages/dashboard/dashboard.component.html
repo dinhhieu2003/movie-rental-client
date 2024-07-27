@@ -1,54 +1,65 @@
 <nz-layout class="app-layout">
-    <nz-sider class="menu-sidebar"
-      nzCollapsible
-      nzWidth="256px"
-      nzBreakpoint="md"
-      [(nzCollapsed)]="isCollapsed"
-      [nzTrigger]="null">
-      <div class="sidebar-logo">
-        <a >
-          <img src="https://dongphucvina.vn/wp-content/uploads/2022/09/Logo-DH-Su-Pham-Ky-Thuat-TP-Ho-Chi-Minh-HCMUTE-623x800.webp" alt="logo">
-          <h1>Admin Dashboard</h1>
-        </a>
+  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a target="_blank">
+        <img
+          src="https://dongphucvina.vn/wp-content/uploads/2022/09/Logo-DH-Su-Pham-Ky-Thuat-TP-Ho-Chi-Minh-HCMUTE-623x800.webp"
+          alt="logo">
+        <h1>Admin Dashboard</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed" class="dashboard">
+      <li nz-submenu nzOpen nzTitle="Quản lí" nzIcon="dashboard">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/user-management">Quản lí người dùng</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/film-management">Quản lí phim</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/a-management">Quản lí danh mục phim</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/b-management">Quản lí thể loại phim</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/bill-management">Quản lí hóa đơn</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/d-management">Quản lí gói dịch vụ</a>
+          </li>
+        </ul>
+      </li>
+     
+    </ul>
+  </nz-sider>
+  <nz-layout class="ant-layoutt">
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+        </span>
       </div>
-      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-        
-          <ul>
-            <li nz-menu-item nzMatchRouter>
-              <a routerLink="/user-management">Quản lí người dùng</a>
-            </li>
-            <li nz-menu-item nzMatchRouter>
-              <a routerLink="/film-management">Quản lí phim</a>
-            </li>
-            <li nz-menu-item nzMatchRouter>
-              <a>Quản lí hóa đơn</a>
-            </li>
-            <li nz-menu-item nzMatchRouter>
-              <a>Quản lí dịch vụ</a>
-            </li>
-          </ul>
-      </ul>
-    </nz-sider>
-    <nz-layout>
-      <nz-header>
-        <div class="app-header">
-          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-              <span class="trigger"
-                 nz-icon
-                 [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-              ></span>
-          </span>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <nz-footer>
+      <div class="flex justify-between">
+        <div class="left-panel">
+          <span class="text-blue-600 mr-2">Privacy Policy</span>
+          <span class="text-blue-600">Terms of Use</span>
         </div>
-      </nz-header>
-      <nz-content>
-        <div class="inner-content">
-          <div class="text-center mt-10">
-            <h1 class="text-4xl font-bold text-blue-500">
-              Hello, Tailwind CSS with Angular!
-            </h1>
-          </div>
-          <router-outlet></router-outlet>
+        <div class="right-panel">
+          <span class="text-white mr-2">WebSite Movie</span>
+          <span class="span-icon text-base" nz-icon nzType="smile" nzTheme="outline"></span>
+          <span class="text-blue-600">Terms of Use</span>
         </div>
-      </nz-content>
-    </nz-layout>
+      </div>
+    </nz-footer>
   </nz-layout>
+</nz-layout>
