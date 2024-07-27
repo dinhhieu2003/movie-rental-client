@@ -8,7 +8,7 @@ export const routes: Routes = [
         loadChildren: () => import('./main/routes/main.routes').then(m => m.mainRoutes),
     },
     { path: "login", component: LoginComponent },
-    { path: "management", component: DashboardComponent,
+    { path: "management", 
       loadChildren: () => import('./management/routes/management.routes').then(m => m.managementRoutes)  
     },
 ];
