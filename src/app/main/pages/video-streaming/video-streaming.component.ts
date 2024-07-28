@@ -250,6 +250,7 @@ const movieDetails: MovieDetail[] = [
     ],
   },
   {
+    
     summary: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
     rate: 8.6,
     currentUserRate: -1,
