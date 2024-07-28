@@ -1,0 +1,158 @@
+<div class="content-page">
+    <!-- Fake video content -->
+    <ul class="circles">
+        @for(i of [].constructor(10);track $index){
+        <li></li>
+        }
+
+    </ul>
+    <div class="video-player">
+
+        <!-- <video controls autoplay style="width: 100%;height: 100%; object-fit: contain;"
+            src="https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4">
+        </video> -->
+        <iframe loading="lazy" width="100%" height="100%" [src]="currentMovie.link" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="detail-film-container">
+        <div class="name-detail">
+            <h1 class="text-white text-4xl mt-4" [innerText]="currentMovieTitle"></h1>
+            <p class="text-2xl m-2" [innerText]="'Mùa '+currentMovieDetail.season"></p>
+            <p class="text-xl m-2">{{currentMovieDetail.year}} - 1/1 Tập - {{currentMovieDetail.country}}</p>
+
+            <p class="summary" [innerText]="currentMovieDetail.summary"></p>
+
+            <!-- <i class="fa fa-star" style="font-size:24px; color:rgb(48, 156, 245); background-color: rgb(0, 0, 0);">
+                    Đánh Giá</i>
+                @for (item of [].constructor(5); track $index) {
+                <i class="fa fa-star" style="font-size:24px; color:rgb(82, 82, 82);"></i>
+                } -->
+            <div id="rating" (mouseleave)="leaveStarListener()">
+                <i class="fa fa-star" style="font-size:36px; color:rgb(48, 156, 245); text-align: left;">
+                    Đánh Giá</i>
+                <br>
+                @for (start of stars; track $index) {
+                    <span (mouseenter)="enterStarListener($index)"
+                        (click)="selectStar($index)" [ngClass]="{'hover': $index <= hoverIndex}">
+                        ★
+                    </span>
+                }
+            </div>
+
+
+
+
+
+
+        </div>
+        <div class="director-detail mt-5">
+            <button class="interact-button text-lg mr-3" (click)="currentMovieDetail.isFollowed = !currentMovieDetail.isFollowed"><i [ngClass]="{
+                'fa': true,
+                'fa-heart': currentMovieDetail.isFollowed,
+                'fa-heart-o': !currentMovieDetail.isFollowed
+              }" [style.color]="currentMovieDetail.isFollowed ? 'red' : ''"> Theo dõi</i>
+            </button>
+
+            <button class="interact-button text-lg"><i class="fa fa-share-alt" style="font-size:24px"></i>
+                Chia sẻ</button>
+            <p class="mt-4 text-2xl"><b>Thể Loại: </b>
+                @for (genre of currentMovieDetail.genres; track $index) {
+                {{genre}},
+                }
+            </p>
+        </div>
+    </div>
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+        titleSection: 'Danh Sách Tập',
+        items: episodes,
+        pageNumberIndex: 0
+        }
+    ">
+    </ng-container>
+
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+           titleSection: 'Các Mùa',
+           items: seasons,
+           pageNumberIndex: 1
+        }
+    ">
+    </ng-container>
+
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+        titleSection: 'Khá Liên Quan',
+        items: relates,
+        pageNumberIndex:2  
+        }
+    ">
+    </ng-container>
+
+
+    <div class="title">
+        <h1>Diễn Viên</h1>
+        <div class="avatar-list">
+            @for (actor of currentMovieDetail.actors; track $index) {
+                <span class="avatar-item">
+                    <img class="avatar-image"
+                        src="https://i.pinimg.com/474x/3f/3a/d1/3f3ad18a365a1668940d93b6cfc20591.jpg" />
+                    <p>{{actor.name}}</p>
+                    <p>({{actor.role}})</p>
+                </span>
+            }
+            
+        </div>
+
+    </div>
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+           titleSection: 'Phim siêu nóng',
+           items: topHot,
+           pageNumberIndex:3  
+        }
+    ">
+    </ng-container>
+
+
+
+    <div class="title">
+        <h1>Bình Luận</h1>
+    </div>
+</div>
+
+<ng-template #itemTemplate let-className="className" let-imageClass="imageClass" let-imageSource="imageSource"
+    let-itemName="itemName" let-itemId="itemId">
+    <span [class]="className">
+        <a [href]="'/video/'+itemId">
+        <img [class]="imageClass" [src]="imageSource" />
+        <p class="mt-2"> {{itemName}}</p>
+        </a>
+    </span>
+</ng-template>
+
+<ng-template #videoList let-titleSection="titleSection" let-items="items" let-pageNumberIndex="pageNumberIndex">
+    <div class="title">
+        <h1>{{titleSection}}</h1>
+
+        <span class="video-list-control">
+            <button (click)="decreasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-left"
+                    style="font-size:24px"></i></button>
+            <input type="number" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
+            <button class="jump-page-button">NHẢY</button>
+            <button (click)="increasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-right"
+                    style="font-size:24px"></i></button>
+        </span>
+
+        <div class="video-list">
+
+            @for (item of items; track $index;) {
+                
+                    <ng-container
+                        *ngTemplateOutlet="itemTemplate; context: {className: 'video-item', imageClass: 'video-thumbnail', imageSource:item.thumbnailImage, itemName:item.title,itemId:item.id}">
+                    </ng-container>
+                
+            }
+        </div>
+    </div>
+</ng-template>
