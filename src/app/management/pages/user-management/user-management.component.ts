@@ -1,17 +1,17 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule, NzIconService } from 'ng-zorro-antd/icon';
-import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+
 interface User {
   userId: string;
   userName: string;
@@ -21,35 +21,42 @@ interface User {
 }
 
 @Component({
-  selector: 'app-user-management',
+  selector: 'app-test',
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzSelectModule, NzButtonModule, NzIconModule, FormsModule, RouterLink,
-    NzInputModule, NzFormModule,NzGridModule,ReactiveFormsModule,NzDrawerModule,NzDatePickerModule, NzModalModule,
-    NzGridModule,
+  imports: [
+    CommonModule,
+    NzTableModule,
+    NzSelectModule,
+    NzButtonModule,
+    NzIconModule,
+    FormsModule,
+    RouterLink,
+    NzInputModule,
+    NzFormModule,
+    NzDrawerModule,
+    ReactiveFormsModule,
+    NzDatePickerModule,
+    NzModalModule,
   ],
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrl: './user-management.component.css'
 })
-
-
-
 export class UserManagementComponent implements OnInit {
-[x: string]: any;
   valueSearch = '';
   status = 'no action';
-  pageSize = 5;
-  user = {
-    action: true 
-  };
+  pageSize = 5; 
+
   listOfColumn = [
+    { title: 'User ID', compare: null, priority: false },
     { title: 'User Name', compare: (a: User, b: User) => a.userName.localeCompare(b.userName), priority: false },
     { title: 'Password', compare: (a: User, b: User) => a.password.localeCompare(b.password), priority: 3 },
     { title: 'Role', compare: (a: User, b: User) => a.role.localeCompare(b.role), priority: 2 },
-    { title: 'Action', compare: (a: User, b: User) => Number(a.userId) - Number(b.userId), priority: 1 }
+    { title: 'Action', compare: (a: User, b: User) => Number(a.userId) - Number(b.userId), priority: 1 },
+    { title: 'Custom', compare: null, priority: false },
   ];
 
   listOfData: User[] = [
+    
     { userId: '1', userName: 'JohnDoe', password: 'password123', role: 'Admin', action: true },
     { userId: '11', userName: 'JaneSmith', password: 'password456', role: 'User', action: true },
     { userId: '12', userName: 'MikeJohnson', password: 'password789', role: 'Staff', action: false },
@@ -62,8 +69,8 @@ export class UserManagementComponent implements OnInit {
     { userId: '1011', userName: 'OliviaMartinez', password: 'password107', role: 'User', action: false }
   ];
 
-  filteredData: User[] = [...this.listOfData];
 
+  filteredData: User[] = [...this.listOfData];
 
   ngOnInit(): void { }
 
@@ -73,60 +80,53 @@ export class UserManagementComponent implements OnInit {
 
   onSearchChange(): void {
     this.filteredData = this.listOfData.filter(item =>
-      item.userName.toLowerCase().includes(this.valueSearch.toLowerCase()) && item.action
+      item.userName.toLowerCase().includes(this.valueSearch.toLowerCase())
     );
   }
 
-  applyStatus(): void {
-    console.log('Status applied:', this.status);
-  }
-
-
-  onDelete(userId: string): void {
-    const user = this.listOfData.find(user => user.userId === userId);
-    if (user) {
-      user.action = false;
-      console.log(`User ${userId} deleted:`, user);
-    }
-    
-  }
-  
-  onRestore(userId: string): void {
-    const user = this.listOfData.find(user => user.userId === userId);
-    if (user) {
-      user.action = true; 
-      console.log(`User ${userId} restored:`, user);
-    }
-    
-  }
-  visibleAdd = false;
-
+  isVisibleAdd = false;
   showModalAdd(): void {
-    this.visibleAdd = true;
+    this.isVisibleAdd = true;
+  }
+  handleAddOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisibleAdd = false;
+  }
+  handleAddCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisibleAdd = false;
   }
 
-  closeModalAdd(): void {
-    this.visibleAdd = false;
-  }
-  save(): void {
-    console.log('Saving user:', this.user);
-    this.closeModalAdd();
-  }
-  visibleUpdate = false;
+  isVisibleUpdate = false;
   showModalUpdate(): void {
-    this.visibleUpdate = true;
+    this.isVisibleUpdate = true;
   }
-  updateOk(): void {
+  handleUpdateOk(): void {
     console.log('Button ok clicked!');
-    this.visibleUpdate = false;
+    this.isVisibleUpdate = false;
   }
-  updateCancel(): void {
+  handleUpdateCancel(): void {
     console.log('Button cancel clicked!');
-    this.visibleUpdate = false;
+    this.isVisibleUpdate = false;
   }
+
+  isVisibleDelete = false;
+  showModalDelete(): void {
+    this.isVisibleDelete = true;
+  }
+  handleDeleteOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisibleDelete = false;
+  }
+  handleDeleteCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisibleDelete = false;
+  }
+
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    
     this.form = this.fb.group({
       userId: [''],
       userName: [''],
@@ -134,5 +134,7 @@ export class UserManagementComponent implements OnInit {
       role: [''],
       action: [false]
     });
+
+
   }
 }

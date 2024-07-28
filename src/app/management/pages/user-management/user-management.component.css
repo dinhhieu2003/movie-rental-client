@@ -1,107 +1,185 @@
-.badge {
-    display: inline-block;
-    padding: 0.5em 0.75em;
-    font-size: 75%;
-    font-weight: 700;
-    line-height: 1;
-    color: #fff;
-    text-align: center;
-    text-transform: uppercase;
-    border-radius: 0.5rem;
+.input-search {
+    background-color: #373232;
+    color: rgb(0, 0, 0);
+    margin-left: 10px;
+    height: 30px;
 }
 
-.badge-success {
-    background-color: #28a745; 
+.form-table th {
+    background-color: #373232;
+    color: aliceblue;
 }
 
-.badge-danger {
-    background-color: #dc3545; 
-}
-
-.mb-2 {
-    margin-bottom: 0.5rem; 
-}
-
-.mr-2 {
-    margin-right: 0.5rem; 
-}
 ::ng-deep .ant-table {
     background-color: #000000;
 }
-  
-::ng-deep .ant-table-thead > tr > th {
-  background-color: #3f4041; 
-  color: rgb(255, 255, 255); 
+
+::ng-deep tr.ant-table-row {
+    background-color: #000000;
+    color: aliceblue;
 }
 
-::ng-deep .ant-table-tbody > tr > td {
-  background-color: #000000; 
-  color: rgb(223, 223, 231);
-}
-.ant-table-tbody > tr:hover > td {
-  background-color: #128fc9; 
-}
-.custom-drawer {
-  background-color: #f5f5f5; 
+.hover-row:hover td {
+    background-color: #6471e6;
 }
 
 
-.custom-form {
-  padding: 16px; 
-  background-color: #000000; 
-  border-radius: 8px; 
+::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    background-color: #000000;
+    color: aliceblue;
+    height: 35px;
+
 }
 
-
-.custom-form nz-form-item {
-  margin-bottom: 16px; 
+::ng-deep .ant-select-dropdown {
+    background-color: #000000;
+    color: aliceblue;
 }
 
-
-.custom-form nz-form-label {
-  font-weight: bold; 
-  color: #501082; 
+::ng-deep .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    color: aliceblue;
+    font-weight: 600;
+    background-color: #3c30e6;
 }
+
+::ng-deep .ant-select-item-option:hover {
+    background-color: #5a4df1;
+    color: white;
+}
+
+::ng-deep .ant-select-item-option-content {
+    color: aliceblue;
+}
+
+::ng-deep .anticon {
+    color: aliceblue;
+}
+
 ::ng-deep .ant-form-item-label>label {
-  color: aliceblue;
-  font-size: medium;
-}
-::ng-deep .ant-drawer-title {
-  color: rgb(255, 255, 255);
-  font-size: 1.7rem;
+    color: aliceblue;
+    font-size: medium;
 }
 
+::ng-deep .ant-pagination .ant-pagination-item {
+    background-color: #000000;
+    border-color: #1890ff;
+    color: #1890ff;
+}
 
-.custom-form nz-form-control {
-  padding: 8px; 
+::ng-deep .ant-pagination .ant-pagination-item-active {
+    border-color: #1890ff;
+}
+
+::ng-deep .ant-pagination .ant-pagination-prev .ant-pagination-item-link {
+    background-color: #333333;
+    border-color: #1890ff;
+    color: #ffffff;
+}
+
+::ng-deep .ant-pagination .ant-pagination-next .ant-pagination-item-link {
+    background-color: #333333;
+    border-color: #1890ff;
+    color: #ffffff;
+}
+
+::ng-deep .ant-pagination .ant-pagination-disabled .ant-pagination-item-link {
+    background-color: #333333;
+    border-color: #1890ff;
+    color: #1890ff;
 }
 
 
-.custom-form input[nz-input] {
-  border-radius: 4px; 
-  border: 1px solid #d9d9d9; 
+input {
+    background-color: #373232;
+    color: aliceblue;
+}
+
+textarea {
+    background-color: #373232;
+    color: aliceblue;
+}
+
+.form-item {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-items-row-4 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-items-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-items-row nz-form-item {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.form-items-row nz-form-item:last-child {
+    margin-right: 0;
+}
+
+.form-items-row nz-form-control,
+.form-items-row nz-select {
+    width: 300px;
+}
+
+::ng-deep .form-select {
+    width: 300px !important;
+}
+
+::ng-deep .ant-picker {
+    background-color: black;
+    width: 185px;
+}
+
+::ng-deep .ant-picker-input>input {
+    color: aliceblue;
 }
 
 
-.custom-form nz-select {
-  width: 100%; 
+::ng-deep .ant-modal-content {
+    background-color: #000;
+    max-height: calc(100vh - 24px);
+    overflow: auto;
 }
 
-
-.custom-drawer .ant-drawer-footer {
-  background-color: #711e1e; 
-  border-top: 1px solid #e8e8e8; 
-  padding: 16px; 
+::ng-deep .ant-modal-body {
+    max-height: inherit;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #0d2ebb #000000;
 }
 
+::ng-deep .ant-modal-header {
+    background-color: black;
+}
 
-.custom-drawer .ant-btn {
-  margin-right: 8px; 
+::ng-deep .ant-modal-title {
+    color: rgb(255, 255, 255);
+    font-size: 1.7rem;
 }
-.ant-drawer-body{
-  background-color:rgb(157, 30, 30);
+
+::ng-deep .ant-form-item {
+    display: block;
+    margin-bottom: 7px;
 }
-::ng-deep .ant-drawer-content {
-  background-color: black;
-  color: aliceblue;
+
+::ng-deep .ant-btn,
+.ant-btn:active,
+.ant-btn:focus {
+    background-color: #a4a9bc;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+::ng-deep .ant-modal-footer .ant-btn+.ant-btn:not(.ant-dropdown-trigger) {
+    background-color: #0d2ebb;
+    color: #ffffff;
 }
