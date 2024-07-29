@@ -30,7 +30,6 @@ type IsFollowed = boolean;
 type Source = string;
 type Summary = string;
 type Rating = number;
-type Season = string;
 type Year = number;
 type Title = string;
 
@@ -50,13 +49,17 @@ interface Actor {
   role: string;
 }
 
+interface Season {
+  idMovie: number;
+  seasonName: string;
+}
+
 interface MovieDetail {
   summary: Summary;
   rate: Rating;
   currentUserRate: Rating;
   isFollowed: IsFollowed;
   year: Year;
-  season: Season;
   genres: Genre[];
   country: Country;
   actors: Actor[];
@@ -84,6 +87,9 @@ const movies: Movie[] = [
   { id: 19, thumbnailImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG5tBPGS5UneOLZB2FZiaxT67_JwNB95QVWEe41V7S3IFx9oQCaiK-ws84-PfvfIVzx6w&usqp=CAU', title: 'The Green Mile' },
   { id: 20, thumbnailImage: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg', title: 'Se7en' },
 ];
+
+
+
 
 const movieServerSources: MovieServerSource[] = [
   { idMovie: 1, link: 'https://www.youtube.com/embed/P-BBYznfOCc?si=dfnaIP9vTMERlAEo' },
@@ -115,7 +121,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2010,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -129,7 +135,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Comedy],
     country: Country.Korea,
     actors: [
@@ -143,7 +149,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1972,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -157,7 +163,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -171,7 +177,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -185,7 +191,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2008,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -199,7 +205,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Comedy],
     country: Country.USA,
     actors: [
@@ -213,7 +219,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -227,7 +233,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Romance],
     country: Country.USA,
     actors: [
@@ -241,7 +247,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -256,7 +262,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2014,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -270,7 +276,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2000,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -284,7 +290,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 1993,
-    season: '1',
+
     genres: [Genre.Drama],
     country: Country.USA,
     actors: [
@@ -298,7 +304,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2003,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -312,7 +318,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama],
     country: Country.USA,
     actors: [
@@ -326,7 +332,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1977,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -340,7 +346,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1991,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -354,7 +360,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1998,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -368,7 +374,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -382,7 +388,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1995,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -392,7 +398,9 @@ const movieDetails: MovieDetail[] = [
   },
 ];
 
-
+const seasons : Season[] = [
+  {idMovie: 1 , seasonName: "Mùa 1"},
+];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component({
@@ -477,12 +485,23 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   loadRelate(): Movie[] {
-    const hotMovie = [];
-    for (let start = 0; start < 5; ++start) {
-      hotMovie.push(movies[Math.floor(Math.random() * 19)])
+    const relateMovie :Movie[]= [];
+    let moviesMaxLength = movieDetails.length;
+      for(let genre of this.currentMovieDetail.genres){
+        for(let i=0;i<moviesMaxLength;++i ){
+          for(let gen of movieDetails[i].genres){
+            if(genre === gen){
+                relateMovie.push(movies[i]);
+                if( relateMovie.length === 5){
+                  return relateMovie;
+                }
+            }
+          }
+        }
+      }
+      return relateMovie;
     }
-    return hotMovie;
-  }
+  
 
   loadHotMovie(): Movie[] {
     const hotMovie = [];
