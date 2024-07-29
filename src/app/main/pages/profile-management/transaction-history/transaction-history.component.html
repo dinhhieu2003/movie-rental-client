@@ -1,1 +1,39 @@
-<p>transaction-history works!</p>
+<div class="transaction-header">
+    <h2>Lịch sử giao dịch</h2>
+  </div>
+  <nz-table #basicTable [nzData]="displayData" nzBordered nzSize="middle" [nzFrontPagination]="false" ngSkipHydration>
+    <thead>
+      <tr>
+        <th>Ngày</th>
+        <th>Số tiền</th>
+        <th>Mô tả</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of displayData">
+        <td>{{ data.date }}</td>
+        <td>{{ data.amount }}</td>
+        <td>{{ data.description }}</td>
+        <td [ngClass]="getStatusClass(data.status)">{{ getStatusText(data.status) }}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div class="pagination-wrapper">
+    <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="transactionData.length" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
+  </div>
+  <div class="payment-method">
+    <h3>Phương thức thanh toán</h3>
+    <div class="payment-card">
+      <img src="https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/cong-ty-cp-giai-phap-thanh-toan-viet-nam-vnpay-6194ba1fa3d66.jpg" alt="VNPay">
+      <span>{{ paymentMethod.type }} - {{ paymentMethod.number }}</span>
+      <button (click)="showModal()">Hủy liên kết</button>
+    </div>
+    <a class="add-payment-method">Thêm phương thức thanh toán</a>
+  </div>
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Hủy liên kết" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <p>Bạn có chắc hủy liên kết?</p>
+    </ng-container>
+  </nz-modal>
+  
