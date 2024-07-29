@@ -4,15 +4,14 @@ import { AlbumComponent } from "../../components/album/album.component";
 import { Album } from '../../models/album';
 import { Movie } from '../../models/movie';
 
-
 @Component({
-  selector: 'app-home',
+  selector: 'app-series',
   standalone: true,
   imports: [CarouselComponent, AlbumComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './series.component.html',
+  styleUrl: './series.component.css'
 })
-export class HomeComponent {
+export class SeriesComponent {
   list: string[] = ["https://ng.ant.design/assets/img/logo.svg", "https://ng.ant.design/assets/img/logo.svg", 
     "https://ng.ant.design/assets/img/logo.svg", 
     "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp"];

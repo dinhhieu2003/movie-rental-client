@@ -1,0 +1,21 @@
+<div class="wrapper">
+    <div class="container">
+      <!-- One slide carousel -->
+      <app-carousel [list]="list">
+        <div class="absolute bottom-5 start-3 z-30 flex justify-center items-center gap-4">
+          <!-- button rent movie -->
+          <a class="btn__rent-movie flex justify-center items-center btn__rent-movie relative h-[50px] w-40 overflow-hidden border-red-500 text-white shadow-2xl shadow-cyan-500/50">
+            <span class="relative z-10 text-slate-300">Thuê phim</span>
+          </a>
+          <!-- button trailer -->
+          <a class="btn__rent-movie flex justify-center items-center btn__rent-movie relative h-[50px] w-40 overflow-hidden border-red-500 text-white shadow-2xl shadow-cyan-500/50">
+            <span class="relative z-10 text-slate-300">Xem trailer</span>
+          </a>
+        </div>
+      </app-carousel>
+      
+      @for(album of listAlbum; track $index) {
+          <app-album [listMovie]="album.movies" [title]="album.name"></app-album>
+      }
+    
+  </div>
