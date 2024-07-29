@@ -4,6 +4,7 @@ import { MainLayoutComponent } from "../../layouts/main/main-layout/main-layout.
 import { ProfileManagementComponent } from "../pages/profile-management/profile-management.component";
 import { AccountSettingsComponent } from "../pages/profile-management/account-settings/account-settings.component";
 import { VideoStreamingComponent } from "../pages/video-streaming/video-streaming.component";
+import { TransactionHistoryComponent } from "../pages/profile-management/transaction-history/transaction-history.component";
 
 export const mainRoutes: Routes = [
     {
@@ -25,6 +26,8 @@ export const mainRoutes: Routes = [
                 component: VideoStreamingComponent,
             },
         ]
-    },
+    }
+
+
     
 ];
