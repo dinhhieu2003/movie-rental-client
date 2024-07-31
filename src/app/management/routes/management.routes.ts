@@ -4,6 +4,7 @@ import { MovieListComponent } from "../pages/movie-list/movie-list.component";
 import { CategoryMovieComponent } from "../pages/category-movie/category-movie.component";
 import { UserManagementComponent } from "../pages/user-management/user-management.component";
 import { BillManagementComponent } from "../pages/bill-management/bill-management.component";
+import { BannerManagementComponent } from "../pages/banner-management/banner-management.component";
 
 
 export const managementRoutes: Routes = [
@@ -12,6 +13,7 @@ export const managementRoutes: Routes = [
             { path: 'film-management', component: MovieListComponent},
             { path: 'category-management', component: CategoryMovieComponent},
             { path: "user-management", component: UserManagementComponent },
+            { path: "banner-management", component: BannerManagementComponent },
             { path: "bill-management", component: BillManagementComponent }
         ]
      }
