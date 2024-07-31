@@ -10,6 +10,7 @@ import { PricingComponent } from "../pages/pricing/pricing.component";
 import { SearchComponent } from "../pages/search/search.component";
 import { AlbumComponent } from "../components/album/album.component";
 import { AlbumDetailComponent } from "../pages/album-detail/album-detail.component";
+import { CheckoutComponent } from "../pages/checkout/checkout.component";
 
 export const mainRoutes: Routes = [
     {
@@ -40,6 +41,11 @@ export const mainRoutes: Routes = [
             {
                 path:'album',
                 component: AlbumDetailComponent,
+            },
+
+            {
+                path: 'checkout',
+                component: CheckoutComponent,
             }
         ]
     },
