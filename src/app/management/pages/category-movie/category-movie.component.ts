@@ -26,10 +26,12 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 })
 export class CategoryMovieComponent {
 
+  valueSearch = ''
   isVisibleAdd = false; 
   isVisibleUpdate = false;  
   isVisibleDelete = false;  
   form!: FormGroup;
+
   newCategory = {
     name: '',
     description: '',
@@ -38,6 +40,7 @@ export class CategoryMovieComponent {
     album: '',
     isActive: true
   };
+
   showModalAdd(): void {
     this.isVisibleAdd = true;
   }
@@ -120,33 +123,12 @@ export class CategoryMovieComponent {
     },
   ];
 
+  filteredCategories = [...this.originalCategories];
 
-  categories = [...this.originalCategories];
-
-
-  refreshData() {
-    // Cập nhật dữ liệu
-    this.categories = [
-      {
-        name: 'Phim Bộ',
-        description: 'High energy and lots of stunts.',
-        image: 'https://ss-images.saostar.vn/w800/pc/1606897461583/bogia-teaser1-1.jpg',
-        category: 'Adventure',
-        album: 'Top Hits',
-        isActive: true
-      },
-      {
-        name: 'Phim Thuê',
-        description: 'Humorous and entertaining.',
-        image: 'https://cinema.momocdn.net/img/57931939496165847-DhWsKzPvVicufunaFQaUqZjEMu.jpg',
-        category: 'Humor',
-        album: 'Comedy Classics',
-        isActive: false
-      }
-      // Các phần tử khác
-    ];
+  onSearchChange(): void {
+    this.filteredCategories = this.originalCategories.filter(item =>
+      item.name.toLowerCase().includes(this.valueSearch.toLowerCase())
+    );
   }
-
-
 
 }
