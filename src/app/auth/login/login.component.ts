@@ -15,9 +15,9 @@ export class LoginComponent {
   password: string = "";
   error: string = "";
   showPass: string = "password";
-  show: boolean = false;
   resetPassword: boolean = true;
   code: string = "";
+  showPasswordButtons: boolean[] = [false,false,false,false,false];
   // private scriptLoadTimeout: any;
   constructor(private renderer: Renderer2) {
 
@@ -111,13 +111,13 @@ export class LoginComponent {
     alert(this.error);
     // Handle sign-in logic here
   }
-  showPassword(): void {
+  showPassword(index:number): void {
     if (this.showPass === "password") {
       this.showPass = "text";
-      this.show = true;
+      this.showPasswordButtons[index] = true;
     } else {
       this.showPass = "password";
-      this.show = false;
+      this.showPasswordButtons[index] = false;
     }
   }
 

@@ -22,11 +22,8 @@
                 <!-- Input fields for sign-up data -->
                 <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
                 <span style="display: flex; align-items: center; width: 100%;background-color: white;">
-                    <input style="min-width: 0; flex-grow: 1;" [type]="show ? 'text' : 'password'"
-                        placeholder="Password" [(ngModel)]="password" name="password" required />
-                    <button class="show-password-button" type="button" (click)="showPassword()">
-                        <i [class]="'fa fa-eye' + (show ? '-slash' : '')" aria-hidden="true"></i>
-                    </button>
+                    <ng-container *ngTemplateOutlet="passwordInput; context:{ index:0 } ">
+                    </ng-container>
                 </span>
                 <button class="deffault-button bg-primary-gradient" type="submit">Đăng Kí</button>
             </form>
@@ -48,11 +45,8 @@
                 <!-- Input fields for sign-in data -->
                 <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
                 <span style="display: flex; align-items: center; width: 100%;background-color: white;">
-                    <input style="min-width: 0; flex-grow: 1;" [type]="show ? 'text' : 'password'"
-                        placeholder="Password" [(ngModel)]="password" name="password" required />
-                    <button class="show-password-button" type="button" (click)="showPassword()">
-                        <i [class]="'fa fa-eye' + (show ? '-slash' : '')" aria-hidden="true"></i>
-                    </button>
+                    <ng-container *ngTemplateOutlet="passwordInput; context:{ index:1 } ">
+                    </ng-container>
                 </span>
 
                 <!-- Forgot password link -->
@@ -73,29 +67,24 @@
                 <div class="item2"><input placeholder="1234-5678"></div>
             </div> -->
             <div class="change-password-container">
+                <h2 class="font-bold">Thay Mật Khẩu Mới</h2>
                 Email
                 <input placeholder="vidu@mail.com">
                 Mật Khẩu Mới
                 <span style="display: flex; align-items: center; width: 100%;background-color: white;">
-                    <input style="min-width: 0; flex-grow: 1;" [type]="show ? 'text' : 'password'"
-                        placeholder="Password" [(ngModel)]="password" name="password" required />
-                    <button class="show-password-button" type="button" (click)="showPassword()">
-                        <i [class]="'fa fa-eye' + (show ? '-slash' : '')" aria-hidden="true"></i>
-                    </button>
+                    <ng-container *ngTemplateOutlet="passwordInput; context:{ index:2 } ">
+                    </ng-container>
                 </span>
                 Mật Khẩu Mới
                 <span style="display: flex; align-items: center; width: 100%;background-color: white;">
-                    <input style="min-width: 0; flex-grow: 1;" [type]="show ? 'text' : 'password'"
-                        placeholder="Password" [(ngModel)]="password" name="password" required />
-                    <button class="show-password-button" type="button" (click)="showPassword()">
-                        <i [class]="'fa fa-eye' + (show ? '-slash' : '')" aria-hidden="true"></i>
-                    </button>
+                    <ng-container *ngTemplateOutlet="passwordInput; context:{ index:3 } ">
+                    </ng-container>
                 </span>
                 Mã Bí Mật
                 <span style="display: flex; align-items: center; width: 100%;background-color: white;">
-                    <input style="min-width: 0; flex-grow: 1;" type="text"
-                        placeholder="123478" [(ngModel)]="code" required />
-                        <button class="send-code-button">Gửi Về Email</button>
+                    <input style="min-width: 0; flex-grow: 1;" type="text" placeholder="123478" [(ngModel)]="code"
+                        required />
+                    <button class="send-code-button" aria-details="gửi">Gửi Về Email</button>
                 </span>
                 <button class="change-password-button rounded-md">Đổi Mật Khẩu Mới</button>
             </div>
@@ -131,3 +120,22 @@
         </div>
     </div>
 </div>
+
+<ng-template #passwordInput let-index="index">
+    <input style="min-width: 0; flex-grow: 1;" [type]="showPasswordButtons[index] ? 'text' : 'password'"
+        placeholder="Password" [(ngModel)]="password" name="password" required />
+    <button class="show-password-button" type="button" (click)="showPassword(index)">
+        <i [class]="'fa fa-eye' + (showPasswordButtons[index] ? '-slash' : '')" aria-hidden="true"></i>
+    </button>
+</ng-template>
+
+
+<ng-template #itemTemplate let-className="className" let-imageClass="imageClass" let-imageSource="imageSource"
+    let-itemName="itemName" let-itemId="itemId">
+    <span [class]="className">
+        <a [href]="'/video/'+itemId">
+            <img [class]="imageClass" [src]="imageSource" />
+            <p class="mt-2"> {{itemName}}</p>
+        </a>
+    </span>
+</ng-template>

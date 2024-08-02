@@ -334,7 +334,11 @@ footer a {
     background-color: rgb(92, 91, 94);
     color: wheat;
     padding: 3px;
+    &:hover{
+        color: #ffffff;
+    }
 }
+
 .change-password-button{
     display: block;
     margin: 0 auto;
