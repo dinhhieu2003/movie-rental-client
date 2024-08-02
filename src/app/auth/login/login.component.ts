@@ -11,13 +11,14 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginComponent {
 
+
   email: string = "";
-  passwords: string[] = ["","","","",""];
+  passwords: string[] = ["", "", "", "", ""];
   error: string = "";
   showPass: string = "password";
   resetPassword: boolean = false;
   code: string = "";
-  showPasswordButtons: boolean[] = [false,false,false,false,false];
+  showPasswordButtons: boolean[] = [false, false, false, false, false];
   // private scriptLoadTimeout: any;
   constructor(private renderer: Renderer2) {
 
@@ -74,7 +75,7 @@ export class LoginComponent {
     //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
     // }
   }
-  validatePassword(index:number) {
+  validatePassword(index: number) {
     if (this.passwords[index].trim() === '') {
       this.error += " Mật khẩu không được để trống.";
     }
@@ -112,7 +113,7 @@ export class LoginComponent {
     alert(this.error);
     // Handle sign-in logic here
   }
-  showPassword(index:number): void {
+  showPassword(index: number): void {
     if (this.showPass === "password") {
       this.showPass = "text";
       this.showPasswordButtons[index] = true;
@@ -132,6 +133,16 @@ export class LoginComponent {
       container.classList.toggle('right-panel-active');
     }
     this.resetPassword = false;
+  }
+  sendCodeToEmail() {
+    this.error = "";
+    this.validateEmail();
+    if (this.error === "") {
+      alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
+    } else {
+      alert(this.error);
+    }
+    
   }
 
 }

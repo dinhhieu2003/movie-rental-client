@@ -32,7 +32,7 @@
                 <span class="password-input">
                     <input style="min-width: 0; flex-grow: 1;" type="text" placeholder="123478" [(ngModel)]="code" name="code"
                         required />
-                    <button class="send-code-button" aria-details="gửi">Gửi Về Email</button>
+                    <button class="send-code-button" type="button" aria-details="gửi" (click)="sendCodeToEmail()">Gửi Về Email</button>
                 </span>
                 <button class="deffault-button bg-primary-gradient" type="submit">Đăng Kí</button>
             </form>
@@ -68,7 +68,7 @@
             <div class="change-password-container">
                 <h2 class="font-bold m-4">Thay Mật Khẩu Mới</h2>
                 Email
-                <input placeholder="vidu@mail.com">
+                <input type="email" [ngModel]="email" name="email" placeholder="vidu@mail.com">
                 Mật Khẩu Mới
                 <span class="password-input">
                     <ng-container *ngTemplateOutlet="passwordInput; context:{ index:3 } ">
@@ -83,9 +83,9 @@
                 <span class="password-input">
                     <input style="min-width: 0; flex-grow: 1;" type="text" placeholder="123478" [(ngModel)]="code" name="code"
                         required />
-                    <button class="send-code-button" aria-details="gửi">Gửi Về Email</button>
+                    <button class="send-code-button" type="button" aria-details="gửi" (click)="sendCodeToEmail()">Gửi Về Email</button>
                 </span>
-                <button class="change-password-button rounded-md">Đổi Mật Khẩu Mới</button>
+                <button type="submit" class="change-password-button rounded-md">Đổi Mật Khẩu Mới</button>
             </div>
             }
         </div>
