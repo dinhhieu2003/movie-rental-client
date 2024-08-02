@@ -16,13 +16,15 @@ export class LoginComponent {
   error: string = "";
   showPass: string = "password";
   show: boolean = false;
+  resetPassword: boolean = true;
+  code: string = "";
   // private scriptLoadTimeout: any;
   constructor(private renderer: Renderer2) {
 
   }
   ngOnInit(): void {
     // this.scriptLoadTimeout = setTimeout(() => {
-      this.addScriptToHead();
+    this.addScriptToHead();
     // }, 2000
 
     // );
@@ -32,9 +34,9 @@ export class LoginComponent {
       return;
     }
     const existingScript = document.head.querySelector('#neon-cursor-script');
-      if (existingScript) {
-        return;
-      }
+    if (existingScript) {
+      return;
+    }
     const script = this.renderer.createElement('script');
     script.type = "module";
     script.id = "neon-cursor-script";
@@ -120,7 +122,7 @@ export class LoginComponent {
   }
 
   navigateToForgotPasswordPage() {
-    alert("Navigate to the forgot password page");
+    this.resetPassword = !this.resetPassword;
   }
 
   togglePanel() {
@@ -128,6 +130,7 @@ export class LoginComponent {
     if (container) {
       container.classList.toggle('right-panel-active');
     }
+    this.resetPassword = false;
   }
 
 }
