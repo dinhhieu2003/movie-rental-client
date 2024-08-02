@@ -12,10 +12,10 @@ import { RouterLink } from '@angular/router';
 export class LoginComponent {
 
   email: string = "";
-  password: string = "";
+  passwords: string[] = ["","","","",""];
   error: string = "";
   showPass: string = "password";
-  resetPassword: boolean = true;
+  resetPassword: boolean = false;
   code: string = "";
   showPasswordButtons: boolean[] = [false,false,false,false,false];
   // private scriptLoadTimeout: any;
@@ -74,17 +74,17 @@ export class LoginComponent {
     //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
     // }
   }
-  validatePassword() {
-    if (this.password.trim() === '') {
+  validatePassword(index:number) {
+    if (this.passwords[index].trim() === '') {
       this.error += " Mật khẩu không được để trống.";
     }
-    else if (this.password.length < 6) {
+    else if (this.passwords[index].length < 6) {
       this.error += " Mật khẩu quá ngắn.";
     }
-    else if (this.password.length > 30) {
+    else if (this.passwords[index].length > 30) {
       this.error += " Mật khẩu quá dài.";
     }
-    else if (!/^[a-zA-Z0-9]+$/.test(this.password)) {
+    else if (!/^[a-zA-Z0-9]+$/.test(this.passwords[index])) {
       this.error += " Mật khẩu chứa kí tự đặc biệt.";
     }
   }
@@ -99,7 +99,8 @@ export class LoginComponent {
   onSignUp() {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
+    this.validatePassword(0);
+    this.validatePassword(1);
     alert(this.error);
     // Handle sign-up logic here
   }
@@ -107,7 +108,7 @@ export class LoginComponent {
   onSignIn() {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
+    this.validatePassword(2);
     alert(this.error);
     // Handle sign-in logic here
   }

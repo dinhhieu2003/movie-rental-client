@@ -82,7 +82,8 @@ form {
 }
 
 input {
-    background-color: rgb(232, 240, 254);;
+    background-color: rgb(232, 240, 254);
+    ;
     border: none;
     padding: 12px 15px;
     margin: 8px 0;
@@ -154,6 +155,11 @@ input {
 
 .forgot-password {
     padding: 20px;
+    cursor: help;
+    &:hover{
+        color: #3c97bf;
+        text-decoration: underline;
+    }
 }
 
 @keyframes show {
@@ -334,30 +340,41 @@ footer a {
     background-color: rgb(92, 91, 94);
     color: wheat;
     padding: 3px;
-    &:hover{
+
+    &:hover {
         color: #ffffff;
     }
 }
 
-.change-password-button{
+.change-password-button {
     display: block;
-    margin: 0 auto;
+    margin: 10px auto;
     padding: 10px 10px;
-    background-color: blueviolet;
+    background-image: linear-gradient(to right, blueviolet, red);
     color: wheat;
-    
+
+
 }
-.change-password-container{
-    padding: 15% 0;
+
+.change-password-container {
+    padding: auto 0;
     margin: auto 10px;
     justify-content: center;
     align-items: center;
     height: 100%;
-    
+
 }
-.show-password-button{
+
+.show-password-button {
     background-color: rgb(232, 240, 254);
     margin: 8px 0px;
     padding-right: 5px;
     padding: 12px;
+}
+
+.password-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: white;
 }
