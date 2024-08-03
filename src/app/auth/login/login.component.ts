@@ -11,18 +11,21 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginComponent {
 
+
   email: string = "";
-  password: string = "";
+  passwords: string[] = ["", "", "", "", ""];
   error: string = "";
   showPass: string = "password";
-  show: boolean = false;
+  resetPassword: boolean = false;
+  code: string = "";
+  showPasswordButtons: boolean[] = [false, false, false, false, false];
   // private scriptLoadTimeout: any;
   constructor(private renderer: Renderer2) {
 
   }
   ngOnInit(): void {
     // this.scriptLoadTimeout = setTimeout(() => {
-      this.addScriptToHead();
+    this.addScriptToHead();
     // }, 2000
 
     // );
@@ -32,9 +35,9 @@ export class LoginComponent {
       return;
     }
     const existingScript = document.head.querySelector('#neon-cursor-script');
-      if (existingScript) {
-        return;
-      }
+    if (existingScript) {
+      return;
+    }
     const script = this.renderer.createElement('script');
     script.type = "module";
     script.id = "neon-cursor-script";
@@ -72,21 +75,21 @@ export class LoginComponent {
     //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
     // }
   }
-  validatePassword() {
-    if (this.password.trim() === '') {
+  validatePassword(index: number): void {
+    if (this.passwords[index].trim() === '') {
       this.error += " Mật khẩu không được để trống.";
     }
-    else if (this.password.length < 6) {
+    else if (this.passwords[index].length < 6) {
       this.error += " Mật khẩu quá ngắn.";
     }
-    else if (this.password.length > 30) {
+    else if (this.passwords[index].length > 30) {
       this.error += " Mật khẩu quá dài.";
     }
-    else if (!/^[a-zA-Z0-9]+$/.test(this.password)) {
+    else if (!/^[a-zA-Z0-9]+$/.test(this.passwords[index])) {
       this.error += " Mật khẩu chứa kí tự đặc biệt.";
     }
   }
-  validateEmail() {
+  validateEmail(): void {
     if (this.email.trim() === '') {
       this.error += " Email không được để trống.";
     }
@@ -94,40 +97,59 @@ export class LoginComponent {
       this.error += " Định dạng không giống email.";
     }
   }
-  onSignUp() {
+  validatePasswordEqual(left: number, right: number): void {
+    if (this.passwords[left] !== this.passwords[right]) {
+      this.error += " Mật khẩu nhập lại không giống."
+    }
+  }
+  onSignUp(): void {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
+    this.validatePassword(0);
+    this.validatePassword(1);
+    this.validatePasswordEqual(0, 1);
     alert(this.error);
     // Handle sign-up logic here
   }
 
-  onSignIn() {
+  onSignIn(): void {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
+    this.validatePassword(2);
     alert(this.error);
     // Handle sign-in logic here
   }
-  showPassword(): void {
+  showPassword(index: number): void {
     if (this.showPass === "password") {
       this.showPass = "text";
-      this.show = true;
+      this.showPasswordButtons[index] = true;
     } else {
       this.showPass = "password";
-      this.show = false;
+      this.showPasswordButtons[index] = false;
     }
   }
 
-  navigateToForgotPasswordPage() {
-    alert("Navigate to the forgot password page");
+  navigateToForgotPasswordPage(): void {
+    this.resetPassword = !this.resetPassword;
   }
 
-  togglePanel() {
+  togglePanel(): void {
     const container = document.getElementById('container');
     if (container) {
       container.classList.toggle('right-panel-active');
     }
+    this.resetPassword = false;
+  }
+  sendCodeToEmail(): void {
+    this.error = "";
+    this.validateEmail();
+    this.validatePasswordEqual(3, 4);
+    if (this.error === "") {
+      alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
+    } else {
+      alert(this.error);
+    }
+
   }
 
 }
