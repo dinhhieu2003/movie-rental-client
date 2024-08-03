@@ -20,7 +20,7 @@
                 </div>
                 <span>hoặc dùng email để đăng ký</span>
                 <!-- Input fields for sign-up data -->
-                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required [email]="true" />
+                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required/>
                 <span class="password-input">
                     <ng-container *ngTemplateOutlet="passwordInput; context:{ index:0 } ">
                     </ng-container>
@@ -52,7 +52,7 @@
                 </div>
                 <span>hoặc dùng tài khoản có sẵn</span>
                 <!-- Input fields for sign-in data -->
-                <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+                <input type="email" placeholder="Email" autocomplete="email" [(ngModel)]="email" name="email" required />
                 <span class="password-input">
                     <ng-container *ngTemplateOutlet="passwordInput; context:{ index:2 } ">
                     </ng-container>
@@ -68,7 +68,7 @@
             <div class="change-password-container">
                 <h2 class="font-bold m-4">Thay Mật Khẩu Mới</h2>
                 Email
-                <input type="email" [ngModel]="email" name="email" placeholder="vidu@mail.com">
+                <input type="email" [ngModel]="email" name="email" placeholder="vidu@mail.com" required>
                 Mật Khẩu Mới
                 <span class="password-input">
                     <ng-container *ngTemplateOutlet="passwordInput; context:{ index:3 } ">
