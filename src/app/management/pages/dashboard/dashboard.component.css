@@ -36,10 +36,6 @@ nz-content {
   min-height: 100vh;
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
   background-color: #212020;
-<<<<<<< HEAD
-  height: auto;
-=======
->>>>>>> 670c70e5b94a4b937890b55cbc3623281f20e7b2
 }
 
 .dashboard {
@@ -105,11 +101,7 @@ nz-content {
 }
 
 .inner-content {
-<<<<<<< HEAD
-  padding: 0px;
-=======
   padding: 10px;
->>>>>>> 670c70e5b94a4b937890b55cbc3623281f20e7b2
   background: #212020;
   height: auto;
   min-height: 100px
