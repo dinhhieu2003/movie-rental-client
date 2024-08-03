@@ -61,6 +61,35 @@
     color: #ffffff;
 }
 
+/* Search  */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.input-search {
+    padding-right: 2rem;
+    /* Để chừa khoảng trống cho biểu tượng tìm kiếm */
+    border-radius: 4px;
+}
+
+.search-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    pointer-events: none;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}
+
 /* --------------------- */
 
 fieldset {
@@ -95,12 +124,23 @@ fieldset {
     background-color: black;
     border-bottom: 2px solid rgb(62, 83, 107);
 }
+
 ::ng-deep .ant-modal-footer {
     border-top: 2px solid rgb(62, 83, 107);
 }
 
 ::ng-deep .ant-form-item-label>label {
     color: aliceblue;
+}
+
+/* input error */
+::ng-deep .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+    background-color: #373232;
+}
+
+::ng-deep .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    background-color: #373232;
+    /* Màu đen khi hover */
 }
 
 input,
@@ -127,35 +167,8 @@ textarea {
     background-color: #0d2ebb;
     color: #ffffff;
 }
-.span-add{
+
+.span-add {
     color: aliceblue;
     font-size: 25px;
-}
-
-/* Search  */
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
-.input-search {
-    padding-right: 2rem;
-    border-radius: 4px;
-}
-
-.search-icon {
-    width: 1.4rem;
-    height: 1.4rem;
-    pointer-events: none;
-}
-
-.relative {
-    position: relative;
-}
-
-.absolute {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ccc;
 }

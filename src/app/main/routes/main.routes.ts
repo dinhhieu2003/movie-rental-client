@@ -12,6 +12,7 @@ import { AlbumComponent } from "../components/album/album.component";
 import { AlbumDetailComponent } from "../pages/album-detail/album-detail.component";
 import { CheckoutComponent } from "../pages/checkout/checkout.component";
 
+
 export const mainRoutes: Routes = [
     {
         path: '',
@@ -59,5 +60,7 @@ export const mainRoutes: Routes = [
             },
         ]
     },
+    
+
     
 ];
