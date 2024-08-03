@@ -1,0 +1,174 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.category-card {
+    width: 100%;
+    background-color: black;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.card-info {
+    flex: 1;
+    padding: 16px;
+    background-color: #000;
+    color: white;
+}
+
+.category-image {
+    width: 50%;
+    height: 277px;
+    object-fit: cover;
+}
+
+.additional-info {
+    margin-top: 16px;
+    color: aliceblue;
+}
+
+.additional-info p {
+    margin: 4px 0;
+}
+
+::ng-deep .ant-switch.ant-switch-small .ant-switch-handle {
+    width: 12px;
+    height: 10px;
+    margin-top: -1px;
+}
+
+::ng-deep .ant-switch.ant-switch-small.ant-switch-checked {
+    background-color: red;
+    border: 1.5px solid white;
+}
+
+::ng-deep .ant-switch.ant-switch-small {
+    background-color: brown;
+    border: 1px solid white;
+}
+
+::ng-deep .ant-switch.ant-switch-small .ant-switch-inner {
+    color: white;
+}
+
+.icon-edit {
+    color: #ffffff;
+}
+
+/* Search  */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.input-search {
+    padding-right: 2rem;
+    /* Để chừa khoảng trống cho biểu tượng tìm kiếm */
+    border-radius: 4px;
+}
+
+.search-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    pointer-events: none;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}
+
+/* --------------------- */
+
+fieldset {
+    border: 1px solid rgb(62, 83, 107);
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: -10px;
+    border-radius: 10px;
+}
+
+::ng-deep .ant-modal-content {
+    background-color: #000;
+    max-height: calc(100vh - 24px);
+    overflow: auto;
+    border: 2px solid rgb(48, 80, 117);
+    border-radius: 10px;
+}
+
+::ng-deep .ant-modal-close-x {
+    color: aliceblue;
+}
+
+::ng-deep .ant-modal-body {
+    max-height: inherit;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #0d2ebb #000000;
+}
+
+::ng-deep .ant-modal-header {
+    background-color: black;
+    border-bottom: 2px solid rgb(62, 83, 107);
+}
+
+::ng-deep .ant-modal-footer {
+    border-top: 2px solid rgb(62, 83, 107);
+}
+
+::ng-deep .ant-form-item-label>label {
+    color: aliceblue;
+}
+
+/* input error */
+::ng-deep .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+    background-color: #373232;
+}
+
+::ng-deep .ant-input-status-error:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover {
+    background-color: #373232;
+    /* Màu đen khi hover */
+}
+
+input,
+textarea {
+    background-color: #373232;
+    color: aliceblue;
+}
+
+::ng-deep .ant-form-item {
+    display: block;
+    margin-bottom: 7px;
+}
+
+::ng-deep .ant-btn,
+.ant-btn:active,
+.ant-btn:focus {
+    background-color: #a4a9bc;
+    color: #000000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+::ng-deep .ant-modal-footer .ant-btn+.ant-btn:not(.ant-dropdown-trigger) {
+    background-color: #0d2ebb;
+    color: #ffffff;
+}
+
+.span-add {
+    color: aliceblue;
+    font-size: 25px;
+}

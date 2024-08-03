@@ -1,0 +1,69 @@
+.transaction-header {
+    margin-bottom: 20px;
+  }
+  
+  .transaction-table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .transaction-table th, .transaction-table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .success {
+    color: green;
+  }
+  
+  .pending {
+    color: orange;
+  }
+  
+  .failed {
+    color: red;
+  }
+  
+  .pagination-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .payment-method {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-method h3 {
+    margin-top: 0;
+  }
+  
+  .payment-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .payment-card img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .payment-card button {
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    color: red;
+    cursor: pointer;
+  }
+  
+  .add-payment-method {
+    color: purple;
+    text-decoration: none;
+  }
+  

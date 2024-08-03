@@ -2,37 +2,40 @@
   <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
+      <a target="_blank">
         <img
           src="https://dongphucvina.vn/wp-content/uploads/2022/09/Logo-DH-Su-Pham-Ky-Thuat-TP-Ho-Chi-Minh-HCMUTE-623x800.webp"
           alt="logo">
-        <h1>Ant Design Of Angular</h1>
+        <h1>Admin Dashboard</h1>
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed" class="dashboard">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+      <li nz-submenu nzOpen nzTitle="Quản lí" nzIcon="dashboard">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome/table">Monitor</a>
+            <a routerLink="/management/user-management">Quản lí người dùng</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome/homepage">WorkPlace</a>
+            <a routerLink="/management/film-management">Quản lí phim</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/management/film-management">MovieList</a>
+            <a routerLink="/management/genre-management">Quản lí thể loại</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome/add-movie">AddMovie</a>
+            <a routerLink="/management/category-management">Quản lí danh mục phim</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/banner-management">Quản lí banner phim</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/bill-management">Quản lí hóa đơn</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/management/d-management">Quản lí gói dịch vụ</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
-          </li>
-        </ul>
-      </li>
+     
     </ul>
   </nz-sider>
   <nz-layout class="ant-layoutt">

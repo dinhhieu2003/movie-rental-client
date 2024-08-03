@@ -1,0 +1,91 @@
+<div class="flex bg-[#292e39]">
+    <div class="container">
+        <div class="checkout-container">
+            <div class="grid grid-cols-12 gap-8">
+                <!-- Cart-info -->
+                <div class="col-span-8">
+                    <div class="cart-info">
+                        <div class="cart-info__list">
+                            @for (item of cartItems; track item; let i=$index) {
+                                <!-- Cart item -->
+                                <article class="cart-item">
+                                    <a>
+                                        <img [src]="item.poster" alt="" class="cart-item__thumb">
+                                    </a>
+                                    <div class="cart-item__content">
+                                        <div class="cart-item__content-left">
+                                            <h3 class="cart-item__title">{{item.name}}</h3>
+                                            <p class="cart-item__genre-wrap">
+                                                Đánh nhau |
+                                                <span class="cart-item__status">Active</span>
+                                            </p>
+                                            <div class="cart-item__ctrl">
+                                                <button (click)="buy(i)" class="btn btn-buy">Mua</button>
+                                                <button class="btn btn-remove">Bỏ ra</button>
+                                            </div>
+                                        </div>
+                                        <div class="cart-item__content-right">
+                                            <p class="cart-item__total-price">${{item.price}}</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            }
+                            
+                        </div>
+                    </div>  
+                </div>
+                <!-- Checkout area -->
+                <div class="col-span-4">
+                    <div class="cart-info">
+                        <div class="cart-info__row">
+                            <span>Số lượng phim <span class="cart-info__sub-label">(items)</span></span>
+                            <span>{{itemsCount}}</span>
+                        </div>
+                        <div class="cart-info__row">
+                            <span>Tổng giá <span class="cart-info__sub-label">(Total)</span></span>
+                            <span>{{totalPrice}}</span>
+                        </div>
+                        <div class="cart-info__row">
+                            <span>Trừ hao <span class="cart-info__sub-label"></span></span>
+                            <span>0</span>
+                        </div>
+                        <div class="cart-info__separate"></div>
+                        <div class="cart-info__row">
+                            <span>Tổng phải trả</span>
+                            <span>{{totalPrice}}</span>
+                        </div>
+                        <a class="cart-info__next-btn btn-checkout">
+                            Continue to checkout
+                        </a>
+                    </div>
+                    <div class="cart-info cart-checkout">
+                        @for (item of checkoutItems; track item; let i=$index) {
+                            <article class="cart-item">
+                                <a>
+                                    <img [src]="item.poster" alt="" class="cart-item__thumb-checkout">
+                                </a>
+                                <div class="cart-item__content">
+                                    <div class="cart-item__content-left">
+                                        <h3 class="cart-item__title text-base">{{item.name}}</h3>
+                                        <p class="cart-item__genre-wrap text-base">
+                                            Đánh nhau |
+                                            <span class="cart-item__status">Active</span>
+                                        </p>
+                                        <div class="cart-item__ctrl">
+                                            <button (click)="removeFromCheckout(i)" class="btn btn-remove px-1 py-1">Bỏ ra</button>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item__content-right">
+                                        <p class="cart-item__total-price">${{item.price}}</p>
+                                    </div>
+                                </div>
+                            </article>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

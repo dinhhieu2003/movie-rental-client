@@ -1,0 +1,26 @@
+.wrapper {
+  background-color: black;
+}
+
+.container {
+  background-color: black;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.btn__rent-movie {
+  border-width: 2px;
+  font-size: 18px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: rgb(239 68 68);
+}
+
+.btn__rent-movie:hover{
+  --tw-shadow-color: rgba(219, 35, 35, 0.5) !important;
+  --tw-shadow: var(--tw-shadow-colored) !important;
+  border: none;
+  background-color: rgb(189, 12, 12) !important;
+}
