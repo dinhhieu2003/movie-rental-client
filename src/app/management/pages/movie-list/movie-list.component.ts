@@ -11,6 +11,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { FilmService } from '../../../core/services/management/FilmService'
+import { FilmModel } from '../../../core/models/management/FilmModel'
 
 interface DataItem {
   name: string;
@@ -48,45 +50,57 @@ export class MovieListComponent implements OnInit {
   status = 'no action';
   pageSize = 5; 
 
-  listOfColumn = [
-    { title: 'Movie', compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name), priority: false },
-    { title: 'Quality', compare: (a: DataItem, b: DataItem) => a.quality.localeCompare(b.quality), priority: 3 },
-    { title: 'Category', compare: (a: DataItem, b: DataItem) => a.category.localeCompare(b.category), priority: 2 },
-    { title: 'Publish Date', compare: (a: DataItem, b: DataItem) => a.publishDate - b.publishDate, priority: 1 },
-    { title: 'Movie Access', compare: (a: DataItem, b: DataItem) => a.movieAccess.localeCompare(b.movieAccess), priority: 1 },
-    { title: 'Status', compare: (a: DataItem, b: DataItem) => Number(a.status) - Number(b.status), priority: 1 },
-    { title: 'Action', compare: (a: DataItem, b: DataItem) => a.action - b.action, priority: 1 }
-  ];
+  listFilms: FilmModel[] = []
 
-  listOfData: DataItem[] = [
-    { name: 'Arrial 1999', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Day of Darkness', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Don Jon', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Mega Fun', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2012, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2005, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2016, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2017, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2001, movieAccess: 'World', status: true, action: 1 },
-    { name: 'Portable', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 }
-  ];
+  // listOfColumn = [
+  //   { title: 'Movie', compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name), priority: false },
+  //   { title: 'Quality', compare: (a: DataItem, b: DataItem) => a.quality.localeCompare(b.quality), priority: 3 },
+  //   { title: 'Category', compare: (a: DataItem, b: DataItem) => a.category.localeCompare(b.category), priority: 2 },
+  //   { title: 'Publish Date', compare: (a: DataItem, b: DataItem) => a.publishDate - b.publishDate, priority: 1 },
+  //   { title: 'Movie Access', compare: (a: DataItem, b: DataItem) => a.movieAccess.localeCompare(b.movieAccess), priority: 1 },
+  //   { title: 'Status', compare: (a: DataItem, b: DataItem) => Number(a.status) - Number(b.status), priority: 1 },
+  //   { title: 'Action', compare: (a: DataItem, b: DataItem) => a.action - b.action, priority: 1 }
+  // ];
 
-  filteredData: DataItem[] = [...this.listOfData];
+  // listOfData: DataItem[] = [
+  //   { name: 'Arrial 1999', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Day of Darkness', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Don Jon', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Mega Fun', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2012, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2005, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2016, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2017, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2001, movieAccess: 'World', status: true, action: 1 },
+  //   { name: 'Portable', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 }
+  // ];
 
-  ngOnInit(): void { }
+  // filteredData: DataItem[] = [...this.listOfData];
+
+  ngOnInit(): void { 
+    this.filmService.getAllCategories().subscribe(
+      (data: FilmModel[]) => {
+        // this.listFilms = data;
+        console.log(data)
+      },
+      (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    );
+  }
 
   onPageSizeChange(newSize: number): void {
     this.pageSize = newSize;
   }
 
-  onSearchChange(): void {
-    this.filteredData = this.listOfData.filter(item =>
-      item.name.toLowerCase().includes(this.valueSearch.toLowerCase())
-    );
-  }
+  // onSearchChange(): void {
+  //   this.filteredData = this.listOfData.filter(item =>
+  //     item.name.toLowerCase().includes(this.valueSearch.toLowerCase())
+  //   );
+  // }
 
   isVisibleAdd = false;
   showModalAdd(): void {
@@ -129,7 +143,7 @@ export class MovieListComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private filmService: FilmService) {
     
     this.form = this.fb.group({
       movieName: [''],
