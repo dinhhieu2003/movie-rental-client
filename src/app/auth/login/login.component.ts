@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { LoginRequest } from '../../core/models/LoginRequest.model';
+import { JwtService } from '../../core/services/jwt.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -20,7 +23,10 @@ export class LoginComponent {
   code: string = "";
   showPasswordButtons: boolean[] = [false, false, false, false, false];
   // private scriptLoadTimeout: any;
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, 
+    private authService: AuthService, 
+    private jwtService: JwtService,
+    private router: Router) {
 
   }
   ngOnInit(): void {
@@ -118,6 +124,22 @@ export class LoginComponent {
     this.validatePassword(2);
     alert(this.error);
     // Handle sign-in logic here
+    let loginRequest: LoginRequest = {Email: this.email, Password: this.passwords[2]};
+    console.log(loginRequest);
+    this.authService.login(loginRequest).subscribe({
+      next: (response) => {
+        this.jwtService.saveToken(response.Data.Token);
+        if(response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
+          this.router.navigate(["management"]);
+        } else {
+          this.router.navigate(["/home"]);
+        }
+        
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
   showPassword(index: number): void {
     if (this.showPass === "password") {
