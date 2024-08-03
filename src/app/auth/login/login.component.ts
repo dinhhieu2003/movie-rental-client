@@ -75,7 +75,7 @@ export class LoginComponent {
     //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
     // }
   }
-  validatePassword(index: number) {
+  validatePassword(index: number): void {
     if (this.passwords[index].trim() === '') {
       this.error += " Mật khẩu không được để trống.";
     }
@@ -89,7 +89,7 @@ export class LoginComponent {
       this.error += " Mật khẩu chứa kí tự đặc biệt.";
     }
   }
-  validateEmail() {
+  validateEmail(): void {
     if (this.email.trim() === '') {
       this.error += " Email không được để trống.";
     }
@@ -97,16 +97,22 @@ export class LoginComponent {
       this.error += " Định dạng không giống email.";
     }
   }
-  onSignUp() {
+  validatePasswordEqual(left: number, right: number): void {
+    if (this.passwords[left] !== this.passwords[right]) {
+      this.error += " Mật khẩu nhập lại không giống."
+    }
+  }
+  onSignUp(): void {
     this.error = "";
     this.validateEmail();
     this.validatePassword(0);
     this.validatePassword(1);
+    this.validatePasswordEqual(0, 1);
     alert(this.error);
     // Handle sign-up logic here
   }
 
-  onSignIn() {
+  onSignIn(): void {
     this.error = "";
     this.validateEmail();
     this.validatePassword(2);
@@ -123,26 +129,27 @@ export class LoginComponent {
     }
   }
 
-  navigateToForgotPasswordPage() {
+  navigateToForgotPasswordPage(): void {
     this.resetPassword = !this.resetPassword;
   }
 
-  togglePanel() {
+  togglePanel(): void {
     const container = document.getElementById('container');
     if (container) {
       container.classList.toggle('right-panel-active');
     }
     this.resetPassword = false;
   }
-  sendCodeToEmail() {
+  sendCodeToEmail(): void {
     this.error = "";
     this.validateEmail();
+    this.validatePasswordEqual(3, 4);
     if (this.error === "") {
       alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
     } else {
       alert(this.error);
     }
-    
+
   }
 
 }
