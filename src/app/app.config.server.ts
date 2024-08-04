@@ -8,9 +8,7 @@ import { routes } from './app.routes';
 
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering(),
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
+    
   ]
 };
 
