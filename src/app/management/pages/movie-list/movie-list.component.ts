@@ -11,8 +11,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { FilmService } from '../../../core/services/management/FilmService'
-import { FilmModel } from '../../../core/models/management/FilmModel'
+import { FilmService } from '../../../core/services/FilmService'
+import { FilmModel } from '../../../core/models/FilmModel'
 
 interface DataItem {
   name: string;
@@ -48,7 +48,7 @@ interface DataItem {
 export class MovieListComponent implements OnInit {
   valueSearch = '';
   status = 'no action';
-  pageSize = 5; 
+  pageSize = 5;
 
   listFilms: FilmModel[] = []
 
@@ -80,14 +80,25 @@ export class MovieListComponent implements OnInit {
 
   // filteredData: DataItem[] = [...this.listOfData];
 
-  ngOnInit(): void { 
-    this.filmService.getAllCategories().subscribe(
+  // ngOnInit(): void { 
+  //   this.filmService.getAllCategories().subscribe(
+  //     (data: FilmModel[]) => {
+  //       // this.listFilms = data;
+  //       console.log(data)
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching categories:', error);
+  //     }
+  //   );
+  // }
+  ngOnInit() {
+    this.filmService.getDeletedFilms().subscribe(
       (data: FilmModel[]) => {
-        // this.listFilms = data;
-        console.log(data)
+        // this.films = data;
+        console.log(data, "2222")
       },
-      (error) => {
-        console.error('Error fetching categories:', error);
+      error => {
+        console.error('There was an error!', error);
       }
     );
   }
@@ -144,7 +155,7 @@ export class MovieListComponent implements OnInit {
   form: FormGroup;
 
   constructor(private fb: FormBuilder, private filmService: FilmService) {
-    
+
     this.form = this.fb.group({
       movieName: [''],
       description: [''],
