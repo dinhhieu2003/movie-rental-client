@@ -135,7 +135,7 @@
     text-wrap: pretty;
     max-width: 17vw;
     margin-top: 5vh;
-
+    transition: margin-top 0.3s ease-in-out;
     &:hover {
         margin-top: 2vh;
     }
@@ -315,9 +315,11 @@ h2 {
     display: grid;
     grid-template-columns: min(8vw, 8vh) auto min(6vw, 6vh) min(6vw, 6vh);
     grid-template-rows: min(3vw, 3vh) auto auto;
-    background-color: transparent;
-    padding: 10px;
-    max-width: max(400px, 70vw);
+    background-color: rgb(26, 29, 69);
+    padding: 10px 10px;
+    padding-right: 40px;
+    margin-bottom: 10px;
+    max-width: max(400px, 50vw);
 }
 
 .avatar-comment {
@@ -325,9 +327,12 @@ h2 {
     aspect-ratio: 1/1;
     height: min(8vw, 8vh);
     grid-column-start: 1;
-    grid-column-end: 1;
     grid-row-start: 1;
     grid-row-end: 4;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid gray;
+    align-items: center;
 }
 
 .user-name {
@@ -344,31 +349,7 @@ h2 {
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 3;
-}
-
-.toggleReadOnly {
-    display: none;
-
-}
-
-/* Style the label as a button */
-.toggleReadOnly+label {
-    display: inline-flex;
-    /* Use inline-flex to align items */
-    align-items: center;
-    /* Center items vertically */
-    justify-content: center;
-    /* Center items horizontally */
-    padding: 5px 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    user-select: none;
-    grid-column-start: 3;
-    grid-row-start: 1;
-    text-align: center;
-    margin-bottom: 5px;
+    margin-left: 20px;
 }
 
 .edit-comment-button {
@@ -397,25 +378,13 @@ h2 {
     grid-row-start: 2;
     background-color: white;
     text-overflow: ellipsis;
-    margin-left: 5px;
+    margin-left: 10px;
     border-radius: 15px;
     padding: 2px 30px;
 }
 .message[readOnly]{
-    background-color: rgb(223, 196, 196);
-}
-
-/* Apply readonly styling when checkbox is not checked */
-.toggleReadOnly:not(:checked)~.message {
-    pointer-events: none;
-    background-color: #ffffff;
-}
-
-/* Apply editable styling when checkbox is checked */
-.toggleReadOnly:checked~.message {
-
-    pointer-events: auto;
-    background-color: rgb(223, 196, 196);
+    background-color: rgb(26, 29, 69);;
+    color: #ffc;
 }
 
 @keyframes animate {

@@ -456,24 +456,25 @@ export class VideoStreamingComponent implements OnInit {
     this.comments = this.load10Comments(movieId, 1);
   }
   load10Comments(movieId: number, pageNumber: number): Comment[] {
-    return [
-      {
+    
+      const temp1: Comment[] =[{
         commenId: 0,
         imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
         createAt: new Date().toISOString(),
         name: 'Quá Mỹ Thế Đan',
         isMyComment: true,
-        text: 'vvvvvvvv\nsjdlfjsldj'
-      },
-      {
-        commenId: 0,
-        imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
-        createAt: new Date().toISOString(),
-        name: 'Trần Nguyễn Lâm Sinh Quyên',
-        isMyComment: false,
-        text: 'bbbbbbbbbbbb'
-      },
-    ];
+        text: 'vvvvvvvvsjdlfjsldj'
+      }];
+      
+     const temp2 =Array<Comment>(5).fill({
+      commenId: 0,
+      imgURL: movies[Math.floor(Math.random()*19)].thumbnailImage,
+      createAt: new Date().toISOString(),
+      name: 'Trần Nguyễn Lâm Sinh Quyên',
+      isMyComment: false,
+      text: 'bbbbbbbbbbbb'
+    });
+    return [...temp1,...temp2];
   }
 
   loadMovieById(id: number): MovieServerSource {
@@ -558,7 +559,7 @@ export class VideoStreamingComponent implements OnInit {
 
   toggleEditMode(index: number): void {
     this.readonlyFields[index] = !this.readonlyFields[index];
-    this.comments[index].text = this.comments[index].text.replaceAll('\n',". ");
+    this.comments[index].text = this.comments[index].text.replaceAll('\n',"  ");
   }
 
 }

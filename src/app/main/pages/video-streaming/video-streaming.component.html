@@ -104,14 +104,27 @@
 
     <div class="title">
         <h1>Bình Luận</h1>
-        @for(cmt of comments;track $index){
-        <ng-container *ngTemplateOutlet="comment;
+        <div style="display: flex; flex-wrap: wrap;">
+            <div style="flex-grow: 1; margin-right: 10px;">
+                <ng-container *ngTemplateOutlet="comment;
             context:{
-                index:$index
+                index:0
             }
             ">
-        </ng-container>
-        }
+                </ng-container>
+            </div>
+            <div style="flex-grow: 1;">
+                @for(cmt of comments;track $index){
+                <ng-container *ngTemplateOutlet="comment;
+                        context:{
+                            index:$index
+                        }
+                        ">
+                </ng-container>
+                }
+            </div>
+        </div>
+
 
     </div>
 
