@@ -5,4 +5,5 @@ export interface Comment {
     name: string,
     isMyComment: boolean,
     text:string,
+    show:boolean,
 }

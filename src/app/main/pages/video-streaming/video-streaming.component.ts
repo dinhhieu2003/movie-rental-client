@@ -417,8 +417,8 @@ export class VideoStreamingComponent implements OnInit {
   currentMovie!: MovieServerSource;
   currentMovieDetail!: MovieDetail;
   currentMovieTitle: string = "chưa đặt tên";
-  newCommentText :string = "";
-  isModalHidden: boolean = false;
+  newCommentText: string = "";
+  deleteCommentIndex: number = 0;
   stars: number[] = [1, 2, 3, 4, 5];
   hoverIndex: number = -1;
 
@@ -457,25 +457,27 @@ export class VideoStreamingComponent implements OnInit {
     this.comments = this.load10Comments(movieId, 1);
   }
   load10Comments(movieId: number, pageNumber: number): Comment[] {
-    
-      const temp1: Comment[] =[{
-        commenId: 0,
-        imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
-        createAt: new Date().toISOString(),
-        name: 'Quá Mỹ Thế Đan',
-        isMyComment: true,
-        text: 'vvvvvvvvsjdlfjsldj'
-      }];
-      
-     const temp2 =Array<Comment>(5).fill({
+
+    const temp1: Comment[] = [{
       commenId: 0,
-      imgURL: movies[Math.floor(Math.random()*19)].thumbnailImage,
+      imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
+      createAt: new Date().toISOString(),
+      name: 'Quá Mỹ Thế Đan',
+      isMyComment: true,
+      text: 'vvvvvvvvsjdlfjsldj',
+      show: true,
+    }];
+
+    const temp2 = Array<Comment>(5).fill({
+      commenId: 0,
+      imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
       createAt: new Date().toISOString(),
       name: 'Trần Nguyễn Lâm Sinh Quyên',
       isMyComment: false,
-      text: 'bbbbbbbbbbbb'
+      text: 'bbbbbbbbbbbb',
+      show:true
     });
-    return [...temp1,...temp2];
+    return [...temp1, ...temp2];
   }
 
   loadMovieById(id: number): MovieServerSource {
@@ -560,9 +562,9 @@ export class VideoStreamingComponent implements OnInit {
 
   toggleEditMode(index: number): void {
     this.readonlyFields[index] = !this.readonlyFields[index];
-    this.comments[index].text = this.comments[index].text.replaceAll('\n',"  ");
+    this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
   }
-  sendCommentToServer():void {
+  sendCommentToServer(): void {
     // for(let i = 0, length=this.comments.length-1; i < length; ++i){
     //   this.comments[i+1] = this.comments[i];
     // }
@@ -577,14 +579,16 @@ export class VideoStreamingComponent implements OnInit {
     // this.comments.unshift(newComment);
 
   }
-  deleteComment(index:number): void{
+  deleteComment(): void {
+    this.comments[this.deleteCommentIndex].show = false;
+    // this.closeModal();
   }
 
-  openModal() :void{
-    this.isModalHidden = false;
+  openModal(index: number): void {
+    this.deleteCommentIndex = index;
   }
 
-  closeModal():void {
-    this.isModalHidden = true;
+  closeModal(): void {
+    this.deleteCommentIndex = -1;
   }
 }
