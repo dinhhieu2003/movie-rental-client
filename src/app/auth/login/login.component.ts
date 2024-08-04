@@ -129,6 +129,7 @@ export class LoginComponent {
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.jwtService.saveToken(response.Data.Token);
+        this.jwtService.saveUserInfo(response.Data.FullName, response.Data.Role, response.Data.IdUser);
         if(response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
           this.router.navigate(["management"]);
         } else {
