@@ -417,6 +417,8 @@ export class VideoStreamingComponent implements OnInit {
   currentMovie!: MovieServerSource;
   currentMovieDetail!: MovieDetail;
   currentMovieTitle: string = "chưa đặt tên";
+  newCommentText :string = "";
+  isModalHidden: boolean = false;
   stars: number[] = [1, 2, 3, 4, 5];
   hoverIndex: number = -1;
 
@@ -445,7 +447,6 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   initPageContent(movieId: number) {
-    // console.log("434id="+movieId);
     this.currentMovie = this.loadMovieById(movieId);
     this.currentMovieDetail = this.loadDetailById(movieId);
     this.currentMovieTitle = this.loadMovieTitle(movieId);
@@ -561,5 +562,29 @@ export class VideoStreamingComponent implements OnInit {
     this.readonlyFields[index] = !this.readonlyFields[index];
     this.comments[index].text = this.comments[index].text.replaceAll('\n',"  ");
   }
+  sendCommentToServer():void {
+    // for(let i = 0, length=this.comments.length-1; i < length; ++i){
+    //   this.comments[i+1] = this.comments[i];
+    // }
+    // const newComment:Comment = {
+    //   commenId: -1,
+    //   imgURL: '',
+    //   createAt: '',
+    //   name: '',
+    //   isMyComment: true,
+    //   text: ''
+    // };
+    // this.comments.unshift(newComment);
 
+  }
+  deleteComment(index:number): void{
+  }
+
+  openModal() :void{
+    this.isModalHidden = false;
+  }
+
+  closeModal():void {
+    this.isModalHidden = true;
+  }
 }

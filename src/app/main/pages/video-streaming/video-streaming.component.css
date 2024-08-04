@@ -136,6 +136,7 @@
     max-width: 17vw;
     margin-top: 5vh;
     transition: margin-top 0.3s ease-in-out;
+
     &:hover {
         margin-top: 2vh;
     }
@@ -178,13 +179,24 @@ h2 {
     text-align: center;
     font-size: medium;
     height: 100%;
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
+
 
 #rating {
     text-align: center;
     perspective: 250px;
     position: relative;
     width: fit-content;
+    font-size:36px;
+    color: rgb(48, 156, 245);
+    font-weight: bold;
 }
 
 #rating span {
@@ -322,6 +334,17 @@ h2 {
     max-width: max(400px, 50vw);
 }
 
+.new-comment-container {
+    display: grid;
+    grid-template-columns: min(8vw, 8vh) auto min(6vw, 6vh) min(6vw, 6vh);
+    grid-template-rows: min(3vw, 3vh) auto auto;
+    background-color: rgb(44, 49, 128);
+    padding: 10px 10px;
+    padding-right: 40px;
+    margin-bottom: 10px;
+    max-width: max(400px, 50vw);
+}
+
 .avatar-comment {
     background-color: rgba(255, 255, 255, 0.8);
     aspect-ratio: 1/1;
@@ -352,11 +375,21 @@ h2 {
     margin-left: 20px;
 }
 
+.send-new-comment-button {
+    grid-column-start: 4;
+    grid-row-start: 3;
+    background-color: #4e54c8;
+    margin-top: 5px;
+}
+
 .edit-comment-button {
     grid-column-start: 3;
     grid-row-start: 1;
     background-color: #4e54c8;
     margin-bottom: 5px;
+    &:hover{
+        background-color:#BF8516 ;
+    }
 }
 
 .delete-comment-button {
@@ -364,6 +397,9 @@ h2 {
     grid-row-start: 1;
     background-color: #4e54c8;
     margin-bottom: 5px;
+    &:hover{
+        background-color:#BF8516 ;
+    }
 }
 
 /* Style the textarea */
@@ -382,10 +418,50 @@ h2 {
     border-radius: 15px;
     padding: 2px 30px;
 }
-.message[readOnly]{
-    background-color: rgb(26, 29, 69);;
+
+.message[readOnly] {
+    background-color: rgb(26, 29, 69);
+    ;
     color: #ffc;
 }
+
+/* The Modal (background) */
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
 
 @keyframes animate {
 
