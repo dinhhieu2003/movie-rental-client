@@ -11,6 +11,7 @@ import { SearchComponent } from "../pages/search/search.component";
 import { AlbumComponent } from "../components/album/album.component";
 import { AlbumDetailComponent } from "../pages/album-detail/album-detail.component";
 import { CheckoutComponent } from "../pages/checkout/checkout.component";
+import { authGuard } from "../../core/guard/auth.guard";
 
 
 export const mainRoutes: Routes = [
@@ -56,8 +57,9 @@ export const mainRoutes: Routes = [
                         path: 'account',
                         component: AccountSettingsComponent,
                     }
-                ]
-            }
+                ],
+                canActivate: [authGuard],
+            },
         ]
     },
     {

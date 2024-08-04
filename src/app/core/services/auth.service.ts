@@ -24,5 +24,4 @@ export class AuthService {
     this.jwtService.removeToken();
     this.jwtService.removeUserInfo();
   }
-
 }
