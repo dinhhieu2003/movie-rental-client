@@ -11,6 +11,7 @@ import { SearchComponent } from "../pages/search/search.component";
 import { AlbumComponent } from "../components/album/album.component";
 import { AlbumDetailComponent } from "../pages/album-detail/album-detail.component";
 import { CheckoutComponent } from "../pages/checkout/checkout.component";
+import { authGuard } from "../../core/guard/auth.guard";
 
 
 export const mainRoutes: Routes = [
@@ -19,7 +20,7 @@ export const mainRoutes: Routes = [
         component: MainLayoutComponent,
         children: [
             {
-                path: 'home',
+                path: '',
                 component: HomeComponent,
             },
             {
@@ -47,7 +48,18 @@ export const mainRoutes: Routes = [
             {
                 path: 'checkout',
                 component: CheckoutComponent,
-            }
+            },
+            {
+                path: 'me',
+                component: ProfileManagementComponent,
+                children: [
+                    {
+                        path: 'account',
+                        component: AccountSettingsComponent,
+                    }
+                ],
+                canActivate: [authGuard],
+            },
         ]
     },
     {
