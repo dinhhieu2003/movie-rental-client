@@ -10,7 +10,7 @@
             <!-- Modal content -->
             <div class="modal-content" (click)="$event.stopPropagation()">
                 <span class="close" (click)="closeModal()">&times;</span>
-                <div style="background-color: rgb(242, 255, 0);margin-bottom: 20px;">
+                <div style="background-color: rgb(242, 255, 0);margin-bottom: 20px; padding-bottom: 10px;">
                     <p class="mt-10 text-2xl text-black font-bold">Bạn có chắc là muốn xóa bình luận này chứ ?</p>
                     <p class="text-lg text-black italic">(Bình luận đã xóa sẽ không thể khôi phục lại)</p>
                     <button class="accept-delete-button" (click)="deleteComment()">DOSOM</button>
