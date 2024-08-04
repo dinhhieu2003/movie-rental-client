@@ -19,7 +19,7 @@ export const mainRoutes: Routes = [
         component: MainLayoutComponent,
         children: [
             {
-                path: 'home',
+                path: '',
                 component: HomeComponent,
             },
             {
@@ -47,6 +47,16 @@ export const mainRoutes: Routes = [
             {
                 path: 'checkout',
                 component: CheckoutComponent,
+            },
+            {
+                path: 'me',
+                component: ProfileManagementComponent,
+                children: [
+                    {
+                        path: 'account',
+                        component: AccountSettingsComponent,
+                    }
+                ]
             }
         ]
     },

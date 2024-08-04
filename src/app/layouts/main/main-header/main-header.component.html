@@ -69,16 +69,40 @@
       </div>
   
       <!-- Auth button -->
-      <div nz-col="" class="ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-6 ant-col-xxl-4">
-        <ul id="nav" nz-menu="" app-navagation="" class="menu-site ant-menu ant-menu-root ant-menu-light ant-menu-horizontal">
-          <li nz-menu-item="" class="ant-menu-item">
-            <a routerLink="login" id="btn-auth">Đăng nhập</a>
-          </li>
-          <li nz-menu-item="" class="ant-menu-item">
-            <a routerLink="login" id="btn-auth">Đăng ký</a>
-          </li>
-        </ul>
-      </div>
+      @if(!isAuthenticated) {
+        <div nz-col="" class="ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-6 ant-col-xxl-4">
+          <ul id="nav" nz-menu="" app-navagation="" class="menu-site ant-menu ant-menu-root ant-menu-light ant-menu-horizontal">
+            <li nz-menu-item="" class="ant-menu-item">
+              <a routerLink="login" id="btn-auth">Đăng nhập</a>
+            </li>
+            <li nz-menu-item="" class="ant-menu-item">
+              <a routerLink="login" id="btn-auth">Đăng ký</a>
+            </li>
+          </ul>
+        </div>
+      }
+      
+      <!-- Avatar -->
+      @if(isAuthenticated) {
+        <div nz-col="" class="flex items-center ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-6 ant-col-xxl-4">
+          <a class="text-white" nz-dropdown [nzDropdownMenu]="menu">
+            {{currentUsername}}
+            <span nz-icon nzType="caret-down" nzTheme="outline"></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>
+                <a class="text-black" routerLink="me">Hồ sơ</a>
+              </li>
+              <li nz-menu-item>2nd menu item</li>
+              <li nz-menu-item>3rd menu item</li>
+              <li nz-menu-item nzDanger>
+                <a (click)="logout()">Đăng xuất</a>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      }
   
       <!-- Hamburger button -->
       <div nz-col class="ant-col ant-col-xs-2 ant-col-sm-2 ant-col-md-2 ant-col-lg-2 ant-col-xl-0 ant-col-xxl-0">
