@@ -417,8 +417,8 @@ export class VideoStreamingComponent implements OnInit {
   currentMovie!: MovieServerSource;
   currentMovieDetail!: MovieDetail;
   currentMovieTitle: string = "chưa đặt tên";
-  newCommentText: string = "";
-  deleteCommentIndex: number = 0;
+  newComment!: Comment;
+  deleteCommentIndex: number = -1;
   stars: number[] = [1, 2, 3, 4, 5];
   hoverIndex: number = -1;
 
@@ -437,6 +437,13 @@ export class VideoStreamingComponent implements OnInit {
     this.sanitizer = sanitizer;
     this.pageNumber = Array<number>(5).fill(1);
     this.readonlyFields = Array<boolean>(10).fill(true);
+    this.newComment = {
+      commenId: 99,
+      createAt: (new Date()).toUTCString(),
+      imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
+      isMyComment: true, name: "currentuser",
+      text: ""
+    };
   }
   // id trên thanh địa chỉ lệch 1 với danh sách tập không phải lỗi. nó là do id != index mảng
   ngOnInit(): void {
@@ -465,18 +472,21 @@ export class VideoStreamingComponent implements OnInit {
       name: 'Quá Mỹ Thế Đan',
       isMyComment: true,
       text: 'vvvvvvvvsjdlfjsldj',
-      show: true,
     }];
 
-    const temp2 = Array<Comment>(5).fill({
-      commenId: 0,
-      imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
-      createAt: new Date().toISOString(),
-      name: 'Trần Nguyễn Lâm Sinh Quyên',
-      isMyComment: false,
-      text: 'bbbbbbbbbbbb',
-      show:true
-    });
+    const temp2: Comment[] = [];
+    for (let i = 0; i < 5; ++i) {
+      temp2.push(
+        {
+          commenId: i + 1,
+          imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
+          createAt: new Date().toISOString(),
+          name: movies[Math.floor(Math.random() * 19)].title,
+          isMyComment: false,
+          text: movieDetails[i + 1].summary,
+        }
+      );
+    }
     return [...temp1, ...temp2];
   }
 
@@ -562,26 +572,30 @@ export class VideoStreamingComponent implements OnInit {
 
   toggleEditMode(index: number): void {
     this.readonlyFields[index] = !this.readonlyFields[index];
-    this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
+    if (this.readonlyFields[index] === true) {
+      this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
+    }
+
   }
   sendCommentToServer(): void {
-    // for(let i = 0, length=this.comments.length-1; i < length; ++i){
-    //   this.comments[i+1] = this.comments[i];
-    // }
-    // const newComment:Comment = {
-    //   commenId: -1,
-    //   imgURL: '',
-    //   createAt: '',
-    //   name: '',
-    //   isMyComment: true,
-    //   text: ''
-    // };
-    // this.comments.unshift(newComment);
+    
+    this.comments.unshift(...this.comments.splice(-1));
+    this.comments[0] = {...this.newComment};
+    this.newComment.text = "";
 
   }
   deleteComment(): void {
-    this.comments[this.deleteCommentIndex].show = false;
-    // this.closeModal();
+
+
+    let i = this.deleteCommentIndex;
+    const tempComment: Comment = this.comments[i];
+    for (let length = this.comments.length; i < length - 1; ++i) {
+      this.comments[i] = this.comments[i + 1];
+    }
+
+    this.comments[i] = tempComment;
+    tempComment.commenId = -1;
+    this.closeModal();
   }
 
   openModal(index: number): void {

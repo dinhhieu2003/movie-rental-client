@@ -130,12 +130,19 @@
     overflow: hidden;
 }
 
+/* @keyframes duration | easing-function | delay |
+iteration-count | direction | fill-mode | play-state | name */
+/* animation: 3s ease-in 1s 2 reverse both paused slidein; */
 .video-item {
     text-align: center;
     text-wrap: pretty;
     max-width: 17vw;
     margin-top: 5vh;
     transition: margin-top 0.3s ease-in-out;
+    animation-name: rotateX-animation;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: infinite;
 
     &:hover {
         margin-top: 2vh;
@@ -407,7 +414,7 @@ h2 {
 /* Style the textarea */
 .message {
     width: 100%;
-    height: fit-content;
+    height: max-content;
     resize: none;
     min-height: 3vh;
     color: black;
@@ -415,7 +422,6 @@ h2 {
     grid-column-end: 5;
     grid-row-start: 2;
     background-color: white;
-    text-overflow: ellipsis;
     margin-left: 10px;
     border-radius: 15px;
     padding: 2px 30px;
@@ -423,8 +429,9 @@ h2 {
 
 .message[readOnly] {
     background-color: rgb(26, 29, 69);
-    ;
+    height: max-content;
     color: #ffc;
+    field-sizing: content;
 }
 
 /* The Modal (background) */
@@ -500,5 +507,15 @@ h2 {
         transform: translateY(-1000px) rotate(720deg);
         opacity: 0;
         border-radius: 50%;
+    }
+}
+
+@keyframes rotateX-animation {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateX(360deg) rotateY(360deg);
     }
 }
