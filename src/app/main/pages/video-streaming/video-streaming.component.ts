@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
+import { Comment } from '../../models/comment';
 enum Genre {
   Romance = "Lãng Mạn",
   Action = "Hành Động",
@@ -16,6 +16,7 @@ enum PageIndex {
   ForEpisode,
   ForSeason,
   ForRelate,
+  ForComment,
 }
 
 enum Country {
@@ -256,7 +257,7 @@ const movieDetails: MovieDetail[] = [
     ],
   },
   {
-    
+
     summary: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
     rate: 8.6,
     currentUserRate: -1,
@@ -398,8 +399,8 @@ const movieDetails: MovieDetail[] = [
   },
 ];
 
-const seasons : Season[] = [
-  {idMovie: 1 , seasonName: "Mùa 1"},
+const seasons: Season[] = [
+  { idMovie: 1, seasonName: "Mùa 1" },
 ];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,6 +412,7 @@ const seasons : Season[] = [
   styleUrls: ['./video-streaming.component.css'] // Updated from styleUrl to styleUrls
 })
 export class VideoStreamingComponent implements OnInit {
+  [x: string]: any;
 
   currentMovie!: MovieServerSource;
   currentMovieDetail!: MovieDetail;
@@ -423,22 +425,26 @@ export class VideoStreamingComponent implements OnInit {
   seasons!: Movie[];
   relates!: Movie[];
   topHot!: Movie[];
+  comments!: Comment[];
+  readonlyFields: boolean[];
 
   constructor(
     private sanitizer: DomSanitizer,
     private activateRoute: ActivatedRoute
   ) {
-    this.pageNumber = [1, 1, 1, 1];
+    this.sanitizer = sanitizer;
+    this.pageNumber = Array<number>(5).fill(1);
+    this.readonlyFields = Array<boolean>(10).fill(true);
   }
   // id trên thanh địa chỉ lệch 1 với danh sách tập không phải lỗi. nó là do id != index mảng
   ngOnInit(): void {
     const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
     if (id) {
-      this.initPageContent(Number(id)-1);
+      this.initPageContent(Number(id) - 1);
     }
   }
 
-  initPageContent(movieId:number){
+  initPageContent(movieId: number) {
     // console.log("434id="+movieId);
     this.currentMovie = this.loadMovieById(movieId);
     this.currentMovieDetail = this.loadDetailById(movieId);
@@ -447,6 +453,27 @@ export class VideoStreamingComponent implements OnInit {
     this.seasons = this.loadSeason();
     this.relates = this.loadRelate();
     this.topHot = this.loadHotMovie();
+    this.comments = this.load10Comments(movieId, 1);
+  }
+  load10Comments(movieId: number, pageNumber: number): Comment[] {
+    return [
+      {
+        commenId: 0,
+        imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
+        createAt: new Date().toISOString(),
+        name: 'Quá Mỹ Thế Đan',
+        isMyComment: true,
+        text: 'vvvvvvvv\nsjdlfjsldj'
+      },
+      {
+        commenId: 0,
+        imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
+        createAt: new Date().toISOString(),
+        name: 'Trần Nguyễn Lâm Sinh Quyên',
+        isMyComment: false,
+        text: 'bbbbbbbbbbbb'
+      },
+    ];
   }
 
   loadMovieById(id: number): MovieServerSource {
@@ -467,7 +494,7 @@ export class VideoStreamingComponent implements OnInit {
   loadEpisodes(): Movie[] {
     // console.log("460id="+this.currentMovie.idMovie);
     this.pageNumber[PageIndex.ForEpisode] = this.currentMovie.idMovie;
-    
+
     const nextEpisode = [];
     let start = Math.floor(this.currentMovie.idMovie / 5) * 5;
     for (let end = start + 5; start < end; ++start) {
@@ -485,23 +512,23 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   loadRelate(): Movie[] {
-    const relateMovie :Movie[]= [];
+    const relateMovie: Movie[] = [];
     let moviesMaxLength = movieDetails.length;
-      for(let genre of this.currentMovieDetail.genres){
-        for(let i=0;i<moviesMaxLength;++i ){
-          for(let gen of movieDetails[i].genres){
-            if(genre === gen){
-                relateMovie.push(movies[i]);
-                if( relateMovie.length === 5){
-                  return relateMovie;
-                }
+    for (let genre of this.currentMovieDetail.genres) {
+      for (let i = 0; i < moviesMaxLength; ++i) {
+        for (let gen of movieDetails[i].genres) {
+          if (genre === gen) {
+            relateMovie.push(movies[i]);
+            if (relateMovie.length === 5) {
+              return relateMovie;
             }
           }
         }
       }
-      return relateMovie;
     }
-  
+    return relateMovie;
+  }
+
 
   loadHotMovie(): Movie[] {
     const hotMovie = [];
@@ -528,4 +555,10 @@ export class VideoStreamingComponent implements OnInit {
     this.currentMovieDetail.currentUserRate = score + 1;
     alert(score);
   }
+
+  toggleEditMode(index: number): void {
+    this.readonlyFields[index] = !this.readonlyFields[index];
+    this.comments[index].text = this.comments[index].text.replaceAll('\n',". ");
+  }
+
 }

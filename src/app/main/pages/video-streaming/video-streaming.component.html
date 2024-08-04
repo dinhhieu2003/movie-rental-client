@@ -104,7 +104,17 @@
 
     <div class="title">
         <h1>Bình Luận</h1>
+        @for(cmt of comments;track $index){
+        <ng-container *ngTemplateOutlet="comment;
+            context:{
+                index:$index
+            }
+            ">
+        </ng-container>
+        }
+
     </div>
+
 </div>
 
 <ng-template #itemTemplate let-className="className" let-imageClass="imageClass" let-imageSource="imageSource"
@@ -140,11 +150,27 @@
     </div>
 </ng-template>
 
-<ng-template #comment>
-    <div class="comment">
-        <img>
-        <input>
-        
-        <
+<ng-template #comment let-index="index">
+    <div class="comment-container">
+
+        <img class="avatar-comment" [src]="comments[index].imgURL">
+        <p class="user-name">{{comments[index].name}}</p>
+        <p class="date">{{comments[index].createAt}}</p>
+        <!-- <div> -->
+
+        @if(comments[index].isMyComment){
+
+        <!-- <input type="checkbox" class="toggleReadOnly" [id]="'toggleReadOnly'+index">
+            <label [for]="'toggleReadOnly'+index">Sửa</label> -->
+        <button class="edit-comment-button" (click)="toggleEditMode(index)">Sửa</button>
+        <button class="delete-comment-button">xóa</button>
+
+
+        }
+        <textarea rows="2" maxlength="1000"
+            onmouseleave='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="message"
+            [(ngModel)]="comments[index].text" [(readOnly)]="readonlyFields[index]"></textarea>
+        <!-- </div> -->
     </div>
+
 </ng-template>
