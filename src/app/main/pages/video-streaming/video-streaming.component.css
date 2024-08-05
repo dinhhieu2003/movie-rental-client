@@ -125,9 +125,12 @@
 .video-list {
     display: flex;
     padding-left: 2vw;
+    padding-bottom: 1vh;
     max-width: 80vw;
     gap: 2vw;
     overflow: hidden;
+    border: 2px solid greenyellow;
+    height: max-content;
 }
 
 /* @keyframes duration | easing-function | delay |
@@ -139,13 +142,15 @@ iteration-count | direction | fill-mode | play-state | name */
     max-width: 17vw;
     margin-top: 5vh;
     transition: margin-top 0.3s ease-in-out;
-    animation-name: rotateX-animation;
+    /* animation-name: rotateX-animation;
     animation-duration: 2s;
     animation-timing-function: ease-out;
-    animation-iteration-count: infinite;
+    animation-iteration-count: infinite; */
 
     &:hover {
         margin-top: 2vh;
+        /* border: 2px solid red; */
+        filter: brightness(50%);
     }
 }
 
