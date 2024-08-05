@@ -23,6 +23,33 @@
      background-color: #6471e6;
  }
 
+/* Search  */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.input-search {
+    padding-right: 2rem;
+    border-radius: 4px;
+}
+
+.search-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    pointer-events: none;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}
 
  ::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
      background-color: #000000;

@@ -11,7 +11,7 @@ describe('UserManagementComponent', () => {
       imports: [UserManagementComponent]
     })
     .compileComponents();
-
+    
     fixture = TestBed.createComponent(UserManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

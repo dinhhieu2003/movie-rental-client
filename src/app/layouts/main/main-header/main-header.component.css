@@ -2,9 +2,16 @@
     background-color: black;
 }
 
+.container {
+    background-color: black;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 #logo {
     display: flex;
-    padding-left: 40px;
     align-items: center;
     gap: 10px;
     line-height: 64px;
@@ -23,6 +30,7 @@
     padding-left: 12px;
     line-height: 64px;
     margin-bottom: 0;
+    font-size: 16px;
 }
 
 #nav .ant-menu-item a {
@@ -84,4 +92,14 @@ svg {
     padding: 8px;
     font-size: 1rem;
     font-weight: bold;
+}
+
+@media(min-width: 992px) and (max-width: 1279px) {
+    .icon {
+        padding: 0;
+    }
+    #nav .ant-menu-item {
+        padding-right: 0;
+        padding-left: 13px;
+    }
 }

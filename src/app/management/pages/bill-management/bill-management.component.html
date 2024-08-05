@@ -1,0 +1,68 @@
+<div class="container p-4">
+    <div class="card-header mb-5">
+      <div class="flex justify-between">
+        <div>
+          <button nz-button nzType="primary" nzSize="default" >Bill Management</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="w-full flex justify-between mb-4">
+        <div class="dataTable_length text-white">
+          Show
+          <nz-select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+            <nz-option [nzValue]="5" nzLabel="5"></nz-option>
+            <nz-option [nzValue]="10" nzLabel="10"></nz-option>
+            <nz-option [nzValue]="15" nzLabel="15"></nz-option>
+          </nz-select>
+          entries
+        </div>
+        <div class="dataTable_filter text-right text-white">
+          Search:
+          <input class="ml-2 input-search" nz-input placeholder="Search" [(ngModel)]="valueSearch" (ngModelChange)="onSearchChange()" type="text" />
+        </div>
+      </div>
+      <div class="w-full flex justify-between mb-4">
+        <div class="dataTable_sort text-white">
+          Sort By:
+          <nz-select [(ngModel)]="sortOption" (ngModelChange)="onSortChange($event)">
+            <nz-option [nzValue]="'date'" nzLabel="Recent Date"></nz-option>
+            <nz-option [nzValue]="'amountLowToHigh'" nzLabel="TotalPrice Low to High"></nz-option>
+            <nz-option [nzValue]="'amountHighToLow'" nzLabel="TotalPrice High to Low"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="table-view">
+        <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize">
+          <thead>
+            <tr>
+              <th>Sr No</th>
+              <th>Bill ID</th>
+              <th>Issue Date</th>
+              <th>User</th>
+              <th>Films</th>
+              <th>Package Info</th>
+              <th>Payment Status</th>
+              <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody style="color: white;">
+            <tr *ngFor="let bill of basicTable.data; let i = index" class="hover-row table-row">
+              <td>{{ i + 1 }}</td>
+              <td>{{ bill.billId }}</td>
+              <td>{{ bill.issueDate | date }}</td>
+              <td>{{ bill.user }}</td>
+              <td>{{ bill.films }}</td>
+              <td>{{ bill.packageInfo }}</td>
+              <td>
+                <span *ngIf="bill.paymentStatus" style="display: inline-block; width: 10px; height: 10px; background-color: #65de24; border-radius: 50%;"></span>
+                <span *ngIf="!bill.paymentStatus" style="display: inline-block; width: 10px; height: 10px; background-color: #dc1922; border-radius: 50%;"></span>
+              </td>
+              <td>{{ bill.totalPrice| currency }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+  
