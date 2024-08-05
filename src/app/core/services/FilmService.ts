@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environments';
-import { FilmModel } from '../models/FilmModel';
 
 @Injectable({
     providedIn: 'root'
@@ -13,45 +12,39 @@ export class FilmService {
 
     constructor(private http: HttpClient) { }
 
-    getDeletedFilms(): Observable<FilmModel[]> {
-        return this.http.get<FilmModel[]>(`${this.apiUrl}/films/deleted`).pipe(
-            tap(data => console.log(data, 'Fetched deleted films')),
+    getDeletedFilms(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}films/deleted`).pipe(
             catchError(this.handleError)
         );
     }
 
     // Lấy all films đã xóa mềm
-    getNotDeletedFilms(): Observable<FilmModel[]> {
-        return this.http.get<FilmModel[]>(`${this.apiUrl}/films/notdelete`).pipe(
-            tap(data => console.log(data, 'Fetched not deleted films')),
+    getNotDeletedFilms(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}films/getNotdelete`).pipe(
             catchError(this.handleError)
         );
     }
 
-    postCreateFilm(film: FilmModel): Observable<FilmModel> {
-        return this.http.post<FilmModel>(`${this.apiUrl}/create`, film).pipe(
-            tap(data => console.log(data, 'Created film')),
+    postCreateFilm(film: FillMode): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}create`, film).pipe(
             catchError(this.handleError)
         );
     }
 
-    putUpdateFilm(id: number, film: FilmModel): Observable<FilmModel> {
-        return this.http.put<FilmModel>(`${this.apiUrl}/update/${id}`, film).pipe(
-            tap(data => console.log(data, 'Updated film')),
+    putUpdateFilm(id: number, film: FillMode): Observable<any> {
+        return this.http.put<any>(`${this.apiUrl}update/${id}`, film).pipe(
             catchError(this.handleError)
         );
     }
 
     patchRestoreFilm(id: number): Observable<void> {
-        return this.http.patch<void>(`${this.apiUrl}/restore/${id}`, {}).pipe(
-            tap(() => console.log(`Restored film with ID ${id}`)),
+        return this.http.patch<void>(`${this.apiUrl}restore/${id}`, {}).pipe(
             catchError(this.handleError)
         );
     }
 
     deleteFilm(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/films/delete/${id}`).pipe(
-            tap(() => console.log(`Deleted film with ID ${id}`)),
+        return this.http.delete<void>(`${this.apiUrl}films/delete/${id}`).pipe(
             catchError(this.handleError)
         );
     }
@@ -65,4 +58,9 @@ export class FilmService {
         }
         return throwError('Something bad happened; please try again later.');
     }
+
+    // .pipe(
+    //     tap(data => console.log(data, 'Created category')),
+    //         catchError(this.handleError)
+    //     );
 }
