@@ -181,7 +181,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-.title input {
+.page-jump,.title input {
     background-color: rgb(59, 59, 59);
     width: 70px;
     margin-right: 10px;

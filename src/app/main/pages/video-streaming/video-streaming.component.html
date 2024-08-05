@@ -138,7 +138,16 @@
                         ">
                 </ng-container>
                 }
+                <span class="video-list-control">
+                    <button (click)="decreasePageNumber(3)"><i class="fa fa-arrow-left"
+                            style="font-size:24px"></i></button>
+                    <input class="page-jump" style="height: min-content;" min="1" type="number" required size="4" [(ngModel)]="pageNumber[3]">
+                    <button class="jump-page-button">NHẢY</button>
+                    <button (click)="increasePageNumber(3)"><i class="fa fa-arrow-right"
+                            style="font-size:24px"></i></button>
+                </span>
             </div>
+            
         </div>
 
 
@@ -156,18 +165,24 @@
     </span>
 </ng-template>
 
+
+<ng-template #listControl let-pageNumberIndex="pageNumberIndex">
+    <span class="video-list-control">
+        <button (click)="decreasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-left"
+                style="font-size:24px"></i></button>
+        <input min="1" type="number" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
+        <button class="jump-page-button">NHẢY</button>
+        <button (click)="increasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-right"
+                style="font-size:24px"></i></button>
+    </span>
+</ng-template>
+
 <ng-template #videoList let-titleSection="titleSection" let-items="items" let-pageNumberIndex="pageNumberIndex">
     <div class="title">
         <h1>{{titleSection}}</h1>
 
-        <span class="video-list-control">
-            <button (click)="decreasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-left"
-                    style="font-size:24px"></i></button>
-            <input type="number" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
-            <button class="jump-page-button">NHẢY</button>
-            <button (click)="increasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-right"
-                    style="font-size:24px"></i></button>
-        </span>
+        <ng-container *ngTemplateOutlet="listControl; context:{pageNumberIndex:pageNumberIndex}">
+        </ng-container>
 
         <div class="video-list">
             @for (item of items; track $index;) {
@@ -189,8 +204,8 @@
         <button class="edit-comment-button" (click)="toggleEditMode(index)">Sửa</button>
         <button class="delete-comment-button" (click)="openModal(index)">xóa</button>
         }
-        <textarea maxlength="1000" 
-        class="message" [(ngModel)]="comments[index].text" [(readOnly)]="readonlyFields[index]"></textarea>
+        <textarea maxlength="1000" class="message" [(ngModel)]="comments[index].text"
+            [(readOnly)]="readonlyFields[index]"></textarea>
         <!-- on='this.style.height = "";this.style.height = this.scrollHeight + "px"' -->
     </div>
 

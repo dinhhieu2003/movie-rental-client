@@ -553,7 +553,9 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   decreasePageNumber(index: number) {
-    this.pageNumber[index] -= 1;
+    if(this.pageNumber[index] > 1){
+      this.pageNumber[index] -= 1;
+    }
   }
   increasePageNumber(index: number) {
     this.pageNumber[index] += 1;
