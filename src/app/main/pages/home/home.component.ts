@@ -19,19 +19,19 @@ export class HomeComponent {
   
   listAlbum: Album[] = [];
 
-  initAlbum() {
-    for(let i=0; i<10; i++) {
-      let movies: Movie[] = [];
-      for(let j=0; j<10; j++) {
-        let movie: Movie = {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price:47};
-        movies.push(movie);
-      }
-      let album: Album = {movies: movies, name:"anime"};
-      this.listAlbum.push(album);
-    }
-  }
+  // initAlbum() {
+  //   for(let i=0; i<10; i++) {
+  //     let movies: Movie[] = [];
+  //     for(let j=0; j<10; j++) {
+  //       let movie: Movie = {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price:47};
+  //       movies.push(movie);
+  //     }
+  //     let album: Album = {movies: movies, name:"anime"};
+  //     this.listAlbum.push(album);
+  //   }
+  // }
 
   constructor() {
-    this.initAlbum();
+    // this.initAlbum();
   }
 }
