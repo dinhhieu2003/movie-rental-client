@@ -28,7 +28,7 @@ export class CommentService {
       text: newText,
       idUser: userId ? userId : "không có IdUser"
     }
-    return this.httpClient.post<BaseResponse>(url, body);
+    return this.httpClient.put<BaseResponse>(url, body);
   }
 
   deleteComment(commentId: string): Observable<BaseResponse> {

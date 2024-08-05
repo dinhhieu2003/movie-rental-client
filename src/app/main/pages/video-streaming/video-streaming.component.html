@@ -17,13 +17,14 @@
             </div>
         </div>
     </div>
-
+    <!-- "https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4" -->
     <div class="video-player">
-        <!-- <video controls autoplay style="width: 100%;height: 100%; object-fit: contain;"
-            src="https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4">
-        </video> -->
+        <video controls autoplay style="width: 100%;height: 100%; object-fit: contain;"
+            [src]="videoSrc">
+        </video>
+    
         <iframe loading="lazy" width="100%" height="100%" [src]="currentMovie.link" frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe>
     </div>
     <div class="detail-film-container">
         <div class="name-detail">
@@ -206,8 +207,11 @@
         }
         <textarea maxlength="1000" class="message" [(ngModel)]="comments[index].text"
             [(readOnly)]="readonlyFields[index]"></textarea>
-        <!-- on='this.style.height = "";this.style.height = this.scrollHeight + "px"' -->
+        
     </div>
 
 
 </ng-template>
+
+
+<!-- on='this.style.height = "";this.style.height = this.scrollHeight + "px"' -->

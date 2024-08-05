@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Comment } from '../../models/comment';
 import { CommentService } from '../../../core/services/comment.service';
+import { VideoStreamingService } from '../../../core/services/video-streaming.service';
+import { log } from 'console';
 enum Genre {
   Romance = "Lãng Mạn",
   Action = "Hành Động",
@@ -431,10 +433,15 @@ export class VideoStreamingComponent implements OnInit {
   comments!: Comment[];
   readonlyFields: boolean[];
 
+  ////////////
+  videoId!: string;
+  videoSrc: string = "";
+  ///////////
   constructor(
     private sanitizer: DomSanitizer,
     private activateRoute: ActivatedRoute,
-    private commentService:CommentService
+    private commentService: CommentService,
+    private filmService: VideoStreamingService,
   ) {
     this.sanitizer = sanitizer;
     this.pageNumber = Array<number>(5).fill(1);
@@ -450,8 +457,22 @@ export class VideoStreamingComponent implements OnInit {
   // id trên thanh địa chỉ lệch 1 với danh sách tập không phải lỗi. nó là do id != index mảng
   ngOnInit(): void {
     const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
+
     if (id) {
-      this.initPageContent(Number(id) - 1);
+      this.videoId = id;
+      this.filmService.getFilmById(id).subscribe({
+        next: (response) => {
+          this.videoSrc = response.Data.filmUrl;
+          console.log(this.videoSrc);
+          console.log(JSON.stringify(response));
+
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+
+      this.initPageContent(/*Number(id) - 1*/3);
     }
   }
 
@@ -493,7 +514,7 @@ export class VideoStreamingComponent implements OnInit {
     //  this.commentService.get10CommentsByFilmId(movieId.toString(),1).subscribe({
     //   next:(response) => {
     //    commentArray = [...response];
-        
+
     //   },
     //   error: (error) => {
     //     console.error(error);
@@ -507,6 +528,8 @@ export class VideoStreamingComponent implements OnInit {
   loadMovieById(id: number): MovieServerSource {
     // console.log("445id="+id);
     const movie = movieServerSources[id];
+    console.log("id="+id+" |movie=");
+    
     movie.link = this.sanitizer.bypassSecurityTrustResourceUrl(movie.link + "?autoplay=1");
     return movie;
   }
@@ -567,7 +590,7 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   decreasePageNumber(index: number) {
-    if(this.pageNumber[index] > 1){
+    if (this.pageNumber[index] > 1) {
       this.pageNumber[index] -= 1;
     }
   }
@@ -595,9 +618,9 @@ export class VideoStreamingComponent implements OnInit {
 
   }
   sendCommentToServer(): void {
-    
+
     this.comments.unshift(...this.comments.splice(-1));
-    this.comments[0] = {...this.newComment};
+    this.comments[0] = { ...this.newComment };
     //this.commentService.createComment(this.currentMovie.idMovie.toString(),this.newComment.text);
     this.newComment.text = "";
 
