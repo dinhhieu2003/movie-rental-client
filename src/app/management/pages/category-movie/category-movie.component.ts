@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -7,6 +7,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { ChangeDetectorRef } from '@angular/core';
 import { NzModalCloseComponent, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { CategoryService } from '../../../core/services/CategoryService';
+import { CategoryModel } from '../../../core/models/CategoryModel';
 
 @Component({
   selector: 'app-category-movie',
@@ -24,7 +26,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
   templateUrl: './category-movie.component.html',
   styleUrl: './category-movie.component.css'
 })
-export class CategoryMovieComponent {
+export class CategoryMovieComponent implements OnInit{
 
   valueSearch = ''
   isVisibleAdd = false; 
@@ -41,6 +43,97 @@ export class CategoryMovieComponent {
     isActive: true
   };
 
+  constructor(private fb: FormBuilder, private categoryService: CategoryService) {
+    this.createForm();
+  }
+  createForm(): void {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      image: ['', Validators.required],
+      category: ['', Validators.required],
+      album: ['', Validators.required],
+      isActive: [false]
+    });
+  }
+  
+  ngOnInit() {
+    this.findAllCategories();    
+  }
+
+  // Phương thức lấy tất cả các category
+  findAllCategories() {
+    this.categoryService.getFindAllCategories().subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức lấy tất cả các category đã bị xóa mềm
+  getAllSoftDeletedCategories() {
+    this.categoryService.getAllSoftDeletedCategories().subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức tạo mới một category
+  createCategory(category: CategoryModel) {
+    this.categoryService.postCreateCategory(category).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức cập nhật một category theo ID
+  updateCategory(categoryId: number, category: CategoryModel) {
+    this.categoryService.putUpdateCategory(categoryId, category).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức xóa mềm một category theo ID
+  softDeleteCategory(categoryId: number) {
+    this.categoryService.patchSoftDeleteCategory(categoryId).subscribe(
+      () => {
+        console.log(`Soft deleted category with ID ${categoryId}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức khôi phục một category đã bị xóa mềm theo ID
+  restoreCategory(categoryId: number) {
+    this.categoryService.patchRestoreCategory(categoryId).subscribe(
+      () => {
+        console.log(`Restored category with ID ${categoryId}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Modal add
   showModalAdd(): void {
     this.isVisibleAdd = true;
   }
@@ -51,7 +144,9 @@ export class CategoryMovieComponent {
   handleAddCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleAdd = false;
-  }  
+  }
+
+  // Modal update
   showModalUpdate(): void {
     this.isVisibleUpdate = true;
   }
@@ -63,6 +158,8 @@ export class CategoryMovieComponent {
     console.log('Button cancel clicked!');
     this.isVisibleUpdate = false;
   }  
+
+  // Modal delete
   showModalDelete(): void {
     this.isVisibleDelete = true;
   }
@@ -74,20 +171,7 @@ export class CategoryMovieComponent {
     console.log('Button cancel clicked!');
     this.isVisibleDelete = false;
   }  
-  constructor(private fb: FormBuilder) {
-    this.createForm();
-  }
-
-  createForm(): void {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      image: ['', Validators.required],
-      category: ['', Validators.required],
-      album: ['', Validators.required],
-      isActive: [false]
-    });
-  }
+  
   originalCategories = [
     {
       name: 'Phim Bộ',
