@@ -11,7 +11,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { UserService } from '../../../core/services/management.services/user.service';
+import { UserService } from '../../../core/services/user.service';
 
 interface User {
   userId: string;
