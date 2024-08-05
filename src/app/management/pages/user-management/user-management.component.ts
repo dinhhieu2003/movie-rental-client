@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -57,7 +57,8 @@ export class UserManagementComponent implements OnInit {
     { title: 'Custom', compare: null, priority: false },
   ];
 
-  listOfData: User[] = [
+  listOfData: User[] = 
+  [
     { userId: '1', userName: 'JohnDoe', password: 'password123', role: 'Admin', action: true },
     { userId: '11', userName: 'JaneSmith', password: 'password456', role: 'User', action: true },
     { userId: '12', userName: 'MikeJohnson', password: 'password789', role: 'User', action: false },
@@ -74,7 +75,7 @@ export class UserManagementComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder,private userService: UserService) {
     this.form = this.fb.group({
       userId: [''],
       userName: [''],
@@ -91,7 +92,10 @@ export class UserManagementComponent implements OnInit {
   getAllUsers(): void {
     this.userService.getAllUsers().subscribe(data => {
       this.listOfData = data;
-      this.filteredData = data;
+      
+      console.log("listdata: "+JSON.stringify(this.listOfData, null, 2)) ;
+      console.log("data: "+JSON.stringify(data, null, 2));
+       this.filteredData = data;
     });
   }
 
