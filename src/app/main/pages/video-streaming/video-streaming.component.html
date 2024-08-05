@@ -195,7 +195,7 @@
 </ng-template>
 
 <ng-template #comment let-index="index">
-    <div class="comment-container" [hidden]="comments[index].commenId < 0">
+    <div class="comment-container" [hidden]="comments[index].commentId < 0">
 
         <img class="avatar-comment" [src]="comments[index].imgURL">
         <p class="user-name">{{comments[index].name}}</p>

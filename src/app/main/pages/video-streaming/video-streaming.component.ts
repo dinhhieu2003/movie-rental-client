@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Comment } from '../../models/comment';
+import { CommentService } from '../../../core/services/comment.service';
 enum Genre {
   Romance = "Lãng Mạn",
   Action = "Hành Động",
@@ -432,13 +433,14 @@ export class VideoStreamingComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private commentService:CommentService
   ) {
     this.sanitizer = sanitizer;
     this.pageNumber = Array<number>(5).fill(1);
     this.readonlyFields = Array<boolean>(10).fill(true);
     this.newComment = {
-      commenId: 99,
+      commentId: 99,
       createAt: (new Date()).toUTCString(),
       imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
       isMyComment: true, name: "currentuser",
@@ -466,7 +468,7 @@ export class VideoStreamingComponent implements OnInit {
   load10Comments(movieId: number, pageNumber: number): Comment[] {
 
     const temp1: Comment[] = [{
-      commenId: 0,
+      commentId: 0,
       imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
       createAt: new Date().toISOString(),
       name: 'Quá Mỹ Thế Đan',
@@ -478,7 +480,7 @@ export class VideoStreamingComponent implements OnInit {
     for (let i = 0; i < 5; ++i) {
       temp2.push(
         {
-          commenId: i + 1,
+          commentId: i + 1,
           imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
           createAt: new Date().toISOString(),
           name: movies[Math.floor(Math.random() * 19)].title,
@@ -487,6 +489,18 @@ export class VideoStreamingComponent implements OnInit {
         }
       );
     }
+    // let commentArray:Comment[] =[];
+    //  this.commentService.get10CommentsByFilmId(movieId.toString(),1).subscribe({
+    //   next:(response) => {
+    //    commentArray = [...response];
+        
+    //   },
+    //   error: (error) => {
+    //     console.error(error);
+    //   }
+    //  });
+    // return commentArray;
+
     return [...temp1, ...temp2];
   }
 
@@ -576,6 +590,7 @@ export class VideoStreamingComponent implements OnInit {
     this.readonlyFields[index] = !this.readonlyFields[index];
     if (this.readonlyFields[index] === true) {
       this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
+      //this.commentService.updateComment(this.comments[index].commentId.toString(),this.comments[index].text);
     }
 
   }
@@ -583,11 +598,11 @@ export class VideoStreamingComponent implements OnInit {
     
     this.comments.unshift(...this.comments.splice(-1));
     this.comments[0] = {...this.newComment};
+    //this.commentService.createComment(this.currentMovie.idMovie.toString(),this.newComment.text);
     this.newComment.text = "";
 
   }
   deleteComment(): void {
-
 
     let i = this.deleteCommentIndex;
     const tempComment: Comment = this.comments[i];
@@ -596,7 +611,8 @@ export class VideoStreamingComponent implements OnInit {
     }
 
     this.comments[i] = tempComment;
-    tempComment.commenId = -1;
+    tempComment.commentId = -1;
+    //this.commentService.deleteComment(this.comments[i].commentId.toString())
     this.closeModal();
   }
 

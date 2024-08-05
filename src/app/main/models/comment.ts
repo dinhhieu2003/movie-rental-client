@@ -1,5 +1,5 @@
 export interface Comment {
-    commenId: number,
+    commentId: number,
     imgURL: string,
     createAt: string,
     name: string,
