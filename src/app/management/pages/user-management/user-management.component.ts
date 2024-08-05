@@ -11,6 +11,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { UserService } from '../../../core/services/management.services/user.service';
 
 interface User {
   userId: string;
@@ -39,7 +40,8 @@ interface User {
     NzModalModule,
   ],
   templateUrl: './user-management.component.html',
-  styleUrl: './user-management.component.css'
+  styleUrls: ['./user-management.component.css'],
+  providers: [UserService]
 })
 export class UserManagementComponent implements OnInit {
   valueSearch = '';
@@ -56,23 +58,49 @@ export class UserManagementComponent implements OnInit {
   ];
 
   listOfData: User[] = [
-    
     { userId: '1', userName: 'JohnDoe', password: 'password123', role: 'Admin', action: true },
     { userId: '11', userName: 'JaneSmith', password: 'password456', role: 'User', action: true },
-    { userId: '12', userName: 'MikeJohnson', password: 'password789', role: 'Staff', action: false },
+    { userId: '12', userName: 'MikeJohnson', password: 'password789', role: 'User', action: false },
     { userId: '123', userName: 'AnnaWilliams', password: 'password101', role: 'Admin', action: false },
     { userId: '2', userName: 'ChrisBrown', password: 'password102', role: 'User', action: false },
-    { userId: '020', userName: 'KatieTaylor', password: 'password103', role: 'Staff', action: true },
+    { userId: '020', userName: 'KatieTaylor', password: 'password103', role: 'User', action: true },
     { userId: '45', userName: 'PaulWalker', password: 'password104', role: 'User', action: false },
     { userId: '66', userName: 'LauraWilson', password: 'password105', role: 'Admin', action: false },
-    { userId: '455', userName: 'SamGreen', password: 'password106', role: 'Staff', action: false },
+    { userId: '455', userName: 'SamGreen', password: 'password106', role: 'User', action: false },
     { userId: '1011', userName: 'OliviaMartinez', password: 'password107', role: 'User', action: false }
   ];
 
-
   filteredData: User[] = [...this.listOfData];
 
-  ngOnInit(): void { }
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder, private userService: UserService) {
+    this.form = this.fb.group({
+      userId: [''],
+      userName: [''],
+      password: [''],
+      role: [''],
+      action: [false]
+    });
+  }
+
+  ngOnInit(): void {
+    this.getAllUsers();
+  }
+
+  getAllUsers(): void {
+    this.userService.getAllUsers().subscribe(data => {
+      this.listOfData = data;
+      this.filteredData = data;
+    });
+  }
+
+  getUser(userId: string): void {
+    this.userService.getUser(userId).subscribe(user => {
+      console.log('User found:', user);
+      this.form.patchValue(user);
+    });
+  }
 
   onPageSizeChange(newSize: number): void {
     this.pageSize = newSize;
@@ -88,53 +116,68 @@ export class UserManagementComponent implements OnInit {
   showModalAdd(): void {
     this.isVisibleAdd = true;
   }
+
   handleAddOk(): void {
     console.log('Button ok clicked!');
     this.isVisibleAdd = false;
   }
+
   handleAddCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleAdd = false;
   }
 
   isVisibleUpdate = false;
-  showModalUpdate(): void {
+  showModalUpdate(user: User): void {
+    this.form.patchValue(user);
     this.isVisibleUpdate = true;
   }
+
   handleUpdateOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleUpdate = false;
+    const updatedUser: User = this.form.value;
+    this.userService.updateUser(updatedUser).subscribe(() => {
+      console.log('User updated successfully');
+      this.getAllUsers();  
+      this.isVisibleUpdate = false;
+    });
   }
+
   handleUpdateCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleUpdate = false;
   }
 
   isVisibleDelete = false;
-  showModalDelete(): void {
+  showModalDelete(userId: string): void {
     this.isVisibleDelete = true;
+    this.form.patchValue({ userId });
   }
+
   handleDeleteOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleDelete = false;
+    const userId: string = this.form.get('userId')?.value;
+    this.userService.softDeleteUser(userId).subscribe(() => {
+      console.log('User deleted successfully');
+      this.getAllUsers();  
+      this.isVisibleDelete = false;
+    });
   }
+
   handleDeleteCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleDelete = false;
   }
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    
-    this.form = this.fb.group({
-      userId: [''],
-      userName: [''],
-      password: [''],
-      role: [''],
-      action: [false]
+  activateUser(userId: string): void {
+    this.userService.activateUser(userId).subscribe(() => {
+      console.log('User activated successfully');
+      this.getAllUsers();  
     });
+  }
 
-
+  deactivateUser(userId: string): void {
+    this.userService.deactivateUser(userId).subscribe(() => {
+      console.log('User deactivated successfully');
+      this.getAllUsers();  
+    });
   }
 }
