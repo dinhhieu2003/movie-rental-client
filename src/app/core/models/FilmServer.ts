@@ -20,8 +20,8 @@ export interface FilmData {
     actors: string;
     director: string;
     language: string;
-    numberOfViews: number | null;
-    rating: number | null;
+    numberOfViews: number;
+    rating: number;
     age: number;
     rentalType: string;
     price: number;

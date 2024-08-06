@@ -6,7 +6,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Comment } from '../../models/comment';
 import { CommentService } from '../../../core/services/comment.service';
 import { VideoStreamingService } from '../../../core/services/video-streaming.service';
-import { log } from 'console';
 enum Genre {
   Romance = "Lãng Mạn",
   Action = "Hành Động",
