@@ -13,6 +13,7 @@ import { CheckoutComponent } from "../pages/checkout/checkout.component";
 import { authGuard } from "../../core/guard/auth.guard";
 import { CategoryService } from "../../core/services/main/category.service";
 import { inject } from "@angular/core";
+import { FilmStreamingComponent } from "../pages/film-streaming/film-streaming.component";
 
 export const mainRoutes: Routes = [
     {
