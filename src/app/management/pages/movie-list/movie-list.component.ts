@@ -11,7 +11,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { FilmService } from '../../../core/services/FilmService'
+import { FilmService } from '../../../core/services/film.service'
 import { FilmModel } from '../../../core/models/FilmModel'
 
 interface DataItem {
