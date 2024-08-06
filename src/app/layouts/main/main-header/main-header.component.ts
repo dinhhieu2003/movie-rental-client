@@ -10,6 +10,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../../../core/services/main/category.service';
 import { error } from 'console';
+import { CartService } from '../../../core/services/main/cart.service';
+import { NotificationService } from '../../../core/services/main/notification.service';
 
 @Component({
   selector: 'app-main-header',
@@ -31,16 +33,45 @@ export class MainHeaderComponent implements OnInit{
   isAuthenticated: boolean = false;
   currentUsername: string | null = "";
   categories: any[] = [];
+  cartQuantity: number = 0;
+  notificationQuantity: number = 0;
 
   constructor(private jwtService: JwtService, 
     private authService: AuthService,
     private router: Router,
     private categoryService: CategoryService,
+    private cartService: CartService,
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
     this.isAuthenticated = !!this.jwtService.getToken();
     this.currentUsername = this.jwtService.getUserInfo().FullName;
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        this.cartQuantity = response.Data.films.length;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+    this.getCartQuantity();
+    this.getNotificationQuantity();
+  }
+
+  getNotificationQuantity() {
+    let id = localStorage.getItem("IdUser");
+    if(id) {
+      this.notificationService.getNotificationUnread(id).subscribe({
+        next: (response) => {
+          this.notificationQuantity = response.length;
+        }
+      })
+
+    }
+  }
+
+  getCartQuantity() {
     this.categoryService.getAllCategory().subscribe({
       next: (response) => {
         this.categories = response.Data.content;
