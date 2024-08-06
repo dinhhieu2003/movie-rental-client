@@ -18,6 +18,7 @@ import { TransactionHistoryComponent } from "../pages/profile-management/transac
 import { MoviesRentalListComponent } from "../pages/profile-management/movies-rental-list/movies-rental-list.component";
 import { MyMailComponent } from "../pages/profile-management/my-mail/my-mail.component";
 import { ManageLoginDevicesComponent } from "../pages/profile-management/manage-login-devices/manage-login-devices.component";
+import { FilmStreamingComponent } from "../pages/film-streaming/film-streaming.component";
 
 export const mainRoutes: Routes = [
     {
@@ -89,7 +90,7 @@ export const mainRoutes: Routes = [
         children: [
             {
                 path: '',
-                component: VideoStreamingComponent,
+                component: FilmStreamingComponent,
             },
         ]
     },

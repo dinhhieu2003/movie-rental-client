@@ -10,7 +10,7 @@
         <!-- Sign-up form container -->
         <div class="form-container sign-up-container">
             <!-- Form to handle sign-up submission -->
-            <form (ngSubmit)="onSignUp()">
+            <form (ngSubmit)="acceptCreateAccount()">
                 <h1>Tạo Tài Khoản</h1>
                 <!-- Social media login buttons -->
                 <div class="social-container">
@@ -32,7 +32,7 @@
                 <span class="password-input">
                     <input style="min-width: 0; flex-grow: 1;" type="text" placeholder="123478" [(ngModel)]="code" name="code"
                         required />
-                    <button class="send-code-button" type="button" aria-details="gửi" (click)="sendCodeToEmail()">Gửi Về Email</button>
+                    <button class="send-code-button" type="button" aria-details="gửi" (click)="onSignUp()">Gửi Về Email</button>
                 </span>
                 <button class="deffault-button bg-primary-gradient" type="submit">Đăng Kí</button>
             </form>
@@ -46,7 +46,8 @@
                 <h1>Đăng Nhập</h1>
                 <!-- Social media login buttons -->
                 <div class="font-montserrat social-container">
-                    <a href="#" class="social">
+                    <a href=
+                    "https://hoctuancustomservice.io.vn/oauth2/authorize/google" class="social">
                         <i class="fa-brands fa-google" style="font-size:24px"></i>
                     </a>
                 </div>
@@ -63,7 +64,7 @@
                 <!-- Sign-in button -->
                 <button class="deffault-button bg-primary-gradient" type="submit">Đăng Nhập</button>
 
-            </form>
+            </form >
             } @else {
             <div class="change-password-container">
                 <h2 class="font-bold m-4">Thay Mật Khẩu Mới</h2>
@@ -83,9 +84,9 @@
                 <span class="password-input">
                     <input style="min-width: 0; flex-grow: 1;" type="text" placeholder="123478" [(ngModel)]="code" name="code"
                         required />
-                    <button class="send-code-button" type="button" aria-details="gửi" (click)="sendCodeToEmail()">Gửi Về Email</button>
+                    <button class="send-code-button" type="button" aria-details="gửi" (click)="sendResetCodeToEmail()">Gửi Về Email</button>
                 </span>
-                <button type="submit" class="change-password-button rounded-md">Đổi Mật Khẩu Mới</button>
+                <button (click)="acceptResetPassword()" class="change-password-button rounded-md">Đổi Mật Khẩu Mới</button>
             </div>
             }
         </div>
