@@ -95,6 +95,7 @@ export class AccountSettingsComponent implements OnInit {
 
       this.accountService.updateAccount(updatedAccount).subscribe({
         next: () => {
+          localStorage.setItem("FullName", updatedAccount.FullName);
           console.log('Account updated successfully');
           alert('Cập nhật hồ sơ thành công');
           this.toggleEditProfileName();
