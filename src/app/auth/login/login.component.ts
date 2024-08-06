@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LoginRequest } from '../../core/models/LoginRequest.model';
 import { JwtService } from '../../core/services/jwt.service';
+import { log } from 'node:console';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -14,17 +15,17 @@ import { JwtService } from '../../core/services/jwt.service';
 })
 export class LoginComponent {
 
-
+  code: string = "";
   email: string = "";
-  passwords: string[] = ["", "", "", "", ""];
   error: string = "";
+  userId: string = "";
   showPass: string = "password";
   resetPassword: boolean = false;
-  code: string = "";
+  passwords: string[] = ["", "", "", "", ""];
   showPasswordButtons: boolean[] = [false, false, false, false, false];
   // private scriptLoadTimeout: any;
-  constructor(private renderer: Renderer2, 
-    private authService: AuthService, 
+  constructor(private renderer: Renderer2,
+    private authService: AuthService,
     private jwtService: JwtService,
     private router: Router) {
 
@@ -91,9 +92,9 @@ export class LoginComponent {
     else if (this.passwords[index].length > 30) {
       this.error += " Mật khẩu quá dài.";
     }
-    else if (!/^[a-zA-Z0-9]+$/.test(this.passwords[index])) {
-      this.error += " Mật khẩu chứa kí tự đặc biệt.";
-    }
+    // else if (!/^[a-zA-Z0-9]+$/.test(this.passwords[index])) {
+    //   this.error += " Mật khẩu chứa kí tự đặc biệt.";
+    // }
   }
   validateEmail(): void {
     if (this.email.trim() === '') {
@@ -114,33 +115,49 @@ export class LoginComponent {
     this.validatePassword(0);
     this.validatePassword(1);
     this.validatePasswordEqual(0, 1);
-    alert(this.error);
-    // Handle sign-up logic here
+    if (this.error !== "") {
+      alert(this.error);
+      return;
+    }
+    console.log("????");
+    
+    this.authService.sendcreateCodeToEmail1(this.email,this.passwords[0],this.passwords[1]).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.userId = response.Data.Id;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
   onSignIn(): void {
     this.error = "";
     this.validateEmail();
     this.validatePassword(2);
-    alert(this.error);
+    if (this.error !== "") {
+      alert(this.error);
+      return;
+    }
     // Handle sign-in logic here
-    let loginRequest: LoginRequest = {Email: this.email, Password: this.passwords[2]};
+    let loginRequest: LoginRequest = { Email: this.email, Password: this.passwords[2] };
     console.log(loginRequest);
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.jwtService.saveToken(response.Data.Token);
         this.jwtService.saveUserInfo(response.Data.FullName, response.Data.Role, response.Data.IdUser);
-        if(response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
+        if (response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
           this.router.navigate(["management"]);
         } else {
           this.router.navigate(["/home"]);
         }
-        
+
       },
       error: (error) => {
         console.error(error);
       }
-    })
+    });
   }
   showPassword(index: number): void {
     if (this.showPass === "password") {
@@ -163,16 +180,50 @@ export class LoginComponent {
     }
     this.resetPassword = false;
   }
-  sendCodeToEmail(): void {
+  sendResetCodeToEmail(): void {
     this.error = "";
     this.validateEmail();
     this.validatePasswordEqual(3, 4);
-    if (this.error === "") {
-      alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
-    } else {
-      alert(this.error);
+    if (this.error !== "") {
+      return;
     }
+    alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
+    this.authService.sendResetCodeToEmai1(this.email, this.passwords[3], this.passwords[4]).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.userId = response.Data.Id;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
 
   }
-
+  acceptResetPassword(): void {
+    this.authService.acceptResetPassword2(this.userId, this.code).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.onSignIn();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  acceptCreateAccount():void{
+    
+    console.log(this.userId, this.code);
+    
+    this.authService.acceptCreateAccount(this.userId, this.code).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.onSignIn();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  googleLogin():void{
+  }
 }
