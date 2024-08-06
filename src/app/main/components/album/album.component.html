@@ -29,7 +29,7 @@
                     <div class="px-0 py-0 bg-gray-800 bg-opacity-30 absolute w-full h-full p-6"></div>
                   </div>
                   <h3 class="py-2 block text-base lg:text-base font-semibold leading-5 lg:leading-6 text-white">
-                    <a>{{movie.FilmName}}</a>
+                    <a [routerLink]="['/video', movie.Id]">{{movie.FilmName}}</a>
                   </h3>
                 </div>
                 
