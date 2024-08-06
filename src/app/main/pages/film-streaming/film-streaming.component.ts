@@ -30,7 +30,7 @@ export class FilmStreamingComponent {
   hoverIndex: number = -1;
   pageNumber: number[];
   filmData!: FilmData;
-  currentUserRate:number = -1;
+  currentUserRate: number = -1;
   constructor(
     private activateRoute: ActivatedRoute,
     private commentService: CommentService,
@@ -39,13 +39,13 @@ export class FilmStreamingComponent {
     this.pageNumber = Array<number>(5).fill(1);
     this.readonlyFields = Array<boolean>(10).fill(true);
     this.newComment = this.getNewCommentDeffault();
-    this.filmData = this.getFilmDataFromServer();
+    this.getFilmDataFromServer();
   }
   toggleEditMode(index: number): void {
     this.readonlyFields[index] = !this.readonlyFields[index];
     if (this.readonlyFields[index] === true) {
       this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
-      this.commentService.updateComment(this.comments[index].commentId,this.comments[index].text);
+      this.commentService.updateComment(this.comments[index].commentId, this.comments[index].text);
     }
 
   }
@@ -71,7 +71,7 @@ export class FilmStreamingComponent {
 
     this.comments.unshift(...this.comments.splice(-1));
     this.comments[0] = { ...this.newComment };
-    //this.commentService.createComment(this.currentMovie.idMovie.toString(),this.newComment.text);
+    this.commentService.createComment(this.filmData.id, this.newComment.text);
     this.newComment.text = "";
 
   }
@@ -85,7 +85,7 @@ export class FilmStreamingComponent {
 
     this.comments[i] = tempComment;
     tempComment.commentId = "";
-    this.commentService.deleteComment(this.comments[i].commentId.toString())
+    this.commentService.deleteComment(this.comments[i].commentId)
     this.closeModal();
   }
   openModal(index: number): void {
@@ -105,46 +105,51 @@ export class FilmStreamingComponent {
       text: ""
     };
   }
-  getFilmDataFromServer(): FilmData {
+  getFilmDataFromServer(): void {
     const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
 
     if (id) {
       this.filmService.getFilmById(id).subscribe({
         next: (response) => {
-          return response.Data
+          console.log(response);
+
+          this.filmData = { ...response.Data };
+          return
         },
         error: (error) => {
           console.error(error);
         }
       });
     }
-    return {
-      isActive: false,
-      isDeleted: false,
-      createdAt: '11/11/1111',
-      updatedAt: '22/22/2222',
-      id: 'superid',
-      filmName: 'không có tên',
-      filmUrl: '',
-      description: 'phim hỏng rồi qua web nước ngoài mà coi',
-      thumbnailUrl: '',
-      trailerUrl: '',
-      releaseDate: '00/00/9999',
-      duration: '',
-      actors: '',
-      director: '',
-      language: '',
-      numberOfViews: -9999999,
-      rating: 5,
-      age: 0,
-      rentalType: '',
-      price: 0,
-      limitTime: 0,
-      subtitles: [],
-      narrations: [],
-      comments: [],
-      genres: []
-    };
+    else {
+      this.filmData = {
+        isActive: false,
+        isDeleted: false,
+        createdAt: '11/11/1111',
+        updatedAt: '22/22/2222',
+        id: 'superid',
+        filmName: 'không có tên',
+        filmUrl: '',
+        description: 'phim hỏng rồi qua web nước ngoài mà coi',
+        thumbnailUrl: '',
+        trailerUrl: '',
+        releaseDate: '00/00/9999',
+        duration: '',
+        actors: '',
+        director: '',
+        language: '',
+        numberOfViews: -9999999,
+        rating: 5,
+        age: 0,
+        rentalType: '',
+        price: 0,
+        limitTime: 0,
+        subtitles: [],
+        narrations: [],
+        comments: [],
+        genres: []
+      };
+    }
   }
 }
 

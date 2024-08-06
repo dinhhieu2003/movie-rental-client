@@ -63,7 +63,7 @@ export const mainRoutes: Routes = [
         children: [
             {
                 path: '',
-                component: VideoStreamingComponent,
+                component: FilmStreamingComponent,
             },
         ]
     },
