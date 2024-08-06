@@ -7,7 +7,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { ChangeDetectorRef } from '@angular/core';
 import { NzModalCloseComponent, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { CategoryService } from '../../../core/services/CategoryService';
+import { CategoryService } from '../../../core/services/category.service';
 import { CategoryModel } from '../../../core/models/CategoryModel';
 
 @Component({
