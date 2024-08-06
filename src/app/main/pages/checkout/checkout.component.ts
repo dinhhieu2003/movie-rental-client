@@ -13,30 +13,20 @@ export class CheckoutComponent {
   totalPrice = 0;
   subtraction = 0;
   lastTotal = 0;
-  cartItems: Movie[] = [{name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47}, 
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-    {name: "Ông thầy vi diệu", poster: "https://images.fptplay.net/media/OTT/VOD/2022/09/06/ong-thay-vi-dieu-12-tap-fpt-play-1662456055668_Background_origin.jpg?w=910&c=0&fmt=webp", price: 47},
-  ];
+  cartItems: Movie[] = [];
   checkoutItems:Movie[] = [];
 
   buy(index: number) {
     this.checkoutItems.push(this.cartItems[index]);
     ++this.itemsCount;
-    this.totalPrice += this.cartItems[index].price;
+    this.totalPrice += this.cartItems[index].Price;
     this.removeItemInCartByIndex(index);
   }
 
   removeFromCheckout(index: number) {
     this.cartItems.push(this.checkoutItems[index]);
     --this.itemsCount;
-    this.totalPrice -= this.cartItems[index].price;
+    this.totalPrice -= this.cartItems[index].Price;
     this.removeItemInCheckout(index);
   }
 

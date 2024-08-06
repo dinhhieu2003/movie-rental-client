@@ -43,7 +43,7 @@ export class ProfileManagementComponent {
   }
 
   navigateToProfile(): void {
-    this.router.navigate(['/profilemanagement/account']);
+    this.router.navigate(['/me/account']);
   }
 
   navigateToTransactionHistory(): void {

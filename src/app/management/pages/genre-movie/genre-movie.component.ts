@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -6,6 +6,8 @@ import { FormsModule, FormGroup, Validators, FormBuilder, ReactiveFormsModule } 
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { GenreModel } from '../../../core/models/GerneModel';
+import { GenreService } from '../../../core/services/gerne.service';
 
 @Component({
   selector: 'app-genre-movie',
@@ -23,7 +25,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
   templateUrl: './genre-movie.component.html',
   styleUrl: './genre-movie.component.css'
 })
-export class GenreMovieComponent {
+export class GenreMovieComponent implements OnInit {
 
   valueSearch = ''
   isVisibleAdd = false;
@@ -40,6 +42,107 @@ export class GenreMovieComponent {
     isActive: true
   };
 
+  constructor(private fbAdd: FormBuilder, private fbUpdate: FormBuilder,
+    private genreService: GenreService) {
+    this.createForm();
+    // this.showModalUpdate(this.newGenre);
+  }
+
+  createForm(): void {
+    this.form = this.fbAdd.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      categoryname: [''],
+      isActive: [false]
+    });
+    this.formUpdate = this.fbUpdate.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      categoryname: [''],
+      isActive: [false]
+    });
+  }
+
+  ngOnInit(): void {
+    this.getAllGenres();
+    this.getAllSoftDeletedGenres();
+  }
+
+  // Lấy tất cả các genre đã bị xóa mềm
+  getAllSoftDeletedGenres() {
+    this.genreService.getAllSoftDeletedGenres().subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Lấy tất cả các genre
+  getAllGenres() {
+    this.genreService.getAllGenres().subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Tạo mới genre
+  createGenre(genre: GenreModel) {
+    this.genreService.postCreateGenre(genre).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Cập nhật genre theo ID
+  updateGenre(genreId: number, genre: GenreModel) {
+    this.genreService.putUpdateGenre(genreId, genre).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Xóa mềm genre theo ID
+  softDeleteGenre(genreId: number) {
+    this.genreService.patchSoftDeleteGenre(genreId).subscribe(
+      () => {
+        console.log(`Soft deleted genre with ID ${genreId}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Khôi phục genre đã xóa mềm theo ID
+  restoreGenre(genreId: number) {
+    this.genreService.patchRestoreGenre(genreId).subscribe(
+      () => {
+        console.log(`Restored genre with ID ${genreId}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+
+
+  // Model add
   showModalAdd(): void {
     this.isVisibleAdd = true;
   }
@@ -66,6 +169,8 @@ export class GenreMovieComponent {
   handleAddCancel(): void {
     this.isVisibleAdd = false;
   }
+
+  // Model update
   showModalUpdate(genre: any): void {
     // this.newGenre = { ...genre }; 
     this.formUpdate.patchValue(genre)
@@ -81,7 +186,7 @@ export class GenreMovieComponent {
         image: '',
         isActive: false
       });
-    this.isVisibleUpdate = false
+      this.isVisibleUpdate = false
 
     } else {
       Object.values(this.formUpdate.controls).forEach(control => {
@@ -95,6 +200,8 @@ export class GenreMovieComponent {
   handleUpdateCancel(): void {
     this.isVisibleUpdate = false;
   }
+
+  // Model delete
   showModalDelete(): void {
     this.isVisibleDelete = true;
   }
@@ -104,25 +211,8 @@ export class GenreMovieComponent {
   handleDeleteCancel(): void {
     this.isVisibleDelete = false;
   }
-  constructor(private fbAdd: FormBuilder, private fbUpdate: FormBuilder) {
-    this.createForm();
-    // this.showModalUpdate(this.newGenre);
-  }
 
-  createForm(): void {
-    this.form = this.fbAdd.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      categoryname: [''],
-      isActive: [false]
-    });
-    this.formUpdate = this.fbUpdate.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      categoryname: [''],
-      isActive: [false]
-    });
-  }
+  //
   originalGenre = [
     {
       name: 'Hành Động',

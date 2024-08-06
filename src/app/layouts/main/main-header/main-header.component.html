@@ -17,20 +17,35 @@
       <div nz-col class="menu-row ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-12 ant-col-xxl-10">
         <ul id="nav" nz-menu="" app-navagation="" class="menu-site ant-menu ant-menu-root ant-menu-light ant-menu-horizontal">
           <li #home nz-menu-item="" class="ant-menu-item">
-            <a routerLink="/home">Trang chủ</a>
-          </li>  
-          <li #series nz-menu-item="" class="ant-menu-item">
-            <a routerLink="/series">Phim bộ</a>
-          </li>  
-          <li #movie nz-menu-item="" class="ant-menu-item">
-            <a routerLink="/movie">Phim lẻ</a>
+            <a routerLink="home">Trang chủ</a>
           </li>  
           <li nz-menu-item="" class="ant-menu-item">
-            <a routerLink="home">Phim thuê</a>
+            <a [routerLink]="'category/'+convertCategoryNameToSlug(categories[0].categoryName)">{{categories[0].categoryName}}</a>
           </li>  
+          <li nz-menu-item="" class="ant-menu-item">
+            <a [routerLink]="'category/'+convertCategoryNameToSlug(categories[1].categoryName)">{{categories[1].categoryName}}</a>
+          </li> 
+      
           <li #pricing nz-menu-item="" class="ant-menu-item">
-            <a routerLink="/pricing">Mua gói</a>
+            <a routerLink="pricing">Mua gói</a>
           </li>  
+
+          <li nz-menu-item="" class="ant-menu-item">
+            <a nz-dropdown [nzDropdownMenu]="cateMenu">
+              Xem thêm
+              <span nz-icon nzType="caret-down" nzTheme="outline"></span>
+            </a>
+            <nz-dropdown-menu #cateMenu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                @for (item of categories.slice(2); track item; let i=$index) {
+                  <li nz-menu-item="" class="ant-menu-item">
+                    <a [routerLink]="'category/'+convertCategoryNameToSlug(categories[i+2].categoryName)">{{categories[i+2].categoryName}}</a>
+                  </li>  
+                }
+              </ul>
+            </nz-dropdown-menu>
+          </li> 
+          
         </ul>
       </div>
   
