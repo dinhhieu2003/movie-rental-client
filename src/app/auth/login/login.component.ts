@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+import { LoginRequest } from '../../core/models/LoginRequest.model';
+import { JwtService } from '../../core/services/jwt.service';
+import { log } from 'node:console';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -11,18 +15,24 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginComponent {
 
+  code: string = "";
   email: string = "";
-  password: string = "";
   error: string = "";
+  userId: string = "";
   showPass: string = "password";
-  show: boolean = false;
+  resetPassword: boolean = false;
+  passwords: string[] = ["", "", "", "", ""];
+  showPasswordButtons: boolean[] = [false, false, false, false, false];
   // private scriptLoadTimeout: any;
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2,
+    private authService: AuthService,
+    private jwtService: JwtService,
+    private router: Router) {
 
   }
   ngOnInit(): void {
     // this.scriptLoadTimeout = setTimeout(() => {
-      this.addScriptToHead();
+    this.addScriptToHead();
     // }, 2000
 
     // );
@@ -32,9 +42,9 @@ export class LoginComponent {
       return;
     }
     const existingScript = document.head.querySelector('#neon-cursor-script');
-      if (existingScript) {
-        return;
-      }
+    if (existingScript) {
+      return;
+    }
     const script = this.renderer.createElement('script');
     script.type = "module";
     script.id = "neon-cursor-script";
@@ -72,21 +82,21 @@ export class LoginComponent {
     //   clearTimeout(this.scriptLoadTimeout); // Clear timeout to prevent delayed execution
     // }
   }
-  validatePassword() {
-    if (this.password.trim() === '') {
+  validatePassword(index: number): void {
+    if (this.passwords[index].trim() === '') {
       this.error += " Mật khẩu không được để trống.";
     }
-    else if (this.password.length < 6) {
+    else if (this.passwords[index].length < 6) {
       this.error += " Mật khẩu quá ngắn.";
     }
-    else if (this.password.length > 30) {
+    else if (this.passwords[index].length > 30) {
       this.error += " Mật khẩu quá dài.";
     }
-    else if (!/^[a-zA-Z0-9]+$/.test(this.password)) {
-      this.error += " Mật khẩu chứa kí tự đặc biệt.";
-    }
+    // else if (!/^[a-zA-Z0-9]+$/.test(this.passwords[index])) {
+    //   this.error += " Mật khẩu chứa kí tự đặc biệt.";
+    // }
   }
-  validateEmail() {
+  validateEmail(): void {
     if (this.email.trim() === '') {
       this.error += " Email không được để trống.";
     }
@@ -94,40 +104,126 @@ export class LoginComponent {
       this.error += " Định dạng không giống email.";
     }
   }
-  onSignUp() {
+  validatePasswordEqual(left: number, right: number): void {
+    if (this.passwords[left] !== this.passwords[right]) {
+      this.error += " Mật khẩu nhập lại không giống."
+    }
+  }
+  onSignUp(): void {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
-    alert(this.error);
-    // Handle sign-up logic here
+    this.validatePassword(0);
+    this.validatePassword(1);
+    this.validatePasswordEqual(0, 1);
+    if (this.error !== "") {
+      alert(this.error);
+      return;
+    }
+    console.log("????");
+    
+    this.authService.sendcreateCodeToEmail1(this.email,this.passwords[0],this.passwords[1]).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.userId = response.Data.Id;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
-  onSignIn() {
+  onSignIn(): void {
     this.error = "";
     this.validateEmail();
-    this.validatePassword();
-    alert(this.error);
+    this.validatePassword(2);
+    if (this.error !== "") {
+      alert(this.error);
+      return;
+    }
     // Handle sign-in logic here
+    let loginRequest: LoginRequest = { Email: this.email, Password: this.passwords[2] };
+    console.log(loginRequest);
+    this.authService.login(loginRequest).subscribe({
+      next: (response) => {
+        this.jwtService.saveToken(response.Data.Token);
+        this.jwtService.saveUserInfo(response.Data.FullName, response.Data.Role, response.Data.IdUser);
+        if (response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
+          this.router.navigate(["management"]);
+        } else {
+          this.router.navigate(["/home"]);
+        }
+
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
-  showPassword(): void {
+  showPassword(index: number): void {
     if (this.showPass === "password") {
       this.showPass = "text";
-      this.show = true;
+      this.showPasswordButtons[index] = true;
     } else {
       this.showPass = "password";
-      this.show = false;
+      this.showPasswordButtons[index] = false;
     }
   }
 
-  navigateToForgotPasswordPage() {
-    alert("Navigate to the forgot password page");
+  navigateToForgotPasswordPage(): void {
+    this.resetPassword = !this.resetPassword;
   }
 
-  togglePanel() {
+  togglePanel(): void {
     const container = document.getElementById('container');
     if (container) {
       container.classList.toggle('right-panel-active');
     }
+    this.resetPassword = false;
   }
+  sendResetCodeToEmail(): void {
+    this.error = "";
+    this.validateEmail();
+    this.validatePasswordEqual(3, 4);
+    if (this.error !== "") {
+      return;
+    }
+    alert("kiểm tra emai của bạn:( " + this.email + " ) để tìm mật mã bí mật");
+    this.authService.sendResetCodeToEmai1(this.email, this.passwords[3], this.passwords[4]).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.userId = response.Data.Id;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
 
+  }
+  acceptResetPassword(): void {
+    this.authService.acceptResetPassword2(this.userId, this.code).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.onSignIn();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  acceptCreateAccount():void{
+    
+    console.log(this.userId, this.code);
+    
+    this.authService.acceptCreateAccount(this.userId, this.code).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.onSignIn();
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  googleLogin():void{
+  }
 }
