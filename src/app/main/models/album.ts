@@ -1,6 +1,6 @@
 import { Movie } from "./movie";
 
 export interface Album {
-    movies: Movie[],
-    name: string,
+    film: Movie[],
+    albumName: string,
 }

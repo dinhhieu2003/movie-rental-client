@@ -1,4 +1,4 @@
-<!-- <div class="container p-4">
+<div class="container p-4">
     <div class="flex items-center text-blue-700 text-2xl font-bold mb-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6 mr-1">
@@ -45,7 +45,7 @@
                 Search:
                 <div class="relative flex items-center">
                     <input class="ml-5 input-search pr-8 text-white" nz-input placeholder="Search by name" [(ngModel)]="valueSearch"
-                        (ngModelChange)="onSearchChange()" name="search" type="text" />
+                         name="search" type="text" />
                     <svg *ngIf="!valueSearch" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="search-icon absolute right-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,13 +55,10 @@
             </div>
         </div>
         <div class="form-table">
-            <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize" ngSkipHydration>
+            <nz-table #basicTable [nzPageSize]="pageSize" ngSkipHydration>
                 <thead class="table-head">
                     <tr>
-                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
-                            [nzSortPriority]="column.priority" [ngClass]="{ 'w-1/5': column.title === 'Movie' }">
-                            {{ column.title }}
-                        </th>
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -260,4 +257,4 @@
         </div>
 
     </ng-container>
-</nz-modal> -->
+</nz-modal>

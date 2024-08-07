@@ -10,11 +10,11 @@
                                 <!-- Cart item -->
                                 <article class="cart-item">
                                     <a>
-                                        <img [src]="item.poster" alt="" class="cart-item__thumb">
+                                        <img [src]="item.ThumbnailUrl" alt="" class="cart-item__thumb">
                                     </a>
                                     <div class="cart-item__content">
                                         <div class="cart-item__content-left">
-                                            <h3 class="cart-item__title">{{item.name}}</h3>
+                                            <h3 class="cart-item__title">{{item.FilmName}}</h3>
                                             <p class="cart-item__genre-wrap">
                                                 Đánh nhau |
                                                 <span class="cart-item__status">Active</span>
@@ -25,7 +25,7 @@
                                             </div>
                                         </div>
                                         <div class="cart-item__content-right">
-                                            <p class="cart-item__total-price">${{item.price}}</p>
+                                            <p class="cart-item__total-price">${{item.Price}}</p>
                                         </div>
                                     </div>
                                 </article>
@@ -62,11 +62,11 @@
                         @for (item of checkoutItems; track item; let i=$index) {
                             <article class="cart-item">
                                 <a>
-                                    <img [src]="item.poster" alt="" class="cart-item__thumb-checkout">
+                                    <img [src]="item.ThumbnailUrl" alt="" class="cart-item__thumb-checkout">
                                 </a>
                                 <div class="cart-item__content">
                                     <div class="cart-item__content-left">
-                                        <h3 class="cart-item__title text-base">{{item.name}}</h3>
+                                        <h3 class="cart-item__title text-base">{{item.FilmName}}</h3>
                                         <p class="cart-item__genre-wrap text-base">
                                             Đánh nhau |
                                             <span class="cart-item__status">Active</span>
@@ -76,7 +76,7 @@
                                         </div>
                                     </div>
                                     <div class="cart-item__content-right">
-                                        <p class="cart-item__total-price">${{item.price}}</p>
+                                        <p class="cart-item__total-price">${{item.Price}}</p>
                                     </div>
                                 </div>
                             </article>

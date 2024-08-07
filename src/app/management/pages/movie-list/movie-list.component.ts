@@ -11,7 +11,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { FilmService } from '../../../core/services/FilmService'
+import { FilmService } from '../../../core/services/film.service'
 import { FilmModel } from '../../../core/models/FilmModel'
 
 interface DataItem {
@@ -52,6 +52,25 @@ export class MovieListComponent implements OnInit {
 
   listFilms: FilmModel[] = []
 
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder, private filmService: FilmService) {
+
+    this.form = this.fb.group({
+      movieName: [''],
+      description: [''],
+      movieAccess: [''],
+      languages: [''],
+      genres: [''],
+      contentRating: [''],
+      releaseDate: [null],
+      publishDate: [null],
+      duration: ['']
+    });
+
+
+  }
+
   // listOfColumn = [
   //   { title: 'Movie', compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name), priority: false },
   //   { title: 'Quality', compare: (a: DataItem, b: DataItem) => a.quality.localeCompare(b.quality), priority: 3 },
@@ -80,29 +99,89 @@ export class MovieListComponent implements OnInit {
 
   // filteredData: DataItem[] = [...this.listOfData];
 
-  // ngOnInit(): void { 
-  //   this.filmService.getAllCategories().subscribe(
-  //     (data: FilmModel[]) => {
-  //       // this.listFilms = data;
-  //       console.log(data)
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching categories:', error);
-  //     }
-  //   );
-  // }
+
   ngOnInit() {
+    this.loadDeletedFilms();
+    this.loadNotDeletedFilms();
+  }
+
+  loadDeletedFilms() {
     this.filmService.getDeletedFilms().subscribe(
-      (data: FilmModel[]) => {
-        // this.films = data;
-        console.log(data, "2222")
+      (response) => {
+        const data = response.Data.content;
+        console.log(data); 
+       
       },
-      error => {
+      (error) => {
         console.error('There was an error!', error);
       }
     );
   }
 
+  // Phương thức lấy danh sách các film không bị xóa mềm
+  loadNotDeletedFilms() {
+    this.filmService.getNotDeletedFilms().subscribe(
+      (response) => {
+        const data = response.Data.content;
+        console.log(data);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức tạo mới một film
+  createFilm(film: any) {
+    this.filmService.postCreateFilm(film).subscribe(
+      (response) => {
+        const data = response.Data;
+        console.log(data);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức cập nhật một film
+  updateFilm(id: number, film: any) {
+    this.filmService.putUpdateFilm(id, film).subscribe(
+      (response) => {
+        const data = response.Data;
+        console.log(data);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức khôi phục một film đã bị xóa mềm
+  restoreFilm(id: number) {
+    this.filmService.patchRestoreFilm(id).subscribe(
+      () => {
+        console.log(`Restored film with ID ${id}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Phương thức xóa mềm một film
+  deleteFilm(id: number) {
+    this.filmService.deleteFilm(id).subscribe(
+      () => {
+        console.log(`Deleted film with ID ${id}`);
+      },
+      (error) => {
+        console.error('There was an error!', error);
+      }
+    );
+  }
+
+  // Lấy số lượng hiện thị của bản
   onPageSizeChange(newSize: number): void {
     this.pageSize = newSize;
   }
@@ -113,6 +192,7 @@ export class MovieListComponent implements OnInit {
   //   );
   // }
 
+  // Modal add
   isVisibleAdd = false;
   showModalAdd(): void {
     this.isVisibleAdd = true;
@@ -126,6 +206,7 @@ export class MovieListComponent implements OnInit {
     this.isVisibleAdd = false;
   }
 
+  // Modal update
   isVisibleUpdate = false;
   showModalUpdate(): void {
     this.isVisibleUpdate = true;
@@ -139,6 +220,7 @@ export class MovieListComponent implements OnInit {
     this.isVisibleUpdate = false;
   }
 
+  // Modal delete
   isVisibleDelete = false;
   showModalDelete(): void {
     this.isVisibleDelete = true;
@@ -152,22 +234,4 @@ export class MovieListComponent implements OnInit {
     this.isVisibleDelete = false;
   }
 
-  form: FormGroup;
-
-  constructor(private fb: FormBuilder, private filmService: FilmService) {
-
-    this.form = this.fb.group({
-      movieName: [''],
-      description: [''],
-      movieAccess: [''],
-      languages: [''],
-      genres: [''],
-      contentRating: [''],
-      releaseDate: [null],
-      publishDate: [null],
-      duration: ['']
-    });
-
-
-  }
 }

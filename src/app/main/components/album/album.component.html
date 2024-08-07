@@ -25,10 +25,12 @@
               <div class="flex flex-shrink-0 relative w-96">
                 <div>
                   <div class="relative flex flex-shrink-0">
-                    <img [src]="movie.poster" />
+                    <img [src]="movie.ThumbnailUrl" />
                     <div class="px-0 py-0 bg-gray-800 bg-opacity-30 absolute w-full h-full p-6"></div>
                   </div>
-                  <h3 class="py-2 block text-base lg:text-base font-semibold leading-5 lg:leading-6 text-white">{{movie.name}}</h3>
+                  <h3 class="py-2 block text-base lg:text-base font-semibold leading-5 lg:leading-6 text-white">
+                    <a [routerLink]="['/video', movie.Id]">{{movie.FilmName}}</a>
+                  </h3>
                 </div>
                 
               </div>
