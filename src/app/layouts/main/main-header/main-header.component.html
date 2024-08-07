@@ -84,7 +84,7 @@
       </div>
   
       <!-- Auth button -->
-      @if(!isAuthenticated) {
+      @if(!checkAuthenticated()) {
         <div nz-col="" class="ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-6 ant-col-xxl-4">
           <ul id="nav" nz-menu="" app-navagation="" class="menu-site ant-menu ant-menu-root ant-menu-light ant-menu-horizontal">
             <li nz-menu-item="" class="ant-menu-item">
@@ -98,10 +98,10 @@
       }
       
       <!-- Avatar -->
-      @if(isAuthenticated) {
+      @if(checkAuthenticated()) {
         <div nz-col="" class="flex items-center ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-6 ant-col-xxl-4">
           <a class="text-white" nz-dropdown [nzDropdownMenu]="menu">
-            {{currentUsername}}
+            {{getCurrentFullName()}}
             <span nz-icon nzType="caret-down" nzTheme="outline"></span>
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
