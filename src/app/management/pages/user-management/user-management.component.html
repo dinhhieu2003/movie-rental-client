@@ -47,6 +47,7 @@
             <tr *ngFor="let data of basicTable.data" class="hover-row table-row">
               <td>{{ data.userId }}</td>
               <td>{{ data.userName }}</td>
+              <td>{{ data.userEmail }}</td>
               <td>{{ data.password }}</td>
               <td>{{ data.role }}</td>
               <td>{{ data.action }}</td>
@@ -75,6 +76,12 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
+          <nz-form-label nzRequired>Email</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter email" formControlName="userEmail" type="userEmail" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
           <nz-form-label nzRequired>Password</nz-form-label>
           <nz-form-control>
             <input nz-input placeholder="Please enter password" formControlName="password" type="password" />
@@ -84,17 +91,19 @@
           <nz-form-label nzRequired>Role</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="role">
-              <nz-option nzValue="Admin" nzLabel="Admin"></nz-option>
-              <nz-option nzValue="User" nzLabel="User"></nz-option>
+              <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
+              <nz-option nzValue="USER" nzLabel="USER"></nz-option>
 
             </nz-select>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label nzRequired>Action</nz-form-label>
-          <nz-form-control>
-            <nz-switch formControlName="action"></nz-switch>
-          </nz-form-control>
+          <nz-form-label nzRequired>AuthProvider</nz-form-label>
+          <nz-select formControlName="action">
+            <nz-option nzValue="active" nzLabel="Active"></nz-option>
+            <nz-option nzValue="deactive" nzLabel="Deactive"></nz-option>
+
+          </nz-select>
         </nz-form-item>
       </form>
     </ng-container>
@@ -129,9 +138,10 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Action</nz-form-label>
-          <nz-form-control>
-            <nz-switch formControlName="action"></nz-switch>
-          </nz-form-control>
+          <nz-select formControlName="action">
+            <nz-option nzValue="active" nzLabel="Active"></nz-option>
+            <nz-option nzValue="deactive" nzLabel="Deactive"></nz-option>
+          </nz-select>
         </nz-form-item>
       </form>
     </ng-container>
