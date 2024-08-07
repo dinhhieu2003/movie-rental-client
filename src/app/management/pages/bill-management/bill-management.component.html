@@ -49,11 +49,11 @@
           <tbody style="color: white;">
             <tr *ngFor="let bill of basicTable.data; let i = index" class="hover-row table-row">
               <td>{{ i + 1 }}</td>
-              <td>{{ bill.billId }}</td>
+              <td>{{ bill.id }}</td>
               <td>{{ bill.issueDate | date }}</td>
-              <td>{{ bill.user }}</td>
-              <td>{{ bill.films }}</td>
-              <td>{{ bill.packageInfo }}</td>
+              <td>{{ bill.userId }}</td>
+              <td>{{ bill.films[0].FilmName }}</td>
+              <td>{{ bill.packageInfo.packageName}}</td>
               <td>
                 <span *ngIf="bill.paymentStatus" style="display: inline-block; width: 10px; height: 10px; background-color: #65de24; border-radius: 50%;"></span>
                 <span *ngIf="!bill.paymentStatus" style="display: inline-block; width: 10px; height: 10px; background-color: #dc1922; border-radius: 50%;"></span>
