@@ -11,6 +11,7 @@ import { AccountModel } from '../../models/Account.model';
 export class AccountService {
   private apiUrl = `${environment.apiUrl}me`; 
   private passwordApiUrl = `${environment.apiUrl}password`; // Địa chỉ API đổi mật khẩu
+  private imageApiUrl = `${environment.apiUrl}image`; // Địa chỉ API xử lý ảnh
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -41,6 +42,23 @@ export class AccountService {
       PasswordConfirm: newPassword
     };
     return this.httpClient.put<any>(this.passwordApiUrl, body).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Upload image
+  uploadImage(image: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return this.httpClient.post<{ url: string }>(`${this.imageApiUrl}/upload`, formData).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Delete image
+  deleteImage(url: string): Observable<any> {
+    return this.httpClient.post(`${this.imageApiUrl}/delete`, { url }).pipe(
       catchError(this.handleError)
     );
   }
