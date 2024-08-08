@@ -42,12 +42,12 @@ export class UserManagementComponent implements OnInit {
   pageSize = 5; 
 
   listOfColumn = [
-    { title: 'User ID', compare: (a: User, b: User) => Number(a.userId) - Number(b.userId), priority: 1 },
-    { title: 'User Name', compare: (a: User, b: User) => a.userName.localeCompare(b.userName), priority: 2 },
+    { title: 'User ID', compare: (a: User, b: User) => Number(a.Id) - Number(b.Id), priority: 1 },
+    { title: 'User Name', compare: (a: User, b: User) => a.FullName.localeCompare(b.FullName), priority: 2 },
     { title: 'Email', compare: null , priority: 3 },
-    { title: 'Password', compare: (a: User, b: User) => a.password.localeCompare(b.password), priority: 4 },
-    { title: 'Role', compare: (a: User, b: User) => a.role.localeCompare(b.role), priority: 5 },
-    { title: 'Action', compare: (a: User, b: User) => Number(a.action) - Number(b.action), priority: 6 },
+    { title: 'Password', compare: (a: User, b: User) => a.Password.localeCompare(b.Password), priority: 4 },
+    { title: 'Role', compare: (a: User, b: User) => a.Role.localeCompare(b.Role), priority: 5 },
+    { title: 'AuthProvider', compare: (a: User, b: User) => Number(a.AuthProvider) - Number(b.AuthProvider), priority: 6 },
     { title: 'Custom', compare: null, priority: false },
   ];
 
@@ -58,12 +58,12 @@ export class UserManagementComponent implements OnInit {
 
   constructor(private fb: FormBuilder,private userService: UserService) {
     this.form = this.fb.group({
-      userId: [''],
-      userName: [''],
-      userEmail: [''],
-      password: [''],
-      role: [''],
-      action: [false]
+      Id: [''],
+      FullName: [''],
+      Email: [''],
+      Password: [''],
+      Role: [''],
+      AuthProvider: [''],
     });
   }
 
@@ -76,16 +76,21 @@ export class UserManagementComponent implements OnInit {
       this.listOfData= [];
       for (let i=0 ; i<data.length ; i++){
         let usertamp: User= {
-          userId: '66b25dd189c70b58fd667ec8',
-          userName: '',
-          userEmail: '',
-          password: '123456',
-          role: 'user',
-          action: false
+          Id: '66b25dd189c70b58fd667ec8',
+          FullName: '',
+          Email: '',
+          Password: '',
+          Role: 'user',
+          AuthProvider: 'LOCAL',
         }
         
-        usertamp.userName= data[i].FullName;
-        usertamp.userEmail= data[i].Email;
+        usertamp.Id= data[i].Id;
+        usertamp.FullName= data[i].FullName;
+        usertamp.Email= data[i].Email;
+        usertamp.Password= data[i].Password;
+        usertamp.Role= data[i].Role;
+        usertamp.AuthProvider= data[i].AuthProvider;
+       
         this.listOfData.push(usertamp);
       }
       this.filteredData = [...this.listOfData];
@@ -93,7 +98,16 @@ export class UserManagementComponent implements OnInit {
       console.log("data: "+JSON.stringify(data, null, 2));
     });
   }
+  passwordVisibility = new Map<string, boolean>();
 
+  togglePasswordVisibility(user: User): void {
+    const currentState = this.passwordVisibility.get(user.Id) || false;
+    this.passwordVisibility.set(user.Id, !currentState);
+  }
+
+  isPasswordVisible(user: User): boolean {
+    return this.passwordVisibility.get(user.Id) || false;
+  }
   getUser(userId: string): void {
     this.userService.getUser(userId).subscribe(user => {
       console.log('User found:', user);
@@ -107,12 +121,13 @@ export class UserManagementComponent implements OnInit {
 
   onSearchChange(): void {
     this.filteredData = this.listOfData.filter(item =>
-      item.userName.toLowerCase().includes(this.valueSearch.toLowerCase())
+      item.FullName.toLowerCase().includes(this.valueSearch.toLowerCase())
     );
   }
 
   isVisibleAdd = false;
   showModalAdd(): void {
+    this.form.reset();
     this.isVisibleAdd = true;
   }
 
@@ -162,14 +177,14 @@ export class UserManagementComponent implements OnInit {
   }
 
   isVisibleDelete = false;
-  showModalDelete(userId: string): void {
+  showModalDelete(Id: string): void {
     this.isVisibleDelete = true;
-    this.form.patchValue({ userId });
+    this.form.patchValue({ Id });
   }
 
   handleDeleteOk(): void {
-    const userId: string = this.form.get('userId')?.value;
-    this.userService.softDeleteUser(userId).
+    const Id: string = this.form.get('Id')?.value;
+    this.userService.softDeleteUser(Id).
     subscribe({
       next: (response) => {
         alert(response);

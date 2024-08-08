@@ -1,14 +1,8 @@
 export interface User {
-    userId: string;
-    userName: string;
-    userEmail: string;
-    password: string;
-    role: string;
-    action: boolean;
-}
-export interface UserFake {
-    
+    Id: string;
     FullName: string;
     Email: string;
-    
+    Password: string;
+    AuthProvider: string;
+    Role: string;
 }

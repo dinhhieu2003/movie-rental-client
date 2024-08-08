@@ -183,3 +183,13 @@ textarea {
     background-color: #0d2ebb;
     color: #ffffff;
 }
+.input-search {
+    color: white; 
+    background-color: transparent; 
+    border: 1px solid white; 
+  }
+  
+  .input-search::placeholder {
+    color: rgba(255, 255, 255, 0.6); 
+  }
+  
