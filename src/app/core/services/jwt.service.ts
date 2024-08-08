@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common'
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class JwtService {
     let token = localStorage.getItem("Token");
     return token;
   }
+
 
   removeToken() {
     localStorage.removeItem("Token");
