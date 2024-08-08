@@ -7,6 +7,8 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { ChangeDetectorRef } from '@angular/core';
 import { NzModalCloseComponent, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { Banner } from '../../../core/models/Banner.model';
+import { BannerService } from '../../../core/services/banner.service';
 
 @Component({
   selector: 'app-banner',
@@ -25,7 +27,9 @@ import { NzFormModule } from 'ng-zorro-antd/form';
   styleUrl: './banner-management.component.css'
 })
 export class BannerManagementComponent {
-
+  listOfData: Banner[] = [];
+  filteredData: Banner[] = [...this.listOfData];
+  banners: Banner[] = [];
   isVisibleAdd = false; 
   isVisibleUpdate = false;  
   isVisibleDelete = false;  
@@ -40,40 +44,175 @@ export class BannerManagementComponent {
     updatedAt: new Date()
   };
 
+  ngOnInit(): void {
+    this.getAllBanners();
+  }
+  getAllBanners(): void {
+    this.bannerService.getAllBanners(0,5).subscribe(data => {
+      
+      this.listOfData= [];
+      this.filteredData = [...this.listOfData];
+      this.banners = [...this.listOfData]; 
+      
+      for (let i=0 ; i<data.Data.length ; i++){
+        let bannertamp:Banner= {
+          id: '111111',
+          isActive: false,
+          isDelete: false,
+          createAt: new Date(),
+          updateAt: new Date(),
+          film: {
+            isActive: false,
+            isDeleted: false,
+            createdAt: '',
+            updatedAt: '',
+            id: 'idFilmKhongCo',
+            FilmName: '',
+            filmUrl: '',
+            description: '',
+            thumbnailUrl: '',
+            trailerUrl: '',
+            releaseDate: '',
+            duration: '',
+            actors: '',
+            director: '',
+            language: '',
+            numberOfViews: 0,
+            rating: 0,
+            age: 0,
+            rentalType: '',
+            price: 0,
+            limitTime: 0,
+            subtitles: [],
+            narrations: [],
+            comments: [],
+            genres: []
+          },
+          imageUrl: 'abc'
+        }
+        
+        bannertamp.id= data.Data[i].id;
+        bannertamp.imageUrl= data.Data[i].imageUrl;
+        if(data.Data[i].film != null && 
+          data.Data[i].film.id != null )
+          bannertamp.film.id= data.Data[i].film.id;
+        bannertamp.createAt= data.Data[i].createAt;
+        bannertamp.updateAt= data.Data[i].updateAt;
+        bannertamp.isActive= data.Data[i].isActive;
+        bannertamp.isDelete= data.Data[i].isDelete;
+        this.banners.push(bannertamp);
+      }
+    });
+  }
   showModalAdd(): void {
     this.isVisibleAdd = true;
   }
   handleAddOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleAdd = false;
+    const createBanner: Banner = this.form.value;
+    createBanner.imageUrl = this.form.value.imageUrl;
+    createBanner.film={
+      isActive: false,
+      isDeleted: false,
+      createdAt: '',
+      updatedAt: '',
+      id: this.form.value.film,
+      FilmName: '',
+      filmUrl: '',
+      description: '',
+      thumbnailUrl: '',
+      trailerUrl: '',
+      releaseDate: '',
+      duration: '',
+      actors: '',
+      director: '',
+      language: '',
+      numberOfViews: 0,
+      rating: 0,
+      age: 0,
+      rentalType: '',
+      price: 0,
+      limitTime: 0,
+      subtitles: [],
+      narrations: [],
+      comments: [],
+      genres: []
+    };
+
+    createBanner.isActive= this.form.value.isActive;
+
+    createBanner.isDelete= this.form.value.isDeleted;
+    this.bannerService.createBanners(createBanner).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.bannerService.getAllBanners(0,5);  
+        this.isVisibleAdd = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    }) 
   }
+  
   handleAddCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleAdd = false;
   }  
-  showModalUpdate(): void {
+  showModalUpdate(id:string, idFilm:string, imageUrl:string): void {
     this.isVisibleUpdate = true;
+    this.form.patchValue({
+      id: id,
+      imageUrl: imageUrl,
+      film: idFilm,
+      isActive: true,
+      isDeleted: false} );
+     
   }
   handleUpdateOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleUpdate = false;
+    const id:string =<string> this.form.value.id;
+    
+    const imageUrl:string= <string> this.form.value.imageUrl;
+    const idFilm :string= <string> this.form.value.film;
+    const isActive:boolean=  this.form.value.isActive;
+    const isDeleted :boolean= this.form.value.isDeleted;
+    this.bannerService.updateBanner(imageUrl,idFilm,isActive,isDeleted,id).
+    subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.getAllBanners();  
+        this.isVisibleUpdate = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
   handleUpdateCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleUpdate = false;
   }  
-  showModalDelete(): void {
+  showModalDelete(id: string): void {
     this.isVisibleDelete = true;
+    this.form.patchValue({ id:id });
   }
   handleDeleteOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleDelete = false;
+    const id: string = this.form.get('id')?.value;
+    this.bannerService.softDeleteBanner(id).
+    subscribe({
+      next: (response) => {
+        alert(response);
+        this.getAllBanners();  
+        this.isVisibleDelete = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
   handleDeleteCancel(): void {
     console.log('Button cancel clicked!');
     this.isVisibleDelete = false;
   }  
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private bannerService: BannerService) {
     this.createForm();
   }
 
@@ -87,54 +226,6 @@ export class BannerManagementComponent {
       createdAt: [new Date(), Validators.required],
       updatedAt: [new Date(), Validators.required]
     });
-  }
-
-  originalBanners = [
-    {
-      id: '1',
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8vCNhtOZZWciq7TCg8n0qmUuqh1Zv2w1vw&s',
-      film: 'KING DOM',
-      isActive: true,
-      isDeleted: false,
-      createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-01')
-    },
-    {
-      id: '2',
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgyIaTFDqITnmQ7PixTC2AuenkjigoUzIxzA&s',
-      film: 'THOR',
-      isActive: false,
-      isDeleted: false,
-      createdAt: new Date('2023-01-02'),
-      updatedAt: new Date('2023-01-02')
-    }
-    // Other banners...
-  ];
-
-  banners = [...this.originalBanners];
-
-  refreshData() {
-    this.banners = [
-      {
-        id: '1',
-        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8vCNhtOZZWciq7TCg8n0qmUuqh1Zv2w1vw&s',
-        film: 'KING DOM',
-        isActive: true,
-        isDeleted: false,
-        createdAt: new Date('2023-01-01'),
-        updatedAt: new Date('2023-01-01')
-      },
-      {
-        id: '2',
-        imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgyIaTFDqITnmQ7PixTC2AuenkjigoUzIxzA&s',
-        film: 'THOR',
-        isActive: false,
-        isDeleted: false,
-        createdAt: new Date('2023-01-02'),
-        updatedAt: new Date('2023-01-02')
-      }
-      
-    ];
   }
   
 }
