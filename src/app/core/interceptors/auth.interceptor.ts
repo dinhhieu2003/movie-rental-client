@@ -14,7 +14,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if(token) {
     const currentDate = new Date();
     const expirationDate = new Date(Number(expiredAt) * 1000);
-    console.log(expiredAt);
     if(expirationDate < currentDate) {
       authService.logout();
       router.navigate(["/login"]);
