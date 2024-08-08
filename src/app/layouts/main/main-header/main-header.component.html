@@ -16,7 +16,7 @@
       <!-- Menu -->
       <div nz-col class="menu-row ant-col ant-col-xs-0 ant-col-sm-0 ant-col-md-0 ant-col-lg-0 ant-col-xl-12 ant-col-xxl-10">
         <ul id="nav" nz-menu="" app-navagation="" class="menu-site ant-menu ant-menu-root ant-menu-light ant-menu-horizontal">
-          <li #home nz-menu-item="" class="ant-menu-item">
+          <li menu-item="" class="ant-menu-item">
             <a routerLink="home">Trang chủ</a>
           </li>  
           <li nz-menu-item="" class="ant-menu-item">
@@ -26,7 +26,7 @@
             <a [routerLink]="'category/'+convertCategoryNameToSlug(categories[1].categoryName)">{{categories[1].categoryName}}</a>
           </li> 
       
-          <li #pricing nz-menu-item="" class="ant-menu-item">
+          <li nz-menu-item="" class="ant-menu-item">
             <a routerLink="pricing">Mua gói</a>
           </li>  
 

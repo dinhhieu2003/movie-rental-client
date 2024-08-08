@@ -42,12 +42,14 @@ export class HomeComponent {
       let token: string = queryParam['token'];
       let role: string = queryParam['role'];
       let fullName: string = queryParam['fullname'];
+      let expiredAt: string = queryParam['expiredat'];
 
       if(idUser && token && role && fullName) {
         localStorage.setItem("IdUser",idUser);
         localStorage.setItem("Token", token);
         localStorage.setItem("Role", role);
         localStorage.setItem("FullName", fullName);
+        localStorage.setItem("ExpiredAt", expiredAt);
         if(role === "USER") {
           this.router.navigate([""]);
         } else {

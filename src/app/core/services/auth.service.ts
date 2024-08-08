@@ -21,8 +21,7 @@ export class AuthService {
   }
 
   logout() {
-    this.jwtService.removeToken();
-    this.jwtService.removeUserInfo();
+    this.jwtService.logout();
   }
   acceptResetPassword2(userId: string, codeStr: string): Observable<BaseResponse> {
     let url: string = this.apiUrl + "/forgot-password/" + userId;
