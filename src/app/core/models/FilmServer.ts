@@ -10,7 +10,7 @@ export interface FilmData {
     createdAt: string;
     updatedAt: string;
     id: string;
-    filmName: string;
+    FilmName: string;
     filmUrl: string;
     description: string;
     thumbnailUrl: string;
