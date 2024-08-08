@@ -45,17 +45,26 @@
           </thead>
           <tbody>
             <tr *ngFor="let data of basicTable.data" class="hover-row table-row">
-              <td>{{ data.userId }}</td>
-              <td>{{ data.userName }}</td>
-              <td>{{ data.userEmail }}</td>
-              <td>{{ data.password }}</td>
-              <td>{{ data.role }}</td>
-              <td>{{ data.action }}</td>
+              <td>{{ data.Id }}</td>
+              <td>{{ data.FullName }}</td>
+              <td>{{ data.Email }}</td>
+              <td>
+                
+                <span *ngIf="isPasswordVisible(data)">
+                  {{ data.Password.length > 19 ? (data.Password | slice:0:19) + '...' : data.Password }}
+                </span>
+                <span *ngIf="!isPasswordVisible(data)">{{ '****' }}</span>
+                <span class="cursor-pointer" nz-icon nzType="{{isPasswordVisible(data) ? 'eye-invisible' : 'eye'}}" nzTheme="outline" style="margin-left: 5px; color: blue;"
+                      (click)="togglePasswordVisibility(data)"></span>
+              </td>
+              
+              <td>{{ data.Role }}</td>
+              <td>{{ data.AuthProvider }}</td>
               <td class="flex justify-center items-center gap-2.5">
                 <span class="cursor-pointer bg-green-600 w-6 h-6 text-3xl rounded" nz-icon nzType="edit" nzTheme="outline"
                   (click)="showModalUpdate(data)"></span>
                 <span class="cursor-pointer bg-red-600 w-6 h-6 text-3xl rounded" nz-icon nzType="delete" nzTheme="outline"
-                  (click)="showModalDelete(data.userId)"></span>
+                  (click)="showModalDelete(data.Id)"></span>
               </td>
             </tr>
           </tbody>
@@ -72,25 +81,25 @@
         <nz-form-item>
           <nz-form-label nzRequired>User Name</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="Please enter user name" formControlName="userName" />
+            <input nz-input placeholder="Please enter user name" formControlName="FullName" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Email</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="Please enter email" formControlName="userEmail" type="userEmail" />
+            <input nz-input placeholder="Please enter email" formControlName="Email" type="Email" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Password</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="Please enter password" formControlName="password" type="password" />
+            <input nz-input placeholder="Please enter password" formControlName="Password" type="Password" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Role</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="role">
+            <nz-select formControlName="Role">
               <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
               <nz-option nzValue="USER" nzLabel="USER"></nz-option>
 
@@ -99,9 +108,9 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>AuthProvider</nz-form-label>
-          <nz-select formControlName="action">
-            <nz-option nzValue="active" nzLabel="Active"></nz-option>
-            <nz-option nzValue="deactive" nzLabel="Deactive"></nz-option>
+          <nz-select formControlName="AuthProvider">
+            <nz-option nzValue="LOCAL" nzLabel="LOCAL"></nz-option>
+            <nz-option nzValue="GOOGLE" nzLabel="GOOGLE"></nz-option>
 
           </nz-select>
         </nz-form-item>
@@ -117,30 +126,36 @@
         <nz-form-item>
           <nz-form-label nzRequired>User Name</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="Please enter user name" formControlName="userName" />
+            <input nz-input placeholder="Please enter user name" formControlName="FullName" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Email</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter email" formControlName="Email" type="Email" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Password</nz-form-label>
           <nz-form-control>
-            <input nz-input placeholder="Please enter password" formControlName="password" type="password" />
+            <input nz-input placeholder="Please enter password" formControlName="Password" type="Password" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label nzRequired>Role</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="role">
-              <nz-option nzValue="Admin" nzLabel="Admin"></nz-option>
-              <nz-option nzValue="User" nzLabel="User"></nz-option>
+            <nz-select formControlName="Role">
+              <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
+              <nz-option nzValue="USER" nzLabel="USER"></nz-option>
              
             </nz-select>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label nzRequired>Action</nz-form-label>
-          <nz-select formControlName="action">
-            <nz-option nzValue="active" nzLabel="Active"></nz-option>
-            <nz-option nzValue="deactive" nzLabel="Deactive"></nz-option>
+          <nz-form-label nzRequired>AuthProvider</nz-form-label>
+          <nz-select formControlName="AuthProvider">
+            <nz-option nzValue="LOCAL" nzLabel="LOCAL"></nz-option>
+            <nz-option nzValue="GOOGLE" nzLabel="GOOGLE"></nz-option>
           </nz-select>
         </nz-form-item>
       </form>
