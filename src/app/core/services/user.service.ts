@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { JwtService } from './jwt.service';
 import { BaseResponse } from '../models/BaseResponse.model';
-import {User, UserFake} from '../models/UserModel.model';
+import {User} from '../models/UserModel.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +16,9 @@ export class UserService {
 
   
 
-  getAllUsers(): Observable<UserFake[]> {
+  getAllUsers(): Observable<User[]> {
    
-    return this.http.get<UserFake[]>(`${this.apiUrl}/getAll`, );
+    return this.http.get<User[]>(`${this.apiUrl}/getAll`, );
   }
 
   getUser(userId: string): Observable<User> {
@@ -28,20 +28,20 @@ export class UserService {
   createUsers(user: User): Observable<BaseResponse> {
     let body :any= {
       
-      FullName: user.userName,
-      Email: user.userEmail,
-      Password: user.password,
-      AuthProvider: "LOCAL",
-      Role: user.role
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
     }
     console.log(body)
     return this.http.post<BaseResponse>(`${this.apiUrl}/create`,{
       
-      FullName: user.userName,
-      Email: user.userEmail,
-      Password: user.password,
-      AuthProvider: "LOCAL",
-      Role: user.role
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
     } );
   }
 
@@ -50,20 +50,23 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<BaseResponse> {
-    const url = this.apiUrl + "/"+ user.userId + "/update" ;
+    const url = this.apiUrl + "/"+ user.Id + "/update" ;
     return this.http.put<BaseResponse>(url,{
-      FullName: user.userName,
-      Email: user.password
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
     });
   }
 
   activateUser(user: User): Observable<BaseResponse> {
-    const url = this.apiUrl + "/"+ user.userId + "/active" ;
+    const url = this.apiUrl + "/"+ user.Id + "/active" ;
     return this.http.put<BaseResponse>(url,{});
   }
 
   deactivateUser(user: User): Observable<BaseResponse> {
-    const url = this.apiUrl + "/"+ user.userId + "/deactive" ;
+    const url = this.apiUrl + "/"+ user.Id + "/deactive" ;
     return this.http.put<BaseResponse>(url,{});
   }
 }
