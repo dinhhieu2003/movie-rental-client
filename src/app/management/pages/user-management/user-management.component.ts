@@ -45,7 +45,7 @@ export class UserManagementComponent implements OnInit {
     { title: 'User ID', compare: (a: User, b: User) => Number(a.Id) - Number(b.Id), priority: 1 },
     { title: 'User Name', compare: (a: User, b: User) => a.FullName.localeCompare(b.FullName), priority: 2 },
     { title: 'Email', compare: null , priority: 3 },
-    { title: 'Password', compare: (a: User, b: User) => a.Password.localeCompare(b.Password), priority: 4 },
+    // { title: 'Password', compare: (a: User, b: User) => a.Password.localeCompare(b.Password), priority: 4 },
     { title: 'Role', compare: (a: User, b: User) => a.Role.localeCompare(b.Role), priority: 5 },
     { title: 'AuthProvider', compare: (a: User, b: User) => Number(a.AuthProvider) - Number(b.AuthProvider), priority: 6 },
     { title: 'Custom', compare: null, priority: false },
@@ -87,7 +87,7 @@ export class UserManagementComponent implements OnInit {
         usertamp.Id= data[i].Id;
         usertamp.FullName= data[i].FullName;
         usertamp.Email= data[i].Email;
-        usertamp.Password= data[i].Password;
+        // usertamp.Password= data[i].Password;
         usertamp.Role= data[i].Role;
         usertamp.AuthProvider= data[i].AuthProvider;
        
