@@ -3,17 +3,15 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule, NzDrawerPlacement } from 'ng-zorro-antd/drawer';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink} from '@angular/router';
 import { JwtService } from '../../../core/services/jwt.service';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../../../core/services/main/category.service';
-import { error } from 'console';
 import { CartService } from '../../../core/services/main/cart.service';
 import { NotificationService } from '../../../core/services/main/notification.service';
 import { Category } from '../../../main/models/category';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-main-header',
@@ -23,7 +21,7 @@ import { BehaviorSubject } from 'rxjs';
     NzDrawerModule,
     RouterLink,
     NzDropDownModule,
-    NzIconModule
+    NzIconModule,
   ],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.scss',
