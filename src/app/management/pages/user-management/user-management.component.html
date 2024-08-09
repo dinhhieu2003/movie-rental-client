@@ -48,15 +48,15 @@
               <td>{{ data.Id }}</td>
               <td>{{ data.FullName }}</td>
               <td>{{ data.Email }}</td>
-              <td>
+              <!-- <td>
                 
                 <span *ngIf="isPasswordVisible(data)">
-                  {{ data.Password.length > 19 ? (data.Password | slice:0:19) + '...' : data.Password }}
+                  {{ data.Password.length > 18 ? (data.Password | slice:0:18) + '...' : data.Password }}
                 </span>
                 <span *ngIf="!isPasswordVisible(data)">{{ '****' }}</span>
                 <span class="cursor-pointer" nz-icon nzType="{{isPasswordVisible(data) ? 'eye-invisible' : 'eye'}}" nzTheme="outline" style="margin-left: 5px; color: blue;"
                       (click)="togglePasswordVisibility(data)"></span>
-              </td>
+              </td> -->
               
               <td>{{ data.Role }}</td>
               <td>{{ data.AuthProvider }}</td>
