@@ -1,9 +1,8 @@
 <div class="container mt-24">
   <div class="flex items-center">
-    <h3 class="title">{{title}}</h3>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" />
-    </svg>
+    <h3 class="title">
+      <a [routerLink]="['/album', idAlbum]">{{title}}</a>
+    </h3>
   </div>
   
   <!-- Multi item carousel -->
@@ -22,13 +21,14 @@
           <div #slider class="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
             <!-- Item -->
             @for (movie of listMovie; track $index) {
-              <div class="flex flex-shrink-0 relative w-96">
-                <div>
-                  <div class="relative flex flex-shrink-0">
-                    <img [src]="movie.poster" />
-                    <div class="px-0 py-0 bg-gray-800 bg-opacity-30 absolute w-full h-full p-6"></div>
+              <div class="wrap-item flex flex-shrink-0 relative">
+                <div class="h-auto w-full bg-black">
+                  <div class="relative h-36 bg-slate-500 rounded-md">
+                    <a [routerLink]="['/video', movie.Id]" class="movie__background" [style]="{ 'background-image': 'url(' + movie.ThumbnailUrl + ')' }"></a>
                   </div>
-                  <h3 class="py-2 block text-base lg:text-base font-semibold leading-5 lg:leading-6 text-white">{{movie.name}}</h3>
+                  <h2 class="text-white font-semibold text-lg py-3">
+                    <a [routerLink]="['/video', movie.Id]">{{movie.FilmName}}</a>
+                  </h2>
                 </div>
                 
               </div>

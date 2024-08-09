@@ -131,3 +131,31 @@ textarea {
     color: aliceblue;
     font-size: 25px;
 }
+
+/* Search  */
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.input-search {
+    padding-right: 2rem;
+    border-radius: 4px;
+}
+
+.search-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    pointer-events: none;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ccc;
+}

@@ -1,0 +1,31 @@
+<div class="main-content-wrapper">
+    <div class="main-content">
+        <div class="header-container">
+            <div class="header">
+              <h2>Giỏ hàng</h2>
+            </div>
+          </div>
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of pageItems">
+          <div class="image-container">
+            <img [src]="item.image" alt="{{ item.title }}">
+            <div class="overlay">
+              <button class="icon-button"><i nz-icon nzType="info-circle" nzTheme="outline"></i></button>
+              <button class="icon-button"><i nz-icon nzType="play-circle" nzTheme="outline"></i></button>
+              <button class="icon-button" (click)="removeItem(item)"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
+            </div>
+          </div>
+          <div class="item-info">
+            <h3>{{ item.title }}</h3>
+            <span class="badge" [ngClass]="item.type === 'rent' ? 'badge-rent' : 'badge-buy'">
+              {{ item.type === 'rent' ? 'PHIM THUÊ' : 'PHIM MUA' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="pagination-wrapper">
+        <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="cartItems.length" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
+      </div>
+    </div>
+  </div>
+  

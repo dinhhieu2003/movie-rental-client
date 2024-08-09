@@ -1,149 +1,174 @@
 <div class="container p-4">
     <div class="card-header mb-5 border-solid border-slate-600 border p-3 rounded-xl ring-offset ring-0">
-        <div class="flex justify-between">
-            <div>
-                <nz-select [(ngModel)]="status">
-                    <nz-option nzValue="no action" nzLabel="No Action"></nz-option>
-                    <nz-option nzValue="status" nzLabel="Status"></nz-option>
-                    <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
-                </nz-select>
-                <button class="ml-4 bg-blue-700 text-white" nz-button nzType="primary" nzSize="default">Apply</button>
-            </div>
-            <div class="flex space-x-2 ml-10">
-                <button class="text-white bg-blue-700 font-semibold pl-2 pr-2 rounded" (click)="showModalAdd()">
-                    <span class="ml-0" nz-icon nzType="plus" nzTheme="outline"></span>
-                    Add User
-                </button>
-            </div>
+      <div class="flex justify-between">
+        <div>
+          <nz-select [(ngModel)]="status">
+            <nz-option nzValue="no action" nzLabel="No Action"></nz-option>
+            <nz-option nzValue="status" nzLabel="Status"></nz-option>
+            <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
+          </nz-select>
+          <button class="ml-4 bg-blue-700 text-white" nz-button nzType="primary" nzSize="default">Apply</button>
         </div>
+        <div class="flex space-x-2 ml-10">
+          <button class="text-white bg-blue-700 font-semibold pl-2 pr-2 rounded" (click)="showModalAdd()">
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+            Add User
+          </button>
+        </div>
+      </div>
     </div>
     <div class="card-body border-solid border-slate-600 border p-3 rounded-xl ring-offset ring-0">
-        <div class="w-full flex justify-between mb-4">
-            <div class="dataTable_length text-white">
-                Show
-                <nz-select name="5" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
-                    <nz-option [nzValue]="5" nzLabel="5"></nz-option>
-                    <nz-option [nzValue]="7" nzLabel="10"></nz-option>
-                    <nz-option [nzValue]="10" nzLabel="15"></nz-option>
-                </nz-select>
-                entries
-            </div>
-            <div class="dataTable_filter text-right text-white flex">
-                Search:
-                <input class="ml-5 input-search" nz-input placeholder="Basic usage" [(ngModel)]="valueSearch"
-                    (ngModelChange)="onSearchChange()" name="search" type="text" />
-            </div>
+      <div class="w-full flex justify-between mb-4">
+        <div class="dataTable_length text-white">
+          Show
+          <nz-select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange($event)">
+            <nz-option [nzValue]="5" nzLabel="5"></nz-option>
+            <nz-option [nzValue]="7" nzLabel="10"></nz-option>
+            <nz-option [nzValue]="10" nzLabel="15"></nz-option>
+          </nz-select>
+          entries
         </div>
-        <div class="form-table">
-            <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize" ngSkipHydration>
-                <thead class="table-head">
-                    <tr>
-                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
-                            [nzSortPriority]="column.priority">
-                            {{ column.title }}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let data of basicTable.data" class="hover-row table-row">
-                        <td>{{ data.userId }}</td>
-                        <td>{{ data.userName }}</td>
-                        <td>{{ data.password }}</td>
-                        <td>{{ data.role }}</td>
-                        <td>{{ data.action }}</td>
-                        <td class="flex justify-center items-center gap-2.5">
-                            <span class="cursor-pointer bg-green-600 w-6 h-6 text-3xl rounded" nz-icon nzType="edit"
-                                nzTheme="outline" (click)="showModalUpdate()"></span>
-                            <span class="cursor-pointer bg-red-600 w-6 h-6 text-3xl rounded" nz-icon nzType="delete"
-                                nzTheme="outline" (click)="showModalDelete()"></span>
-                        </td>
-                    </tr>
-                </tbody>
-            </nz-table>
+        <div class="dataTable_filter text-right text-white flex">
+          Search:
+          <input class="ml-5 input-search" nz-input placeholder="Basic usage" [(ngModel)]="valueSearch"
+            (ngModelChange)="onSearchChange()" />
         </div>
+      </div>
+      <div class="form-table">
+        <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize">
+          <thead class="table-head">
+            <tr>
+              <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">
+                {{ column.title }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data" class="hover-row table-row">
+              <td>{{ data.Id }}</td>
+              <td>{{ data.FullName }}</td>
+              <td>{{ data.Email }}</td>
+              <td>
+                
+                <span *ngIf="isPasswordVisible(data)">
+                  {{ data.Password.length > 19 ? (data.Password | slice:0:19) + '...' : data.Password }}
+                </span>
+                <span *ngIf="!isPasswordVisible(data)">{{ '****' }}</span>
+                <span class="cursor-pointer" nz-icon nzType="{{isPasswordVisible(data) ? 'eye-invisible' : 'eye'}}" nzTheme="outline" style="margin-left: 5px; color: blue;"
+                      (click)="togglePasswordVisibility(data)"></span>
+              </td>
+              
+              <td>{{ data.Role }}</td>
+              <td>{{ data.AuthProvider }}</td>
+              <td class="flex justify-center items-center gap-2.5">
+                <span class="cursor-pointer bg-green-600 w-6 h-6 text-3xl rounded" nz-icon nzType="edit" nzTheme="outline"
+                  (click)="showModalUpdate(data)"></span>
+                <span class="cursor-pointer bg-red-600 w-6 h-6 text-3xl rounded" nz-icon nzType="delete" nzTheme="outline"
+                  (click)="showModalDelete(data.Id)"></span>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
     </div>
-</div>
-
-<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleAdd" nzWidth="1000px" nzTitle="Add User" (nzOnCancel)="handleAddCancel()"
-    (nzOnOk)="handleAddOk()">
+  </div>
+  
+  <nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleAdd" nzWidth="1000px" nzTitle="Add User"
+    (nzOnCancel)="handleAddCancel()" (nzOnOk)="handleAddOk()">
     <ng-container *nzModalContent>
-        <span class="text-blue-700 text-2xl"> User </span>
-        <form [formGroup]="form" nz-form>
-            <nz-form-item>
-                <nz-form-label nzRequired>User Name</nz-form-label>
-                <nz-form-control>
-                    <input nz-input placeholder="Please enter user name" formControlName="userName" />
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Password</nz-form-label>
-                <nz-form-control>
-                    <input nz-input placeholder="Please enter password" formControlName="password" type="password" />
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Role</nz-form-label>
-                <nz-form-control>
-                    <nz-select formControlName="role">
-                        <nz-option nzValue="Admin" nzLabel="Admin"></nz-option>
-                        <nz-option nzValue="User" nzLabel="User"></nz-option>
-                        <nz-option nzValue="Staff" nzLabel="Staff"></nz-option>
-                    </nz-select>
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Action</nz-form-label>
-                <nz-form-control>
-                    <nz-switch formControlName="action"></nz-switch>
-                </nz-form-control>
-            </nz-form-item>
-        </form>
-    </ng-container>
-</nz-modal>
+      <span class="text-blue-700 text-2xl">User</span>
+      <form [formGroup]="form" nz-form>
+        <nz-form-item>
+          <nz-form-label nzRequired>User Name</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter user name" formControlName="FullName" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Email</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter email" formControlName="Email" type="Email" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Password</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter password" formControlName="Password" type="Password" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Role</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="Role">
+              <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
+              <nz-option nzValue="USER" nzLabel="USER"></nz-option>
 
-<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleUpdate" nzWidth="1000px" nzTitle="Update User"
-    (nzOnCancel)="handleUpdateCancel()" (nzOnOk)="handleUpdateOk()">
-    <ng-container *nzModalContent>
-        <span class="text-blue-700 text-2xl"> User </span>
-        <form [formGroup]="form" nz-form>
-            <nz-form-item>
-                <nz-form-label nzRequired>User Name</nz-form-label>
-                <nz-form-control>
-                    <input nz-input placeholder="Please enter user name" formControlName="userName" />
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Password</nz-form-label>
-                <nz-form-control>
-                    <input nz-input placeholder="Please enter password" formControlName="password" type="password" />
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Role</nz-form-label>
-                <nz-form-control>
-                    <nz-select formControlName="role">
-                        <nz-option nzValue="Admin" nzLabel="Admin"></nz-option>
-                        <nz-option nzValue="User" nzLabel="User"></nz-option>
-                        <nz-option nzValue="Staff" nzLabel="Staff"></nz-option>
-                    </nz-select>
-                </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-                <nz-form-label nzRequired>Action</nz-form-label>
-                <nz-form-control>
-                    <nz-switch formControlName="action"></nz-switch>
-                </nz-form-control>
-            </nz-form-item>
-        </form>
-    </ng-container>
-</nz-modal>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>AuthProvider</nz-form-label>
+          <nz-select formControlName="AuthProvider">
+            <nz-option nzValue="LOCAL" nzLabel="LOCAL"></nz-option>
+            <nz-option nzValue="GOOGLE" nzLabel="GOOGLE"></nz-option>
 
-<nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleDelete" nzWidth="300px" nzTitle="Delete User"
-    (nzOnCancel)="handleDeleteCancel()" (nzOnOk)="handleDeleteOk()">
-    <ng-container *nzModalContent>
-        <div>
-            <span class="bg-blue-700 w-6 h-6 text-3xl rounded" nz-icon nzType="delete" nzTheme="outline"></span>
-            <span class="text-white h-5 text-lg"> Are you sure you want to delete this user?</span>
-        </div>
+          </nz-select>
+        </nz-form-item>
+      </form>
     </ng-container>
-</nz-modal>
+  </nz-modal>
+  
+  <nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleUpdate" nzWidth="1000px"
+    nzTitle="Update User" (nzOnCancel)="handleUpdateCancel()" (nzOnOk)="handleUpdateOk()">
+    <ng-container *nzModalContent>
+      <span class="text-blue-700 text-2xl">User</span>
+      <form [formGroup]="form" nz-form>
+        <nz-form-item>
+          <nz-form-label nzRequired>User Name</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter user name" formControlName="FullName" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Email</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter email" formControlName="Email" type="Email" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Password</nz-form-label>
+          <nz-form-control>
+            <input nz-input placeholder="Please enter password" formControlName="Password" type="Password" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>Role</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="Role">
+              <nz-option nzValue="ADMIN" nzLabel="ADMIN"></nz-option>
+              <nz-option nzValue="USER" nzLabel="USER"></nz-option>
+             
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired>AuthProvider</nz-form-label>
+          <nz-select formControlName="AuthProvider">
+            <nz-option nzValue="LOCAL" nzLabel="LOCAL"></nz-option>
+            <nz-option nzValue="GOOGLE" nzLabel="GOOGLE"></nz-option>
+          </nz-select>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+  
+  <nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleDelete" nzWidth="300px"
+    nzTitle="Delete User" (nzOnCancel)="handleDeleteCancel()" (nzOnOk)="handleDeleteOk()">
+    <ng-container *nzModalContent>
+      <div>
+        <span nz-icon nzType="delete" nzTheme="outline" class="bg-blue-700 w-6 h-6 text-3xl rounded"></span>
+        <span class="text-white h-5 text-lg"> Are you sure you want to delete this user?</span>
+      </div>
+    </ng-container>
+  </nz-modal>
+  

@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
+import { Comment } from '../../models/comment';
+import { CommentService } from '../../../core/services/comment.service';
+import { VideoStreamingService } from '../../../core/services/video-streaming.service';
 enum Genre {
   Romance = "Lãng Mạn",
   Action = "Hành Động",
@@ -16,6 +18,7 @@ enum PageIndex {
   ForEpisode,
   ForSeason,
   ForRelate,
+  ForComment,
 }
 
 enum Country {
@@ -30,7 +33,6 @@ type IsFollowed = boolean;
 type Source = string;
 type Summary = string;
 type Rating = number;
-type Season = string;
 type Year = number;
 type Title = string;
 
@@ -50,13 +52,17 @@ interface Actor {
   role: string;
 }
 
+interface Season {
+  idMovie: number;
+  seasonName: string;
+}
+
 interface MovieDetail {
   summary: Summary;
   rate: Rating;
   currentUserRate: Rating;
   isFollowed: IsFollowed;
   year: Year;
-  season: Season;
   genres: Genre[];
   country: Country;
   actors: Actor[];
@@ -84,6 +90,9 @@ const movies: Movie[] = [
   { id: 19, thumbnailImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG5tBPGS5UneOLZB2FZiaxT67_JwNB95QVWEe41V7S3IFx9oQCaiK-ws84-PfvfIVzx6w&usqp=CAU', title: 'The Green Mile' },
   { id: 20, thumbnailImage: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg', title: 'Se7en' },
 ];
+
+
+
 
 const movieServerSources: MovieServerSource[] = [
   { idMovie: 1, link: 'https://www.youtube.com/embed/P-BBYznfOCc?si=dfnaIP9vTMERlAEo' },
@@ -115,7 +124,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2010,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -129,7 +138,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Comedy],
     country: Country.Korea,
     actors: [
@@ -143,7 +152,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1972,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -157,7 +166,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -171,7 +180,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 2019,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -185,7 +194,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2008,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -199,7 +208,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Comedy],
     country: Country.USA,
     actors: [
@@ -213,7 +222,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -227,7 +236,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Romance],
     country: Country.USA,
     actors: [
@@ -241,7 +250,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -250,13 +259,13 @@ const movieDetails: MovieDetail[] = [
     ],
   },
   {
-    
+
     summary: 'A team of explorers travel through a wormhole in space in an attempt to ensure humanity\'s survival.',
     rate: 8.6,
     currentUserRate: -1,
     isFollowed: true,
     year: 2014,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -270,7 +279,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2000,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -284,7 +293,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: false,
     year: 1993,
-    season: '1',
+
     genres: [Genre.Drama],
     country: Country.USA,
     actors: [
@@ -298,7 +307,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 2003,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -312,7 +321,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1994,
-    season: '1',
+
     genres: [Genre.Drama],
     country: Country.USA,
     actors: [
@@ -326,7 +335,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1977,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -340,7 +349,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1991,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -354,7 +363,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1998,
-    season: '1',
+
     genres: [Genre.Action, Genre.Drama],
     country: Country.USA,
     actors: [
@@ -368,7 +377,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1999,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -382,7 +391,7 @@ const movieDetails: MovieDetail[] = [
     currentUserRate: -1,
     isFollowed: true,
     year: 1995,
-    season: '1',
+
     genres: [Genre.Drama, Genre.Action],
     country: Country.USA,
     actors: [
@@ -392,7 +401,9 @@ const movieDetails: MovieDetail[] = [
   },
 ];
 
-
+const seasons: Season[] = [
+  { idMovie: 1, seasonName: "Mùa 1" },
+];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @Component({
@@ -403,10 +414,13 @@ const movieDetails: MovieDetail[] = [
   styleUrls: ['./video-streaming.component.css'] // Updated from styleUrl to styleUrls
 })
 export class VideoStreamingComponent implements OnInit {
+  [x: string]: any;
 
   currentMovie!: MovieServerSource;
   currentMovieDetail!: MovieDetail;
   currentMovieTitle: string = "chưa đặt tên";
+  newComment!: Comment;
+  deleteCommentIndex: number = -1;
   stars: number[] = [1, 2, 3, 4, 5];
   hoverIndex: number = -1;
 
@@ -415,23 +429,53 @@ export class VideoStreamingComponent implements OnInit {
   seasons!: Movie[];
   relates!: Movie[];
   topHot!: Movie[];
+  comments!: Comment[];
+  readonlyFields: boolean[];
 
+  ////////////
+  videoId!: string;
+  videoSrc: string = "";
+  ///////////
   constructor(
     private sanitizer: DomSanitizer,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private commentService: CommentService,
+    private filmService: VideoStreamingService,
   ) {
-    this.pageNumber = [1, 1, 1, 1];
+    this.sanitizer = sanitizer;
+    this.pageNumber = Array<number>(5).fill(1);
+    this.readonlyFields = Array<boolean>(10).fill(true);
+    this.newComment = {
+      commentId: 99,
+      createAt: (new Date()).toUTCString(),
+      imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
+      isMyComment: true, name: "currentuser",
+      text: ""
+    };
   }
   // id trên thanh địa chỉ lệch 1 với danh sách tập không phải lỗi. nó là do id != index mảng
   ngOnInit(): void {
     const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
+
     if (id) {
-      this.initPageContent(Number(id)-1);
+      this.videoId = id;
+      this.filmService.getFilmById(id).subscribe({
+        next: (response) => {
+          this.videoSrc = response.Data.filmUrl;
+          console.log(this.videoSrc);
+          console.log(JSON.stringify(response));
+
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+
+      this.initPageContent(/*Number(id) - 1*/3);
     }
   }
 
-  initPageContent(movieId:number){
-    // console.log("434id="+movieId);
+  initPageContent(movieId: number) {
     this.currentMovie = this.loadMovieById(movieId);
     this.currentMovieDetail = this.loadDetailById(movieId);
     this.currentMovieTitle = this.loadMovieTitle(movieId);
@@ -439,11 +483,52 @@ export class VideoStreamingComponent implements OnInit {
     this.seasons = this.loadSeason();
     this.relates = this.loadRelate();
     this.topHot = this.loadHotMovie();
+    this.comments = this.load10Comments(movieId, 1);
+  }
+  load10Comments(movieId: number, pageNumber: number): Comment[] {
+
+    const temp1: Comment[] = [{
+      commentId: 0,
+      imgURL: 'https://s29288.pcdn.co/wp-content/uploads/2020/08/seven-image-750.jpg',
+      createAt: new Date().toISOString(),
+      name: 'Quá Mỹ Thế Đan',
+      isMyComment: true,
+      text: 'vvvvvvvvsjdlfjsldj',
+    }];
+
+    const temp2: Comment[] = [];
+    for (let i = 0; i < 5; ++i) {
+      temp2.push(
+        {
+          commentId: i + 1,
+          imgURL: movies[Math.floor(Math.random() * 19)].thumbnailImage,
+          createAt: new Date().toISOString(),
+          name: movies[Math.floor(Math.random() * 19)].title,
+          isMyComment: false,
+          text: movieDetails[i + 1].summary,
+        }
+      );
+    }
+    // let commentArray:Comment[] =[];
+    //  this.commentService.get10CommentsByFilmId(movieId.toString(),1).subscribe({
+    //   next:(response) => {
+    //    commentArray = [...response];
+
+    //   },
+    //   error: (error) => {
+    //     console.error(error);
+    //   }
+    //  });
+    // return commentArray;
+
+    return [...temp1, ...temp2];
   }
 
   loadMovieById(id: number): MovieServerSource {
     // console.log("445id="+id);
     const movie = movieServerSources[id];
+    console.log("id="+id+" |movie=");
+    
     movie.link = this.sanitizer.bypassSecurityTrustResourceUrl(movie.link + "?autoplay=1");
     return movie;
   }
@@ -459,7 +544,7 @@ export class VideoStreamingComponent implements OnInit {
   loadEpisodes(): Movie[] {
     // console.log("460id="+this.currentMovie.idMovie);
     this.pageNumber[PageIndex.ForEpisode] = this.currentMovie.idMovie;
-    
+
     const nextEpisode = [];
     let start = Math.floor(this.currentMovie.idMovie / 5) * 5;
     for (let end = start + 5; start < end; ++start) {
@@ -477,12 +562,23 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   loadRelate(): Movie[] {
-    const hotMovie = [];
-    for (let start = 0; start < 5; ++start) {
-      hotMovie.push(movies[Math.floor(Math.random() * 19)])
+    const relateMovie: Movie[] = [];
+    let moviesMaxLength = movieDetails.length;
+    for (let genre of this.currentMovieDetail.genres) {
+      for (let i = 0; i < moviesMaxLength; ++i) {
+        for (let gen of movieDetails[i].genres) {
+          if (genre === gen) {
+            relateMovie.push(movies[i]);
+            if (relateMovie.length === 5) {
+              return relateMovie;
+            }
+          }
+        }
+      }
     }
-    return hotMovie;
+    return relateMovie;
   }
+
 
   loadHotMovie(): Movie[] {
     const hotMovie = [];
@@ -493,7 +589,9 @@ export class VideoStreamingComponent implements OnInit {
   }
 
   decreasePageNumber(index: number) {
-    this.pageNumber[index] -= 1;
+    if (this.pageNumber[index] > 1) {
+      this.pageNumber[index] -= 1;
+    }
   }
   increasePageNumber(index: number) {
     this.pageNumber[index] += 1;
@@ -508,5 +606,43 @@ export class VideoStreamingComponent implements OnInit {
   selectStar(score: number) {
     this.currentMovieDetail.currentUserRate = score + 1;
     alert(score);
+  }
+
+  toggleEditMode(index: number): void {
+    this.readonlyFields[index] = !this.readonlyFields[index];
+    if (this.readonlyFields[index] === true) {
+      this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
+      //this.commentService.updateComment(this.comments[index].commentId.toString(),this.comments[index].text);
+    }
+
+  }
+  sendCommentToServer(): void {
+
+    this.comments.unshift(...this.comments.splice(-1));
+    this.comments[0] = { ...this.newComment };
+    //this.commentService.createComment(this.currentMovie.idMovie.toString(),this.newComment.text);
+    this.newComment.text = "";
+
+  }
+  deleteComment(): void {
+
+    let i = this.deleteCommentIndex;
+    const tempComment: Comment = this.comments[i];
+    for (let length = this.comments.length; i < length - 1; ++i) {
+      this.comments[i] = this.comments[i + 1];
+    }
+
+    this.comments[i] = tempComment;
+    tempComment.commentId = -1;
+    //this.commentService.deleteComment(this.comments[i].commentId.toString())
+    this.closeModal();
+  }
+
+  openModal(index: number): void {
+    this.deleteCommentIndex = index;
+  }
+
+  closeModal(): void {
+    this.deleteCommentIndex = -1;
   }
 }

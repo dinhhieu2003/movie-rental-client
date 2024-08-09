@@ -38,7 +38,7 @@
     font-weight: 500;
 }
 
-.menu-row #nav .ant-menu-item-selected a{
+.active-link{
     border-bottom: solid 2px white;
     padding: 5px;
 }

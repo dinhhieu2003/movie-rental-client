@@ -10,20 +10,21 @@
 
     <div class="mb-5 border-solid border-slate-600 border p-3 rounded-xl ring-offset ring-0">
         <div class="flex justify-between items-center mb-5">
-            <div class="flex items-center space-x-2">
-                <button class="flex items-center space-x-2 bg-blue-700 text-white font-semibold p-2 rounded"
-                    (click)="refreshData()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6">
+            <div class="search-container flex items-center space-x-2 text-white text-base relative">
+                Search:
+                <div class="relative flex items-center">
+                    <input class="ml-5 input-search pr-8" nz-input placeholder="Search by name" [(ngModel)]="valueSearch"
+                        (ngModelChange)="onSearchChange()" name="search" type="text" />
+                    <svg *ngIf="!valueSearch" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="search-icon absolute right-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
-                    <span>Refresh</span>
-                </button>
+                </div>
             </div>
 
             <button (click)="showModalAdd()" nz-button nzType="primary"
-                class="bg-blue-700 flex p-1 pr-1.5 text-white font-semibold">
+                class="bg-blue-700 mr-3 hover:bg-blue-900 border border-transparent hover:border-blue-300 rounded flex p-1 pr-1.5 text-white font-semibold">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                     <path
                         d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
@@ -31,8 +32,9 @@
                 Add Category
             </button>
         </div>
+        <!-- <div class="card-container grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 m-1 border-solid border-slate-300 border rounded-xl ring-offset ring-0">-->
         <div class="card-container p-4 m-1 border-solid border-slate-300 border rounded-xl ring-offset ring-0">
-            <nz-card *ngFor="let category of originalCategories" class="category-card">
+            <nz-card *ngFor="let category of filteredCategories" class="category-card">
                 <div class="card-content">
                     <div class="card-info">
                         <div class="flex">
@@ -147,7 +149,7 @@
                         <nz-switch formControlName="isActive"></nz-switch>
                     </nz-form-control>
                 </nz-form-item>
-    
+
             </form>
         </fieldset>
     </ng-container>
@@ -167,49 +169,50 @@
         </div>
     </ng-template>
     <ng-container *nzModalContent>
-<fieldset class="fieldset">
-    <legend class="text-blue-700 text-2xl w-28 ml-2"> Category </legend>
-    <form [formGroup]="form" nz-form>
-        <nz-form-item>
-            <nz-form-label nzRequired>Category Name</nz-form-label>
-            <nz-form-control>
-                <input class="text-white" nz-input placeholder="Please enter category name" formControlName="name" />
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired>Description</nz-form-label>
-            <nz-form-control>
-                <textarea nz-input placeholder="Enter description" [nzAutosize]="{ minRows: 2, maxRows: 7 }"
-                    formControlName="description"></textarea>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired>Image URL</nz-form-label>
-            <nz-form-control>
-                <input nz-input placeholder="Enter image URL" formControlName="image" />
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired>Category</nz-form-label>
-            <nz-form-control>
-                <input nz-input placeholder="Enter category" formControlName="category" />
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired>Album</nz-form-label>
-            <nz-form-control>
-                <input nz-input placeholder="Enter album" formControlName="album" />
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item class="flex items-center">
-            <nz-form-label class="mr-4">Active</nz-form-label>
-            <nz-form-control>
-                <nz-switch formControlName="isActive"></nz-switch>
-            </nz-form-control>
-        </nz-form-item>
+        <fieldset class="fieldset">
+            <legend class="text-blue-700 text-2xl w-28 ml-2"> Category </legend>
+            <form [formGroup]="form" nz-form>
+                <nz-form-item>
+                    <nz-form-label nzRequired>Category Name</nz-form-label>
+                    <nz-form-control>
+                        <input class="text-white" nz-input placeholder="Please enter category name"
+                            formControlName="name" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired>Description</nz-form-label>
+                    <nz-form-control>
+                        <textarea nz-input placeholder="Enter description" [nzAutosize]="{ minRows: 2, maxRows: 7 }"
+                            formControlName="description"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired>Image URL</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Enter image URL" formControlName="image" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired>Category</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Enter category" formControlName="category" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzRequired>Album</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Enter album" formControlName="album" />
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item class="flex items-center">
+                    <nz-form-label class="mr-4">Active</nz-form-label>
+                    <nz-form-control>
+                        <nz-switch formControlName="isActive"></nz-switch>
+                    </nz-form-control>
+                </nz-form-item>
 
-    </form>
-</fieldset>
+            </form>
+        </fieldset>
     </ng-container>
 </nz-modal>
 
