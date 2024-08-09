@@ -1,4 +1,4 @@
 .wrapper {
     background-color: black;
-    height: auto;
+    min-height: 768px;
 }
