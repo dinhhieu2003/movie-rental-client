@@ -1,11 +1,12 @@
 import { Component, ElementRef, Input, OnInit, viewChild } from '@angular/core';
 import { Movie } from '../../models/movie';
 import { Album } from '../../models/album';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-album',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './album.component.html',
   styleUrl: './album.component.css'
 })
@@ -14,6 +15,7 @@ export class AlbumComponent implements OnInit{
   defaultTransform: number = 0;
   @Input() listMovie: Movie[] = [];
   @Input() title: string = "";
+  @Input() idAlbum: string = "";
 
   goNext() {
     this.defaultTransform = this.defaultTransform - 398;
