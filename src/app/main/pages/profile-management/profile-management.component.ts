@@ -47,30 +47,30 @@ export class ProfileManagementComponent {
   }
 
   navigateToTransactionHistory(): void {
-    this.router.navigate(['/profilemanagement/transaction-history']);
+    this.router.navigate(['/me/transaction-history']);
   }
 
   navigateToCart(): void {
-    this.router.navigate(['/profilemanagement/cart']);
+    this.router.navigate(['/me/cart']);
   }
 
   navigateToRentalList(): void {
-    this.router.navigate(['/profilemanagement/rental-list']);
+    this.router.navigate(['/me/rental-list']);
   }
 
   navigateToMailbox(): void {
-    this.router.navigate(['/profilemanagement/mailbox']);
+    this.router.navigate(['/me/mailbox']);
   }
 
   navigateToLoginDevices(): void {
-    this.router.navigate(['/profilemanagement/login-devices']);
+    this.router.navigate(['/me/login-devices']);
   }
 
   navigateToFavoriteMovies(): void {
-    this.router.navigate(['/profilemanagement/favorite-movies']);
+    this.router.navigate(['/me/favorite-movies']);
   }
 
   navigateToLogout(): void {
-    this.router.navigate(['/profilemanagement/logout']);
+    this.router.navigate(['/me/logout']);
   }
 }

@@ -16,10 +16,7 @@ export class AccountService {
 
   // Lấy thông tin tài khoản
   getAccount(): Observable<AccountModel> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-    });
-    return this.httpClient.get<{ Data: AccountModel }>(this.apiUrl, { headers }).pipe(
+    return this.httpClient.get<{ Data: AccountModel }>(this.apiUrl).pipe(
       map(response => response.Data),
       catchError(this.handleError)
     );
@@ -27,10 +24,7 @@ export class AccountService {
 
   // Cập nhật thông tin tài khoản
   updateAccount(account: AccountModel): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-    });
-    return this.httpClient.put<any>(this.apiUrl, account, { headers }).pipe(
+    return this.httpClient.put<any>(this.apiUrl, account).pipe(
       catchError(this.handleError)
     );
   }
@@ -46,7 +40,7 @@ export class AccountService {
       PasswordNew: newPassword,
       PasswordConfirm: newPassword
     };
-    return this.httpClient.put<any>(this.passwordApiUrl, body, { headers }).pipe(
+    return this.httpClient.put<any>(this.passwordApiUrl, body).pipe(
       catchError(this.handleError)
     );
   }

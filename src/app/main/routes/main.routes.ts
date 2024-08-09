@@ -13,6 +13,11 @@ import { CheckoutComponent } from "../pages/checkout/checkout.component";
 import { authGuard } from "../../core/guard/auth.guard";
 import { CategoryService } from "../../core/services/main/category.service";
 import { inject } from "@angular/core";
+import { CartComponent } from "../pages/profile-management/cart/cart.component";
+import { TransactionHistoryComponent } from "../pages/profile-management/transaction-history/transaction-history.component";
+import { MoviesRentalListComponent } from "../pages/profile-management/movies-rental-list/movies-rental-list.component";
+import { MyMailComponent } from "../pages/profile-management/my-mail/my-mail.component";
+import { ManageLoginDevicesComponent } from "../pages/profile-management/manage-login-devices/manage-login-devices.component";
 import { FilmStreamingComponent } from "../pages/film-streaming/film-streaming.component";
 
 export const mainRoutes: Routes = [
@@ -37,7 +42,7 @@ export const mainRoutes: Routes = [
                 component: SearchComponent,
             },
             {
-                path:'album',
+                path:'album/:id',
                 component: AlbumDetailComponent,
             },
 
@@ -52,7 +57,28 @@ export const mainRoutes: Routes = [
                     {
                         path: 'account',
                         component: AccountSettingsComponent,
-                    }
+                    },
+                    {
+                        path: 'cart',
+                        component: CartComponent,
+                    },
+                    {
+                        path: 'transaction-history',
+                        component: TransactionHistoryComponent,
+                    },
+                    {
+                        path: 'rental-list',
+                        component: MoviesRentalListComponent,
+                    },
+                    {
+                        path: 'mailbox',
+                        component: MyMailComponent,
+                    },
+                    {
+                        path: 'login-devices',
+                        component: ManageLoginDevicesComponent,
+                    },
+                    
                 ],
                 canActivate: [authGuard],
             },

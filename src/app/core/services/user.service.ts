@@ -3,14 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { JwtService } from './jwt.service';
-
-interface User {
-  userId: string;
-  userName: string;
-  password: string;
-  role: string;
-  action: boolean;
-}
+import { BaseResponse } from '../models/BaseResponse.model';
+import {User} from '../models/UserModel.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,24 +25,48 @@ export class UserService {
     
     return this.http.get<User>(`${this.apiUrl}/get/${userId}`, );
   }
+  createUsers(user: User): Observable<BaseResponse> {
+    let body :any= {
+      
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
+    }
+    console.log(body)
+    return this.http.post<BaseResponse>(`${this.apiUrl}/create`,{
+      
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
+    } );
+  }
 
   softDeleteUser(userId: string): Observable<any> {
-    
-    return this.http.put(`${this.apiUrl}/soft-delete/${userId}`, {}, );
+    return this.http.put<any>(`${this.apiUrl}/${userId}/soft-delete`, {} );
   }
 
-  updateUser(user: User): Observable<any> {
-    
-    return this.http.put(`${this.apiUrl}/update`, user, );
+  updateUser(user: User): Observable<BaseResponse> {
+    const url = this.apiUrl + "/"+ user.Id + "/update" ;
+    return this.http.put<BaseResponse>(url,{
+      FullName: user.FullName,
+      Email: user.Email,
+      Password: user.Password,
+      AuthProvider: user.AuthProvider,
+      Role: user.Role
+    });
   }
 
-  activateUser(userId: string): Observable<any> {
-    
-    return this.http.put(`${this.apiUrl}/activate`, { userId },);
+  activateUser(user: User): Observable<BaseResponse> {
+    const url = this.apiUrl + "/"+ user.Id + "/active" ;
+    return this.http.put<BaseResponse>(url,{});
   }
 
-  deactivateUser(userId: string): Observable<any> {
-    
-    return this.http.put(`${this.apiUrl}/deactivate`, { userId }, );
+  deactivateUser(user: User): Observable<BaseResponse> {
+    const url = this.apiUrl + "/"+ user.Id + "/deactive" ;
+    return this.http.put<BaseResponse>(url,{});
   }
 }
