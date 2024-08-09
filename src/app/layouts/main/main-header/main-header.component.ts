@@ -3,7 +3,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule, NzDrawerPlacement } from 'ng-zorro-antd/drawer';
-import { Router, RouterLink} from '@angular/router';
+import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { JwtService } from '../../../core/services/jwt.service';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -22,6 +22,7 @@ import { Category } from '../../../main/models/category';
     RouterLink,
     NzDropDownModule,
     NzIconModule,
+    RouterLinkActive
   ],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.scss',
