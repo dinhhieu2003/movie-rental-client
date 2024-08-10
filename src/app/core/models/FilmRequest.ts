@@ -1,7 +1,7 @@
-import {FilmData} from "../../main/models/film"
+import { FilmData } from "../../main/models/film";
 
-export interface FilmRequest {
-    Message: string;
-    Status: number;
-    Data: FilmData;
+export  interface FilmRequest {
+    Message: string,
+    Status: number,
+    Data: FilmData,
 }
