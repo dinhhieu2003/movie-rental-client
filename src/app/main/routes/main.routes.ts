@@ -3,7 +3,7 @@ import { HomeComponent } from "../pages/home/home.component";
 import { MainLayoutComponent } from "../../layouts/main/main-layout/main-layout.component";
 import { ProfileManagementComponent } from "../pages/profile-management/profile-management.component";
 import { AccountSettingsComponent } from "../pages/profile-management/account-settings/account-settings.component";
-import { VideoStreamingComponent } from "../pages/video-streaming/video-streaming.component";
+// import { VideoStreamingComponent } from "../pages/video-streaming/video-streaming.component";
 import { MovieComponent } from "../pages/movie/movie.component";
 import { PricingComponent } from "../pages/pricing/pricing.component";
 import { SearchComponent } from "../pages/search/search.component";

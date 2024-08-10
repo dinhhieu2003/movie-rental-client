@@ -14,8 +14,9 @@
     height: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background: #4e54c8;
-    background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+    /* background: #4e54c8; */
+    /* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8); */
+    background-color: #f5f5f5;
     width: 100%;
     height: 100vh;
     z-index: -1;
@@ -70,10 +71,11 @@
 
 .detail-film-container {
     display: flex;
-    justify-content: space-between;
+    gap:10px;
     width: 70vw;
     margin: 0 auto;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .summary {
@@ -86,13 +88,15 @@
 }
 
 .name-detail {
-    width: 50vw;
+    width: max-content;
     padding-bottom: 40px;
+    flex-grow: 1;
 }
 
-.director-detail {
+.genres-detail {
     text-align: center;
-    gap: 10px;
+    width: max-content;
+    flex-grow: 1;
 }
 
 .interact-button {
@@ -101,7 +105,14 @@
     transform: skew(-20deg);
 }
 
-
+.director-image{
+    border-radius: 20px;
+    width: 8vw;
+    height: 8vw;
+    object-fit: contain;
+    margin: auto;
+    align-items: center;
+}
 .avatar-image {
     border-radius: 50%;
     width: 8vw;
@@ -109,6 +120,7 @@
     object-fit: contain;
     margin: auto;
     align-items: center;
+    background-image: red;
 }
 
 .avatar-list {
@@ -124,13 +136,12 @@
 
 .video-list {
     display: flex;
-    padding-left: 2vw;
+    justify-content: space-around;
     padding-bottom: 1vh;
-    max-width: 80vw;
-    gap: 2vw;
-    overflow: hidden;
-    border: 2px solid greenyellow;
+    width: 100%;
+    /* border: 2px solid greenyellow; */
     height: max-content;
+    flex-wrap: wrap;
 }
 
 /* @keyframes duration | easing-function | delay |
@@ -141,6 +152,7 @@ iteration-count | direction | fill-mode | play-state | name */
     text-wrap: pretty;
     max-width: 17vw;
     margin-top: 5vh;
+    flex-basis: 100;
     transition: margin-top 0.3s ease-in-out;
     /* animation-name: rotateX-animation;
     animation-duration: 2s;
@@ -232,7 +244,7 @@ h2 {
 
 .jump-page-button {
     border-radius: 10%;
-    background-color: cornflowerblue;
+    background-color: #177DDC;
     padding: 5px 10px;
     margin-right: 20px;
 }
@@ -339,7 +351,8 @@ h2 {
     display: grid;
     grid-template-columns: min(8vw, 8vh) auto min(6vw, 6vh) min(6vw, 6vh);
     grid-template-rows: min(3vw, 3vh) auto auto;
-    background-color: rgb(26, 29, 69);
+    /* background-color: rgb(26, 29, 69); */
+    background-color: #424242FF;
     padding: 10px 10px;
     padding-right: 40px;
     margin-bottom: 10px;
@@ -350,7 +363,7 @@ h2 {
     display: grid;
     grid-template-columns: min(8vw, 8vh) auto min(6vw, 6vh) min(6vw, 6vh);
     grid-template-rows: min(3vw, 3vh) auto auto;
-    background-color: rgb(44, 49, 128);
+    background-color: #424242FF;
     padding: 10px 10px;
     padding-right: 40px;
     margin-bottom: 10px;
@@ -366,12 +379,12 @@ h2 {
     grid-row-end: 4;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid gray;
+    border: 2px solid #d9d9d9;
     align-items: center;
 }
 
 .user-name {
-    color: aqua;
+    color: #1890ff;
     font-weight: bold;
     grid-column-start: 2;
     grid-column-end: 3;
@@ -385,19 +398,20 @@ h2 {
     grid-column-end: 5;
     grid-row-start: 3;
     margin-left: 20px;
+    color: #8c8c8c;
 }
 
 .send-new-comment-button {
     grid-column-start: 4;
     grid-row-start: 3;
-    background-color: #4e54c8;
+    background-color: #177DDC;
     margin-top: 5px;
 }
 
 .edit-comment-button {
     grid-column-start: 3;
     grid-row-start: 1;
-    background-color: #4e54c8;
+    background-color: #52c41a;
     margin-bottom: 5px;
 
     &:hover {
@@ -408,7 +422,7 @@ h2 {
 .delete-comment-button {
     grid-column-start: 4;
     grid-row-start: 1;
-    background-color: #4e54c8;
+    background-color: #ff4d4f;
     margin-bottom: 5px;
 
     &:hover {
@@ -422,20 +436,20 @@ h2 {
     height: max-content;
     resize: none;
     min-height: 3vh;
-    color: black;
+    color: #000000;
     grid-column-start: 2;
     grid-column-end: 5;
     grid-row-start: 2;
-    background-color: white;
+    background-color: #ffffff;
     margin-left: 10px;
     border-radius: 15px;
     padding: 2px 30px;
 }
 
 .message[readOnly] {
-    background-color: rgb(26, 29, 69);
+    background-color: #595959;
     height: max-content;
-    color: #ffc;
+    color: #f0f0f0;
     field-sizing: content;
 }
 

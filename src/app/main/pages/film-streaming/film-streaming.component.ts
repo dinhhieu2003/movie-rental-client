@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommentService } from '../../../core/services/comment.service';
-import { VideoStreamingService } from '../../../core/services/video-streaming.service';
-import { CommentRequest } from '../../models/comment';
-import { FilmData } from '../../../core/models/FilmServer';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CommentData, getDefaultCommentData } from '../../models/comment';
+import { FilmService } from '../../../core/services/film.service';
+import { getDefaultMovieCard, MovieCard } from '../../models/movie-card';
+import { FilmData, getDefaultFilmData } from '../../models/film';
 
 enum PageIndex {
   ForEpisode,
@@ -22,70 +23,111 @@ enum PageIndex {
   styleUrl: './film-streaming.component.css'
 })
 export class FilmStreamingComponent {
-  comments!: CommentRequest[];
+  comments!: CommentData[];
   readonlyFields: boolean[];
-  newComment!: CommentRequest;
+  newComment!: CommentData;
   deleteCommentIndex: number = -1;
   stars: number[] = [1, 2, 3, 4, 5];
   hoverIndex: number = -1;
   pageNumber: number[];
+  MaxPageNumber: number[];
   filmData!: FilmData;
-  currentUserRate: number = -1;
+  topHot !: MovieCard[];
   constructor(
     private activateRoute: ActivatedRoute,
     private commentService: CommentService,
-    private filmService: VideoStreamingService
+    private filmService: FilmService
   ) {
     this.pageNumber = Array<number>(5).fill(1);
+    this.MaxPageNumber = Array<number>(5).fill(10);
     this.readonlyFields = Array<boolean>(10).fill(true);
+    this.comments = Array.from({ length: 10 }, () => ({ ...getDefaultCommentData() }));
     this.newComment = this.getNewCommentDeffault();
-    this.getFilmDataFromServer();
+    this.filmData = getDefaultFilmData(this.activateRoute.snapshot.paramMap.get("id"));
+    this.topHot = Array.from({ length: 5 }, () => ({ ...getDefaultMovieCard() }));
+    this.getDataFromServer()
   }
+  async getDataFromServer() {
+    this.getFilmDataFromServer();
+    this.getCommentsFromServer();
+    this.getRatingFromServer();
+    this.getTop5Film();
+  }
+
   toggleEditMode(index: number): void {
     this.readonlyFields[index] = !this.readonlyFields[index];
     if (this.readonlyFields[index] === true) {
       this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
-      this.commentService.updateComment(this.comments[index].commentId, this.comments[index].text);
+      this.commentService.updateComment(this.filmData.Id, this.comments[index].commentId, this.comments[index].text);
     }
 
   }
-  decreasePageNumber(index: number) {
-    if (this.pageNumber[index] > 1) {
-      this.pageNumber[index] -= 1;
+  changePageNumber(index: number, amount: number) {
+    const nextPage = this.pageNumber[index] + amount;
+
+    if (1 <= nextPage && nextPage <= this.MaxPageNumber[index]) {
+      this.pageNumber[index] = nextPage;
+
+      console.log(this.pageNumber[index]);
+
+      switch (index) {
+        case PageIndex.ForComment:
+          this.getCommentsFromServer();
+          break;
+
+        default:
+          break;
+      }
     }
   }
-  increasePageNumber(index: number) {
-    this.pageNumber[index] += 1;
-  }
+
   enterStarListener(index: number) {
     this.hoverIndex = index;
   }
   leaveStarListener() {
-    this.hoverIndex = this.currentUserRate - 1;
+    this.hoverIndex = this.filmData.RatingScore - 1;
   }
   selectStar(score: number) {
-    alert(score + 1);
-    // api cập nhật rating
+    this.filmService.setRatingForFilm(this.filmData.Id, score + 1);
   }
   sendCommentToServer(): void {
-
+    if( containsVietnameseChars(this.newComment.text) === false){
+      return;
+    }
     this.comments.unshift(...this.comments.splice(-1));
     this.comments[0] = { ...this.newComment };
-    this.commentService.createComment(this.filmData.id, this.newComment.text);
+    this.commentService.createComment(this.filmData.Id, this.newComment.text).subscribe({
+      next: (response) => {
+        this.pageNumber[PageIndex.ForComment] = 1;
+        this.commentService.get10CommentsByFilmId(this.filmData.Id, 0)
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
     this.newComment.text = "";
 
   }
   deleteComment(): void {
 
     let i = this.deleteCommentIndex;
-    const tempComment: CommentRequest = this.comments[i];
+    const tempComment: CommentData = this.comments[i];
     for (let length = this.comments.length; i < length - 1; ++i) {
       this.comments[i] = this.comments[i + 1];
     }
-
     this.comments[i] = tempComment;
+
+    this.commentService.deleteComment(this.comments[i].commentId).subscribe({
+      next: (response) => {
+        console.log(response);
+
+
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
     tempComment.commentId = "";
-    this.commentService.deleteComment(this.comments[i].commentId)
     this.closeModal();
   }
   openModal(index: number): void {
@@ -95,61 +137,90 @@ export class FilmStreamingComponent {
   closeModal(): void {
     this.deleteCommentIndex = -1;
   }
-  getNewCommentDeffault(): CommentRequest {
+  getNewCommentDeffault(): CommentData {
+    const userName = localStorage.getItem("FullName");
     return {
-      commentId: "not a real id",
-      createAt: "00/00/00",
+      commentId: "66b5e3c76d4d8759d90f8ab9",
+      createdAt: "00/00/00",
       imgURL: "https://i.pinimg.com/474x/3f/3a/d1/3f3ad18a365a1668940d93b6cfc20591.jpg",
       isMyComment: true,
-      name: "currentuser",
+      userName: userName ? userName : "current user",
       text: ""
     };
   }
+  getCommentsFromServer() {
+
+    this.commentService.get10CommentsByFilmId(this.filmData.Id, this.pageNumber[PageIndex.ForComment] - 1).subscribe({
+      next: (response) => {
+        this.MaxPageNumber[PageIndex.ForComment] = response.Data.totalPages;
+
+        let i = 0;
+        for (let commentSFromServer: CommentData[] = response.Data.content; i < commentSFromServer.length; ++i) {
+          this.comments[i].commentId = commentSFromServer[i].commentId;
+          this.comments[i].createdAt = commentSFromServer[i].createdAt;
+          this.comments[i].imgURL = commentSFromServer[i].imgURL;
+          this.comments[i].isMyComment = commentSFromServer[i].isMyComment;
+          this.comments[i].userName = commentSFromServer[i].userName;
+          this.comments[i].text = commentSFromServer[i].text;
+        }
+        while (i < 10) {
+          this.comments[i].commentId = "";
+          ++i;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
   getFilmDataFromServer(): void {
+
     const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
 
     if (id) {
       this.filmService.getFilmById(id).subscribe({
         next: (response) => {
-          console.log(response);
 
           this.filmData = { ...response.Data };
-          return
+
         },
         error: (error) => {
           console.error(error);
         }
       });
     }
-    else {
-      this.filmData = {
-        isActive: false,
-        isDeleted: false,
-        createdAt: '11/11/1111',
-        updatedAt: '22/22/2222',
-        id: 'superid',
-        filmName: 'không có tên',
-        filmUrl: '',
-        description: 'phim hỏng rồi qua web nước ngoài mà coi',
-        thumbnailUrl: '',
-        trailerUrl: '',
-        releaseDate: '00/00/9999',
-        duration: '',
-        actors: '',
-        director: '',
-        language: '',
-        numberOfViews: -9999999,
-        rating: 5,
-        age: 0,
-        rentalType: '',
-        price: 0,
-        limitTime: 0,
-        subtitles: [],
-        narrations: [],
-        comments: [],
-        genres: []
-      };
-    }
+  }
+  getRatingFromServer(): void {
+    this.filmService.getFilmRating(this.filmData.Id).subscribe({
+      next: (response) => {
+        this.filmData.RatingScore = response.Data;
+        this.selectStar(response.Data);
+        this.leaveStarListener();
+
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+
+  }
+  getTop5Film(): void{
+    this.filmService.getTop5HotestFilm().subscribe({
+      next: (response) => {
+        
+        this.topHot = response.Data;
+
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 }
 
+function containsVietnameseChars(input: string): boolean {
+  // Kiểm tra các ký tự ASCII và các ký tự đặc trưng của Tiếng Việt
+  const vietnameseCharRegex = /[\u0000-\u007F\u0100-\u024F\u1EA0-\u1EFF\u0300-\u036F]/;
+  return vietnameseCharRegex.test(input);
+}
