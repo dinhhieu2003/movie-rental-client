@@ -13,18 +13,11 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ChangeDetectorRef } from '@angular/core';
+import { InvoiceService } from '../../../core/services/invoice.service';
+import { Invoice } from '../../../core/models/Invoice.model';
 
-interface Bill {
-  billId: string;
-  issueDate: Date;
-  user: string;
-  films: string;
-  packageInfo: string;
-  paymentStatus: boolean;
-  totalPrice: number;
-}
 @Component({
-  selector: 'app-bill-management',
+  selector: 'app-Invoice-management',
   standalone: true,
   imports: [CommonModule, NzTableModule, NzSelectModule, NzButtonModule, NzIconModule, FormsModule, RouterLink,
     NzInputModule, NzFormModule,NzGridModule,ReactiveFormsModule,NzDrawerModule,NzDatePickerModule, NzModalModule,
@@ -39,33 +32,98 @@ export class BillManagementComponent implements OnInit {
   pageSize = 5;
   sortOption = 'date';
   listOfColumn = [
-    { title: 'Bill ID', compare: (a: Bill, b: Bill) => a.billId.localeCompare(b.billId), priority: 1 },
-    { title: 'Issue Date', compare: (a: Bill, b: Bill) => a.issueDate.getTime() - b.issueDate.getTime(), priority: 2 },
-    { title: 'User', compare: (a: Bill, b: Bill) => a.user.localeCompare(b.user), priority: 3 },
-    { title: 'Films', compare: (a: Bill, b: Bill) => a.films.localeCompare(b.films), priority: 4 },
-    { title: 'Package Info', compare: (a: Bill, b: Bill) => a.packageInfo.localeCompare(b.packageInfo), priority: 5 },
-    { title: 'Payment Status', compare: (a: Bill, b: Bill) => Number(a.paymentStatus) - Number(b.paymentStatus), priority: 6 },
-    { title: 'TotalPrice', compare: (a: Bill, b: Bill) => a.totalPrice - b.totalPrice, priority: 7 } 
+    { title: 'Invoice ID', compare: (a: Invoice, b: Invoice) => a.id.localeCompare(b.id), priority: 1 },
+    { title: 'Issue Date', compare: (a: Invoice, b: Invoice) => a.issueDate.getTime() - b.issueDate.getTime(), priority: 2 },
+    { title: 'User', compare: (a: Invoice, b: Invoice) => a.userId.localeCompare(b.userId), priority: 3 },
+    { title: 'Films', compare: (a: Invoice, b: Invoice) => a.films[0].FilmName.localeCompare(b.films[0].FilmName), priority: 4 },
+    { title: 'Package Info', compare: (a: Invoice, b: Invoice) => a.packageInfo.packageName.localeCompare(b.packageInfo.packageName), priority: 5 },
+    { title: 'Payment Status', compare: (a: Invoice, b: Invoice) => Number(a.paymentStatus) - Number(b.paymentStatus), priority: 6 },
+    { title: 'TotalPrice', compare: (a: Invoice, b: Invoice) => a.totalPrice - b.totalPrice, priority: 7 } 
   ];
 
-  listOfData: Bill[] = [
-    { billId: '1', issueDate: new Date('2023-01-01'), user: 'JohnDoe', films: 'Film1', packageInfo: 'Package A', paymentStatus: true,totalPrice: 100},
-    { billId: '2', issueDate: new Date('2023-02-15'), user: 'JaneSmith', films: 'Film2', packageInfo: 'Package B', paymentStatus: false,totalPrice: 90 },
-    { billId: '3', issueDate: new Date('2023-03-10'), user: 'MikeJohnson', films: 'Film3', packageInfo: 'Package C', paymentStatus: true,totalPrice: 70 },
-    { billId: '4', issueDate: new Date('2023-04-22'), user: 'AnnaWilliams', films: 'Film4', packageInfo: 'Package A', paymentStatus: false,totalPrice: 200 },
-    { billId: '5', issueDate: new Date('2023-05-18'), user: 'ChrisBrown', films: 'Film5', packageInfo: 'Package B', paymentStatus: true,totalPrice: 110 }
-  ];
+  listOfData: Invoice[] = []
 
-  filteredData: Bill[] = [...this.listOfData];
+  filteredData: Invoice[] = [...this.listOfData];
 
 
   ngOnInit(): void {
-    this.applySort();
+    this.getAllInvoices();
   }
-  constructor(private cdr: ChangeDetectorRef) {}
+
+  getAllInvoices(): void {
+    this.invoiceService.getAllInvoices().subscribe(data => {
+      this.listOfData= [];
+      for (let i=0 ; i<data.Data.length ; i++){
+        let invoicetamp: Invoice={
+          id: '1111111',
+          issueDate: new Date(),
+          films:[ {
+            isActive: false,
+            isDeleted: false,
+            createdAt: '',
+            updatedAt: '',
+            id: '',
+            FilmName: '',
+            filmUrl: '',
+            description: '',
+            thumbnailUrl: '',
+            trailerUrl: '',
+            releaseDate: '',
+            duration: '',
+            actors: '',
+            director: '',
+            language: '',
+            numberOfViews: 0,
+            rating: 0,
+            age: 0,
+            rentalType: '',
+            price: 0,
+            limitTime: 0,
+            subtitles: [],
+            narrations: [],
+            comments: [],
+            genres: []
+          }],
+          packageInfo: {
+            id: '',
+            packageName: '',
+            description: '',
+            price: 0,
+            timeDuration: 0
+          },
+          totalPrice: 0,
+          paymentStatus: '',
+          userId: '9999'
+        }
+        invoicetamp.id= data.Data[i].id;
+        invoicetamp.issueDate= data.Data[i].issueDate;
+        if(data.Data[i].films.length !== 0){
+      
+          invoicetamp.films[0].FilmName= data.Data[i].films[0].FilmName;
+        }
+        if(data.Data[i].packageInfo != null &&data.Data[i].packageInfo.packageName != null ){
+          invoicetamp.packageInfo.packageName= data.Data[i].packageInfo.packageName;
+        }
+        invoicetamp.totalPrice= data.Data[i].totalPrice;
+        invoicetamp.paymentStatus= data.Data[i].paymentStatus;
+        if(data.Data[i].userId != null)
+          invoicetamp.userId= data.Data[i].userId;
+        
+        this.listOfData.push(invoicetamp);
+      }
+      
+      this.filteredData = [...this.listOfData];
+      // console.log("listdata: "+JSON.stringify(this.listOfData, null, 2)) ;
+      // console.log("data: "+JSON.stringify(this.filteredData, null, 2));
+    });
+    
+  }
+  constructor(private cdr: ChangeDetectorRef, private invoiceService: InvoiceService) {
+
+  }
 
   onSearchChange(): void {
-    this.filteredData = this.listOfData.filter(data => data.user.toLowerCase().includes(this.valueSearch.toLowerCase()));
+    this.filteredData = this.listOfData.filter(data => data.userId.toLowerCase().includes(this.valueSearch.toLowerCase()));
     this.applySort();
   }
 
@@ -80,12 +138,14 @@ export class BillManagementComponent implements OnInit {
 
   applySort(): void {
     if (this.sortOption === 'date') {
-      this.filteredData.sort((a, b) => b.issueDate.getTime() - a.issueDate.getTime());
+      this.listOfData.sort((a, b) => b.issueDate.getTime() - a.issueDate.getTime());
     } else if (this.sortOption === 'amountLowToHigh') {
-      this.filteredData.sort((a, b) => a.totalPrice - b.totalPrice);
+      this.listOfData.sort((a, b) => a.totalPrice - b.totalPrice);
     } else if (this.sortOption === 'amountHighToLow') {
-      this.filteredData.sort((a, b) => b.totalPrice - a.totalPrice);
+      this.listOfData.sort((a, b) => b.totalPrice - a.totalPrice);
     }
+    this.filteredData = [...this.listOfData];
+    this.filteredData.forEach(i=>console.log(i.totalPrice));
     this.cdr.detectChanges();
   }
 

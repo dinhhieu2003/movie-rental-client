@@ -59,13 +59,10 @@
             </div>
         </div>
         <div class="form-table">
-            <nz-table #basicTable [nzData]="filteredData" [nzPageSize]="pageSize" ngSkipHydration>
+            <nz-table #basicTable [nzPageSize]="pageSize" ngSkipHydration>
                 <thead class="table-head">
                     <tr>
-                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
-                            [nzSortPriority]="column.priority" [ngClass]="{ 'w-1/5': column.title === 'Movie' }">
-                            {{ column.title }}
-                        </th>
+                       
                     </tr>
                 </thead>
                 <tbody>

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common'
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,9 @@ export class JwtService {
   constructor() {
   }
 
-  saveToken(Token: string) {
+  saveToken(Token: string, Expired: string) {
     localStorage.setItem("Token", Token);
+    localStorage.setItem("ExpiredAt", Expired);
   }
 
   saveUserInfo(fullName: string, role: string, idUser: string) {
@@ -30,6 +32,11 @@ export class JwtService {
     return token;
   }
 
+  getExpiryDate() {
+    return localStorage.getItem("ExpiredAt");
+  }
+
+
   removeToken() {
     localStorage.removeItem("Token");
   }
@@ -38,5 +45,10 @@ export class JwtService {
     localStorage.removeItem("IdUser");
     localStorage.removeItem("FullName");
     localStorage.removeItem("Role");
+  }
+
+  logout() {
+    this.removeToken();
+    this.removeUserInfo();
   }
 }

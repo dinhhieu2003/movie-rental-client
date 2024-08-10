@@ -1,0 +1,207 @@
+<div class="content-page">
+    <!-- Fake video content -->
+    <ul class="circles">
+        @for(i of [].constructor(10);track $index){
+        <li></li>
+        }
+    </ul>
+    <div id="myModal" class="modal" [hidden]="(deleteCommentIndex < 0)" (click)="closeModal()">
+
+        <!-- Modal content -->
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <div style="background-color: rgb(242, 255, 0);margin-bottom: 20px; padding-bottom: 10px;">
+                <p class="mt-10 text-2xl text-black font-bold">Bạn có chắc là muốn xóa bình luận này chứ ?</p>
+                <p class="text-lg text-black italic">(Bình luận đã xóa sẽ không thể khôi phục lại)</p>
+                <button class="accept-delete-button" (click)="deleteComment()">Xóa</button>
+            </div>
+        </div>
+    </div>
+    <!-- "https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4" -->
+    <div class="video-player">
+        <video controls autoplay style="width: 100%;height: 100%; object-fit: contain;"
+            [src]="filmData.filmUrl">
+        </video>
+    
+        <!-- <iframe loading="lazy" width="100%" height="100%" [src]="currentMovie.link" frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe> -->
+    </div>
+    <div class="detail-film-container">
+        <div class="name-detail">
+            <h1 style="color: white;" class="text-white text-4xl mt-4 font-bold" [innerText]="filmData.FilmName"></h1>
+            <p class="text-2xl m-2" [innerText]="'Mùa 1'"></p>
+            <p class="text-xl m-2">{{filmData.releaseDate}} - 1/1 Tập - {{filmData.language}}</p>
+            <p class="summary" [innerText]="filmData.description"></p>
+            <div id="rating" (mouseleave)="leaveStarListener()">
+                <i class="fa fa-star" style="font-size:36px; color:rgb(48, 156, 245); text-align: left;">
+                </i> Đánh Giá
+                <br>
+                @for (start of stars; track $index) {
+                <span (mouseenter)="enterStarListener($index)" (click)="selectStar($index)"
+                    [ngClass]="{'hover': ($index <= hoverIndex)}">
+                    ★
+                </span>
+                }
+            </div>
+        </div>
+        <div class="director-detail mt-5">
+            <p class="mt-4 text-2xl"><b>Thể Loại: </b>
+                @for (genre of filmData.genres; track $index) {
+                {{genre}},
+                }
+            </p>
+        </div>
+    </div>
+    <!-- <ng-container *ngTemplateOutlet="videoList;
+        context:{
+        titleSection: 'Danh Sách Tập',
+        items: episodes,
+        pageNumberIndex: 0
+        }
+    ">
+    </ng-container> -->
+
+    <!-- <ng-container *ngTemplateOutlet="videoList;
+        context:{
+           titleSection: 'Các Mùa',
+           items: seasons,
+           pageNumberIndex: 1
+        }
+    ">
+    </ng-container> -->
+<!-- 
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+        titleSection: 'Khá Liên Quan',
+        items: relates,
+        pageNumberIndex:2  
+        }
+    ">
+    </ng-container> -->
+
+
+    <div class="title">
+        <h1>Diễn Viên</h1>
+        <div class="avatar-list">
+            @for (actor of filmData.actors; track $index) {
+            <span class="avatar-item">
+                <img class="avatar-image"
+                    src="https://i.pinimg.com/474x/3f/3a/d1/3f3ad18a365a1668940d93b6cfc20591.jpg" />
+                <p>{{actor}}</p>
+                <!-- <p>({{actor.role}})</p> -->
+            </span>
+            }
+
+        </div>
+
+    <!-- </div>
+    <ng-container *ngTemplateOutlet="videoList;
+        context:{
+           titleSection: 'Phim siêu nóng',
+           items: topHot,
+           pageNumberIndex:3  
+        }
+    ">
+    </ng-container>
+ -->
+
+
+    <div class="title">
+        <h1>Bình Luận</h1>
+        <div style="display: flex; flex-wrap: wrap;">
+            <div style="flex-grow: 1; margin-right: 10px;">
+                <div class="new-comment-container">
+                    <img class="avatar-comment" [src]="newComment.imgURL">
+                    <p class="user-name">{{newComment.name}}</p>
+                    <textarea placeholder="Phim này nhà tôi làm. Mọi người chia sẻ nhiều vào nhé !!" rows="2"
+                        maxlength="1000"
+                        onmouseleave='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                        class="message" [(ngModel)]="newComment.text"></textarea>
+                    <button class="send-new-comment-button" (click)="sendCommentToServer()">Gửi</button>
+                </div>
+            </div>
+            <div style="flex-grow: 1;">
+                @for(cmt of comments;track $index){
+                <ng-container *ngTemplateOutlet="comment;
+                        context:{
+                            index:$index
+                        }
+                        ">
+                </ng-container>
+                }
+                <span class="video-list-control">
+                    <button (click)="decreasePageNumber(3)"><i class="fa fa-arrow-left"
+                            style="font-size:24px"></i></button>
+                    <input class="page-jump" style="height: min-content;" min="1" type="number" required size="4" [(ngModel)]="pageNumber[3]">
+                    <button class="jump-page-button">NHẢY</button>
+                    <button (click)="increasePageNumber(3)"><i class="fa fa-arrow-right"
+                            style="font-size:24px"></i></button>
+                </span>
+            </div>
+            
+        </div>
+
+
+    </div>
+
+</div>
+
+<ng-template #itemTemplate let-className="className" let-imageClass="imageClass" let-imageSource="imageSource"
+    let-itemName="itemName" let-itemId="itemId">
+    <span [class]="className">
+        <a [href]="'/video/'+itemId">
+            <img [class]="imageClass" [src]="imageSource" />
+            <p class="mt-2"> {{itemName}}</p>
+        </a>
+    </span>
+</ng-template>
+
+
+<ng-template #listControl let-pageNumberIndex="pageNumberIndex">
+    <span class="video-list-control">
+        <button (click)="decreasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-left"
+                style="font-size:24px"></i></button>
+        <input min="1" type="number" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
+        <button class="jump-page-button">NHẢY</button>
+        <button (click)="increasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-right"
+                style="font-size:24px"></i></button>
+    </span>
+</ng-template>
+
+<ng-template #videoList let-titleSection="titleSection" let-items="items" let-pageNumberIndex="pageNumberIndex">
+    <div class="title">
+        <h1>{{titleSection}}</h1>
+
+        <ng-container *ngTemplateOutlet="listControl; context:{pageNumberIndex:pageNumberIndex}">
+        </ng-container>
+
+        <div class="video-list">
+            @for (item of items; track $index;) {
+            <ng-container
+                *ngTemplateOutlet="itemTemplate; context: {className: 'video-item', imageClass: 'video-thumbnail', imageSource:item.thumbnailImage, itemName:item.title,itemId:item.id}">
+            </ng-container>
+            }
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #comment let-index="index">
+    <div class="comment-container" [hidden]="comments[index].commentId ===''">
+
+        <img class="avatar-comment" [src]="comments[index].imgURL">
+        <p class="user-name">{{comments[index].name}}</p>
+        <p class="date">{{comments[index].createAt}}</p>
+        @if(comments[index].isMyComment){
+        <button class="edit-comment-button" (click)="toggleEditMode(index)">Sửa</button>
+        <button class="delete-comment-button" (click)="openModal(index)">xóa</button>
+        }
+        <textarea maxlength="1000" class="message" [(ngModel)]="comments[index].text"
+            [(readOnly)]="readonlyFields[index]"></textarea>
+        
+    </div>
+
+
+</ng-template>
+
+
+<!-- on='this.style.height = "";this.style.height = this.scrollHeight + "px"' -->

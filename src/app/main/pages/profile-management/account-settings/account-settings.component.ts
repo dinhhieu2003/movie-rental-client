@@ -30,10 +30,13 @@ export class AccountSettingsComponent implements OnInit {
   isEditingProfileName = false; // State to track if profile name is editable
   apiMessage: string = ''; // Variable to store API response message
 
-  // New variables to handle password visibility
+  // Variables to handle password visibility
   passwordTypeOld: string = 'password';
   passwordTypeNew: string = 'password';
   passwordTypeConfirm: string = 'password';
+
+  initialProfileName: string = '';
+  initialAvatar: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +46,8 @@ export class AccountSettingsComponent implements OnInit {
     this.profileForm = this.fb.group({
       profileName: [{ value: '', disabled: true }, Validators.required],
       email: [{ value: '', disabled: true }],
-      phone: ['']
+      phone: [''],
+      avatar: [''] // Add the avatar field
     });
 
     this.passwordChangeForm = this.fb.group({
@@ -61,9 +65,13 @@ export class AccountSettingsComponent implements OnInit {
     this.accountService.getAccount().subscribe({
       next: (account) => {
         console.log('Account data received:', account);
+        this.initialProfileName = account.FullName; // Store initial profile name
+        this.initialAvatar = account.Avatar; // Store initial avatar
+
         this.profileForm.patchValue({
           profileName: account.FullName,
-          email: account.Email
+          email: account.Email,
+          avatar: account.Avatar
         });
       },
       error: (err) => {
@@ -77,10 +85,9 @@ export class AccountSettingsComponent implements OnInit {
 
   toggleEditProfileName(): void {
     this.isEditingProfileName = !this.isEditingProfileName;
-    if (this.isEditingProfileName) {
-      this.profileForm.get('profileName')?.enable();
-    } else {
-      this.profileForm.get('profileName')?.disable();
+    const profileNameControl = this.profileForm.get('profileName');
+    if (profileNameControl) {
+      this.isEditingProfileName ? profileNameControl.enable() : profileNameControl.disable();
     }
   }
 
@@ -88,13 +95,15 @@ export class AccountSettingsComponent implements OnInit {
     if (this.profileForm.valid) {
       const updatedAccount: AccountModel = {
         FullName: this.profileForm.value.profileName,
-        Email: this.profileForm.get('email')?.value
+        Email: this.profileForm.get('email')?.value,
+        Avatar: this.profileForm.get('avatar')?.value // Include the avatar value
       };
 
       console.log('Submitting updated account:', updatedAccount);
 
       this.accountService.updateAccount(updatedAccount).subscribe({
         next: () => {
+          localStorage.setItem("FullName", updatedAccount.FullName);
           console.log('Account updated successfully');
           alert('Cập nhật hồ sơ thành công');
           this.toggleEditProfileName();
@@ -122,29 +131,34 @@ export class AccountSettingsComponent implements OnInit {
     this.passwordChangeForm.updateValueAndValidity();
     this.isChangePasswordModalVisible = true;
   }
+
   get isPasswordFormValid(): boolean {
     return this.passwordChangeForm.valid;
   }
-  
 
   handleCancel(): void {
     this.isChangeContactModalVisible = false;
     this.isChangePasswordModalVisible = false;
   }
 
+  cancelEdit(): void {
+    this.isEditingProfileName = false; // Revert to non-editing mode
+    this.profileForm.get('profileName')?.setValue(this.initialProfileName); // Reset profile name
+    this.profileForm.get('avatar')?.setValue(this.initialAvatar); // Reset avatar
+    this.profileForm.get('profileName')?.disable(); // Disable profile name field
+  }
+
   handlePasswordChange(): void {
     if (this.passwordChangeForm.valid) {
       const { oldPassword, newPassword } = this.passwordChangeForm.value;
-  
+
       this.accountService.changePassword(oldPassword, newPassword).subscribe({
         next: (response) => {
-          // Xử lý khi thay đổi mật khẩu thành công
           this.apiMessage = response.Message || 'Đổi mật khẩu thành công';
           alert(this.apiMessage);
           this.handleCancel();
         },
         error: (err) => {
-          // Xử lý lỗi và hiện thông báo từ API
           console.error('Error changing password:', err);
           this.apiMessage = err.error?.Message || 'Mật khẩu cũ không đúng.';
           alert(this.apiMessage);
@@ -156,7 +170,6 @@ export class AccountSettingsComponent implements OnInit {
       alert(this.apiMessage);
     }
   }
-  
 
   showPassword(type: 'old' | 'new' | 'confirm'): void {
     switch(type) {
@@ -192,14 +205,33 @@ export class AccountSettingsComponent implements OnInit {
     return newPassword === confirmPassword ? null : { mismatch: true };
   }
 
-  passwordStrengthValidator(control: FormGroup): { [key: string]: boolean } | null {
+  passwordStrengthValidator(control: any): { [key: string]: boolean } | null {
     const password = control.value;
-    if (!password) return null; 
+    if (!password) return null;
 
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
     
     return hasUpperCase && hasLowerCase && hasSpecialChar ? null : { weakPassword: true };
+  }
+
+  onAvatarChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          // Set the avatar value in the form
+          this.profileForm.patchValue({
+            avatar: e.target.result as string
+          });
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    }
   }
 }

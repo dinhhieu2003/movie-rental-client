@@ -1,6 +1,6 @@
 .title {
     color: white;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: bold;
     margin-right: 20px;
 }
@@ -15,4 +15,24 @@
     opacity: 1;
     background: linear-gradient(90deg, #000000 35%, rgba(0, 0, 0, 0.5) 100%);
     transition: all .3s;
+  }
+
+  .movie__background {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+  }
+
+  .wrap-item {
+    width: 18%;
+    margin-right: 10px;
   }
