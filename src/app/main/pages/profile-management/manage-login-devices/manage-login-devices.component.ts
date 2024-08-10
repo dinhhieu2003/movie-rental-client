@@ -1,27 +1,35 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DeviceService } from '../../../../core/services/deviceservice/devices.service'; 
+import { Device } from '../../../../main/models/devicemodel/devices.model';
+
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-manage-login-devices',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './manage-login-devices.component.html',
   styleUrl: './manage-login-devices.component.css'
 })
-export class ManageLoginDevicesComponent {
-  ngAfterViewInit(): void {
-    // Chỉ thực thi sau khi view đã được khởi tạo
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-      const deleteButtons = document.querySelectorAll('.fas.fa-times');
+export class ManageLoginDevicesComponent implements OnInit {
+  devices: Device[] = [];
 
-      deleteButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const row = button.closest('tr');
-          if (row) {
-            row.remove();
-          }
-        });
-      });
-    }
+  constructor(private deviceService: DeviceService) {}
+
+  ngOnInit(): void {
+    this.loadDevices();
+  }
+
+  loadDevices(): void {
+    this.deviceService.getDevices().subscribe({
+      next: (data: Device[]) => {
+        this.devices = data;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to fetch devices:', err);
+      }
+    });
   }
 
 }
