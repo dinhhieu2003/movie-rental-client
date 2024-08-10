@@ -1,39 +1,74 @@
 <div class="transaction-header">
-    <h2>Lịch sử giao dịch</h2>
+  <h2>Lịch sử giao dịch</h2>
+</div>
+<nz-table #basicTable [nzData]="displayData" nzBordered nzSize="middle" [nzFrontPagination]="false">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Ngày</th>
+      <th>Số tiền</th>
+      <th>Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of displayData">
+      <td>{{ data.id }}</td>
+      <td>{{ data.purchaseDate }}</td>
+      <td>{{ data.totalPrice }}</td>
+      <td [ngClass]="getStatusClass(data.transactionStatus)">{{ getStatusText(data.transactionStatus) }}</td>
+    </tr>
+  </tbody>
+</nz-table>
+<div class="pagination-wrapper">
+  <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="transactionData.length" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
+</div>
+<div class="payment-method">
+  <h3>Phương thức thanh toán</h3>
+  <div *ngFor="let method of paymentInfos" class="payment-card">
+    <img [src]="getBankImage(method.bankName)" alt="{{ method.bankName }}">
+    <span>{{ method.bankName }} - {{ maskCardNumber(method.cardNumber) }}</span>
+    <button (click)="showModal(method.id)">Hủy liên kết</button>
   </div>
-  <nz-table #basicTable [nzData]="displayData" nzBordered nzSize="middle" [nzFrontPagination]="false" ngSkipHydration>
-    <thead>
-      <tr>
-        <th>Ngày</th>
-        <th>Số tiền</th>
-        <th>Mô tả</th>
-        <th>Trạng thái</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of displayData">
-        <td>{{ data.date }}</td>
-        <td>{{ data.amount }}</td>
-        <td>{{ data.description }}</td>
-        <td [ngClass]="getStatusClass(data.status)">{{ getStatusText(data.status) }}</td>
-      </tr>
-    </tbody>
-  </nz-table>
-  <div class="pagination-wrapper">
-    <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="transactionData.length" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>
-  </div>
-  <div class="payment-method">
-    <h3>Phương thức thanh toán</h3>
-    <div class="payment-card">
-      <img src="https://cdn-new.topcv.vn/unsafe/200x/https://static.topcv.vn/company_logos/cong-ty-cp-giai-phap-thanh-toan-viet-nam-vnpay-6194ba1fa3d66.jpg" alt="VNPay">
-      <span>{{ paymentMethod.type }} - {{ paymentMethod.number }}</span>
-      <button (click)="showModal()">Hủy liên kết</button>
-    </div>
-    <a class="add-payment-method">Thêm phương thức thanh toán</a>
-  </div>
-  <nz-modal [(nzVisible)]="isVisible" nzTitle="Hủy liên kết" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-    <ng-container *nzModalContent>
-      <p>Bạn có chắc hủy liên kết?</p>
-    </ng-container>
-  </nz-modal>
-  
+  <a class="add-payment-method" (click)="showAddPaymentModal()">Thêm phương thức thanh toán</a>
+</div>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Hủy liên kết" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <p>Bạn có chắc hủy liên kết?</p>
+  </ng-container>
+</nz-modal>
+<nz-modal [(nzVisible)]="isAddPaymentModalVisible" nzTitle="Thêm phương thức thanh toán" (nzOnCancel)="handleCancel()" (nzOnOk)="submitAddPayment()">
+  <ng-container *nzModalContent>
+    <form [formGroup]="addPaymentForm" class="payment-form">
+      <div class="form-group">
+        <label for="bankName">Tên ngân hàng:</label>
+        <select id="bankName" formControlName="bankName" class="form-control">
+          <option *ngFor="let bank of banks" [value]="bank.name">{{ bank.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cardNumber">Số tài khoản:</label>
+        <input id="cardNumber" formControlName="cardNumber" class="form-control">
+        <div *ngIf="addPaymentForm.get('cardNumber')?.invalid && (addPaymentForm.get('cardNumber')?.dirty || addPaymentForm.get('cardNumber')?.touched)">
+          <div *ngIf="addPaymentForm.get('cardNumber')?.errors?.['required']">Số tài khoản là bắt buộc.</div>
+          <div *ngIf="addPaymentForm.get('cardNumber')?.errors?.['pattern']">Số tài khoản không hợp lệ.</div>
+        </div>
+        
+        
+      </div>
+      <div class="form-group">
+        <label for="cardHolderName">Tên chủ sở hữu:</label>
+        <input id="cardHolderName" formControlName="cardHolderName" class="form-control">
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+<nz-modal [(nzVisible)]="isSuccessModalVisible" nzTitle="Thành công" (nzOnCancel)="handleSuccessCancel()" (nzOnOk)="handleSuccessOk()">
+  <ng-container *nzModalContent>
+    <p>Phương thức thanh toán đã được thêm thành công!</p>
+  </ng-container>
+</nz-modal>
+<nz-modal [(nzVisible)]="isUnlinkSuccessModalVisible" nzTitle="Thành công" (nzOnCancel)="handleUnlinkSuccessCancel()" (nzOnOk)="handleUnlinkSuccessOk()">
+  <ng-container *nzModalContent>
+    <p>Đã hủy liên kết thành công!</p>
+  </ng-container>
+</nz-modal>
