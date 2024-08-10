@@ -145,7 +145,7 @@ export class LoginComponent {
     console.log(loginRequest);
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
-        this.jwtService.saveToken(response.Data.Token);
+        this.jwtService.saveToken(response.Data.Token, response.Data.ExpiredAt);
         this.jwtService.saveUserInfo(response.Data.FullName, response.Data.Role, response.Data.IdUser);
         if (response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
           this.router.navigate(["management"]);

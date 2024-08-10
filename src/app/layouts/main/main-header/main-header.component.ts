@@ -3,15 +3,15 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule, NzDrawerPlacement } from 'ng-zorro-antd/drawer';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink} from '@angular/router';
 import { JwtService } from '../../../core/services/jwt.service';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../../../core/services/main/category.service';
-import { error } from 'console';
 import { CartService } from '../../../core/services/main/cart.service';
 import { NotificationService } from '../../../core/services/main/notification.service';
+import { Category } from '../../../main/models/category';
 
 @Component({
   selector: 'app-main-header',
@@ -21,7 +21,7 @@ import { NotificationService } from '../../../core/services/main/notification.se
     NzDrawerModule,
     RouterLink,
     NzDropDownModule,
-    NzIconModule
+    NzIconModule,
   ],
   templateUrl: './main-header.component.html',
   styleUrl: './main-header.component.scss',
@@ -30,9 +30,7 @@ import { NotificationService } from '../../../core/services/main/notification.se
 export class MainHeaderComponent implements OnInit{
   visible = false;
   placement: NzDrawerPlacement = 'right';
-  isAuthenticated: boolean = false;
-  currentUsername: string | null = "";
-  categories: any[] = [];
+  categories: Category[] = [];
   cartQuantity: number = 0;
   notificationQuantity: number = 0;
 
@@ -45,18 +43,17 @@ export class MainHeaderComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.isAuthenticated = !!this.jwtService.getToken();
-    this.currentUsername = this.jwtService.getUserInfo().FullName;
-    this.cartService.getCart().subscribe({
-      next: (response) => {
-        this.cartQuantity = response.Data.films.length;
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    })
+    this.getCategories();
     this.getCartQuantity();
     this.getNotificationQuantity();
+  }
+
+  checkAuthenticated(): boolean {
+    return !!this.jwtService.getToken();
+  }
+
+  getCurrentFullName(): string | null {
+    return this.jwtService.getUserInfo().FullName;
   }
 
   getNotificationQuantity() {
@@ -72,8 +69,20 @@ export class MainHeaderComponent implements OnInit{
   }
 
   getCartQuantity() {
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        this.cartQuantity = response.Data.films.length;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
+  }
+
+  getCategories() {
     this.categoryService.getAllCategory().subscribe({
       next: (response) => {
+        console.log(response);
         this.categories = response.Data.content;
         this.categories.forEach((value) => {
           console.log(this.convertCategoryNameToSlug(value.categoryName));
@@ -96,7 +105,6 @@ export class MainHeaderComponent implements OnInit{
 
   logout() {
     this.authService.logout();
-    this.isAuthenticated = false;
     this.router.navigate(["home"]);
   }
 

@@ -12,14 +12,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { UserService } from '../../../core/services/user.service';
-
-interface User {
-  userId: string;
-  userName: string;
-  password: string;
-  role: string;
-  action: boolean;
-}
+import { User } from '../../../core/models/UserModel.model';
 
 @Component({
   selector: 'app-test',
@@ -49,39 +42,28 @@ export class UserManagementComponent implements OnInit {
   pageSize = 5; 
 
   listOfColumn = [
-    { title: 'User ID', compare: null, priority: false },
-    { title: 'User Name', compare: (a: User, b: User) => a.userName.localeCompare(b.userName), priority: false },
-    { title: 'Password', compare: (a: User, b: User) => a.password.localeCompare(b.password), priority: 3 },
-    { title: 'Role', compare: (a: User, b: User) => a.role.localeCompare(b.role), priority: 2 },
-    { title: 'Action', compare: (a: User, b: User) => Number(a.userId) - Number(b.userId), priority: 1 },
+    { title: 'User ID', compare: (a: User, b: User) => Number(a.Id) - Number(b.Id), priority: 1 },
+    { title: 'User Name', compare: (a: User, b: User) => a.FullName.localeCompare(b.FullName), priority: 2 },
+    { title: 'Email', compare: null , priority: 3 },
+    { title: 'Password', compare: (a: User, b: User) => a.Password.localeCompare(b.Password), priority: 4 },
+    { title: 'Role', compare: (a: User, b: User) => a.Role.localeCompare(b.Role), priority: 5 },
+    { title: 'AuthProvider', compare: (a: User, b: User) => Number(a.AuthProvider) - Number(b.AuthProvider), priority: 6 },
     { title: 'Custom', compare: null, priority: false },
   ];
 
-  listOfData: User[] = 
-  [
-    { userId: '1', userName: 'JohnDoe', password: 'password123', role: 'Admin', action: true },
-    { userId: '11', userName: 'JaneSmith', password: 'password456', role: 'User', action: true },
-    { userId: '12', userName: 'MikeJohnson', password: 'password789', role: 'User', action: false },
-    { userId: '123', userName: 'AnnaWilliams', password: 'password101', role: 'Admin', action: false },
-    { userId: '2', userName: 'ChrisBrown', password: 'password102', role: 'User', action: false },
-    { userId: '020', userName: 'KatieTaylor', password: 'password103', role: 'User', action: true },
-    { userId: '45', userName: 'PaulWalker', password: 'password104', role: 'User', action: false },
-    { userId: '66', userName: 'LauraWilson', password: 'password105', role: 'Admin', action: false },
-    { userId: '455', userName: 'SamGreen', password: 'password106', role: 'User', action: false },
-    { userId: '1011', userName: 'OliviaMartinez', password: 'password107', role: 'User', action: false }
-  ];
-
+  listOfData: User[] = []
   filteredData: User[] = [...this.listOfData];
 
   form: FormGroup;
 
   constructor(private fb: FormBuilder,private userService: UserService) {
     this.form = this.fb.group({
-      userId: [''],
-      userName: [''],
-      password: [''],
-      role: [''],
-      action: [false]
+      Id: [''],
+      FullName: [''],
+      Email: [''],
+      Password: [''],
+      Role: [''],
+      AuthProvider: [''],
     });
   }
 
@@ -91,14 +73,41 @@ export class UserManagementComponent implements OnInit {
 
   getAllUsers(): void {
     this.userService.getAllUsers().subscribe(data => {
-      this.listOfData = data;
-      
+      this.listOfData= [];
+      for (let i=0 ; i<data.length ; i++){
+        let usertamp: User= {
+          Id: '66b25dd189c70b58fd667ec8',
+          FullName: '',
+          Email: '',
+          Password: '',
+          Role: 'user',
+          AuthProvider: 'LOCAL',
+        }
+        
+        usertamp.Id= data[i].Id;
+        usertamp.FullName= data[i].FullName;
+        usertamp.Email= data[i].Email;
+        usertamp.Password= data[i].Password;
+        usertamp.Role= data[i].Role;
+        usertamp.AuthProvider= data[i].AuthProvider;
+       
+        this.listOfData.push(usertamp);
+      }
+      this.filteredData = [...this.listOfData];
       console.log("listdata: "+JSON.stringify(this.listOfData, null, 2)) ;
       console.log("data: "+JSON.stringify(data, null, 2));
-       this.filteredData = data;
     });
   }
+  passwordVisibility = new Map<string, boolean>();
 
+  togglePasswordVisibility(user: User): void {
+    const currentState = this.passwordVisibility.get(user.Id) || false;
+    this.passwordVisibility.set(user.Id, !currentState);
+  }
+
+  isPasswordVisible(user: User): boolean {
+    return this.passwordVisibility.get(user.Id) || false;
+  }
   getUser(userId: string): void {
     this.userService.getUser(userId).subscribe(user => {
       console.log('User found:', user);
@@ -112,18 +121,28 @@ export class UserManagementComponent implements OnInit {
 
   onSearchChange(): void {
     this.filteredData = this.listOfData.filter(item =>
-      item.userName.toLowerCase().includes(this.valueSearch.toLowerCase())
+      item.FullName.toLowerCase().includes(this.valueSearch.toLowerCase())
     );
   }
 
   isVisibleAdd = false;
   showModalAdd(): void {
+    this.form.reset();
     this.isVisibleAdd = true;
   }
 
   handleAddOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisibleAdd = false;
+    const createUser: User = this.form.value;
+    this.userService.createUsers(createUser).subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.getAllUsers();  
+        this.isVisibleAdd = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    }) 
   }
 
   handleAddCancel(): void {
@@ -139,11 +158,17 @@ export class UserManagementComponent implements OnInit {
 
   handleUpdateOk(): void {
     const updatedUser: User = this.form.value;
-    this.userService.updateUser(updatedUser).subscribe(() => {
-      console.log('User updated successfully');
-      this.getAllUsers();  
-      this.isVisibleUpdate = false;
-    });
+    this.userService.updateUser(updatedUser).
+    subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.getAllUsers();  
+        this.isVisibleUpdate = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
   handleUpdateCancel(): void {
@@ -152,18 +177,24 @@ export class UserManagementComponent implements OnInit {
   }
 
   isVisibleDelete = false;
-  showModalDelete(userId: string): void {
+  showModalDelete(Id: string): void {
     this.isVisibleDelete = true;
-    this.form.patchValue({ userId });
+    this.form.patchValue({ Id });
   }
 
   handleDeleteOk(): void {
-    const userId: string = this.form.get('userId')?.value;
-    this.userService.softDeleteUser(userId).subscribe(() => {
-      console.log('User deleted successfully');
-      this.getAllUsers();  
-      this.isVisibleDelete = false;
-    });
+    const Id: string = this.form.get('Id')?.value;
+    this.userService.softDeleteUser(Id).
+    subscribe({
+      next: (response) => {
+        alert(response);
+        this.getAllUsers();  
+        this.isVisibleDelete = false;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
   handleDeleteCancel(): void {
@@ -171,17 +202,29 @@ export class UserManagementComponent implements OnInit {
     this.isVisibleDelete = false;
   }
 
-  activateUser(userId: string): void {
-    this.userService.activateUser(userId).subscribe(() => {
-      console.log('User activated successfully');
-      this.getAllUsers();  
-    });
+  activateUser(user: User): void {
+    this.userService.activateUser(user).
+    subscribe({
+      next: (response) => {
+        alert(response.Message);
+        this.getAllUsers();  
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    })
   }
 
-  deactivateUser(userId: string): void {
-    this.userService.deactivateUser(userId).subscribe(() => {
-      console.log('User deactivated successfully');
+  deactivateUser(user: User): void {
+    this.userService.deactivateUser(user).
+  subscribe({
+    next: (response) => {
+      alert(response.Message);
       this.getAllUsers();  
-    });
+    },
+    error: (error) => {
+      console.error(error);
+      }
+    })
   }
 }

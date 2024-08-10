@@ -42,7 +42,7 @@ export const mainRoutes: Routes = [
                 component: SearchComponent,
             },
             {
-                path:'album',
+                path:'album/:id',
                 component: AlbumDetailComponent,
             },
 
