@@ -15,7 +15,6 @@ import { FilmService } from '../../../core/services/film.service'
 import { FilmModel } from '../../../core/models/FilmModel'
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
-
 @Component({
   selector: 'app-movie-list',
   standalone: true,
@@ -135,7 +134,21 @@ export class MovieListComponent implements OnInit {
           FilmUrl: film.FilmUrl || '',
           Id: film.Id || '',
           comments: film.comments || [],
-          genres: (film.genres && film.genres.length > 0) ? film.genres : ['N/A'], isActive: film.isActive ?? false,  // Sử dụng '??' để phân biệt giữa 'false' và 'undefined'
+          genres : (film.genres && film.genres.length > 0)
+            ? film.genres.map((genre: any) => {
+              // Kiểm tra và ghép lại chuỗi từ mảng các ký tự riêng lẻ
+              if (typeof genre === 'string' && genre.startsWith('{')) {
+                try {
+                  genre = JSON.parse(genre);
+                } catch (e) {
+                  console.error('Failed to parse genre string:', genre);
+                  return 'Unknown Genre';
+                }
+              }
+              return genre.genreName || 'Unknown Genre';
+            })
+            : ['N/A'],
+          isActive: film.isActive ?? false,
           isDeleted: film.isDeleted ?? false,
           narrations: film.narrations || [],
           subtitles: film.subtitles || [],
@@ -314,7 +327,7 @@ export class MovieListComponent implements OnInit {
   showModalUpdate(movie: any): void {
     this.isVisibleUpdate = true;
     this.formUpdate.patchValue(movie)
-    console.log(this.formUpdate,"222")
+    console.log(this.formUpdate, "222")
 
   }
   handleUpdateOk(): void {
