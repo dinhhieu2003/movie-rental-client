@@ -15,6 +15,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ChangeDetectorRef } from '@angular/core';
 import { InvoiceService } from '../../../core/services/invoice.service';
 import { Invoice } from '../../../core/models/Invoice.model';
+import { getDefaultFilmData } from '../../../main/models/film';
 
 @Component({
   selector: 'app-Invoice-management',
@@ -57,33 +58,7 @@ export class BillManagementComponent implements OnInit {
         let invoicetamp: Invoice={
           id: '1111111',
           issueDate: new Date(),
-          films:[ {
-            isActive: false,
-            isDeleted: false,
-            createdAt: '',
-            updatedAt: '',
-            id: '',
-            FilmName: '',
-            filmUrl: '',
-            description: '',
-            thumbnailUrl: '',
-            trailerUrl: '',
-            releaseDate: '',
-            duration: '',
-            actors: '',
-            director: '',
-            language: '',
-            numberOfViews: 0,
-            rating: 0,
-            age: 0,
-            rentalType: '',
-            price: 0,
-            limitTime: 0,
-            subtitles: [],
-            narrations: [],
-            comments: [],
-            genres: []
-          }],
+          films:[ getDefaultFilmData()],
           packageInfo: {
             id: '',
             packageName: '',

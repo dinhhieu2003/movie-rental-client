@@ -9,6 +9,7 @@ import { NzModalCloseComponent, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { Banner } from '../../../core/models/Banner.model';
 import { BannerService } from '../../../core/services/banner.service';
+import { getDefaultFilmData } from '../../../main/models/film';
 
 @Component({
   selector: 'app-banner',
@@ -61,41 +62,15 @@ export class BannerManagementComponent {
           isDelete: false,
           createAt: new Date(),
           updateAt: new Date(),
-          film: {
-            isActive: false,
-            isDeleted: false,
-            createdAt: '',
-            updatedAt: '',
-            id: 'idFilmKhongCo',
-            FilmName: '',
-            filmUrl: '',
-            description: '',
-            thumbnailUrl: '',
-            trailerUrl: '',
-            releaseDate: '',
-            duration: '',
-            actors: '',
-            director: '',
-            language: '',
-            numberOfViews: 0,
-            rating: 0,
-            age: 0,
-            rentalType: '',
-            price: 0,
-            limitTime: 0,
-            subtitles: [],
-            narrations: [],
-            comments: [],
-            genres: []
-          },
+          film: getDefaultFilmData(),
           imageUrl: 'abc'
         }
         
         bannertamp.id= data.Data[i].id;
         bannertamp.imageUrl= data.Data[i].imageUrl;
         if(data.Data[i].film != null && 
-          data.Data[i].film.id != null )
-          bannertamp.film.id= data.Data[i].film.id;
+          data.Data[i].film.Id != null )
+          bannertamp.film.Id= data.Data[i].film.Id;
         bannertamp.createAt= data.Data[i].createAt;
         bannertamp.updateAt= data.Data[i].updateAt;
         bannertamp.isActive= data.Data[i].isActive;
@@ -110,33 +85,7 @@ export class BannerManagementComponent {
   handleAddOk(): void {
     const createBanner: Banner = this.form.value;
     createBanner.imageUrl = this.form.value.imageUrl;
-    createBanner.film={
-      isActive: false,
-      isDeleted: false,
-      createdAt: '',
-      updatedAt: '',
-      id: this.form.value.film,
-      FilmName: '',
-      filmUrl: '',
-      description: '',
-      thumbnailUrl: '',
-      trailerUrl: '',
-      releaseDate: '',
-      duration: '',
-      actors: '',
-      director: '',
-      language: '',
-      numberOfViews: 0,
-      rating: 0,
-      age: 0,
-      rentalType: '',
-      price: 0,
-      limitTime: 0,
-      subtitles: [],
-      narrations: [],
-      comments: [],
-      genres: []
-    };
+    createBanner.film= getDefaultFilmData(this.form.value.film);
 
     createBanner.isActive= this.form.value.isActive;
 
