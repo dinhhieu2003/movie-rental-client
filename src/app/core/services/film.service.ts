@@ -8,22 +8,29 @@ import { environment } from '../../../environments/environments';
     providedIn: 'root'
 })
 export class FilmService {
-    private apiUrl = environment.apiUrl;
+    private apiUrl = environment.apiUrl + 'films';
 
     constructor(private http: HttpClient) { }
 
     getDeletedFilms(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}films/deleted`).pipe(
+        return this.http.get<any>(`${this.apiUrl}/deleted`).pipe(
             catchError(this.handleError)
         );
     }
 
-    // Lấy all films đã xóa mềm
+    // Lấy all films chưa xóa mềm
     getNotDeletedFilms(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}films/getNotdelete`).pipe(
+        return this.http.get<any>(`${this.apiUrl}/getNotdelete`).pipe(
             catchError(this.handleError)
         );
     }
+    // Lấy all genre chưa xóa mềm
+    getGenres(): Observable<any> {
+        return this.http.get<any>(`https://hoctuancustomservice.io.vn/api/genre/getAll`).pipe(
+            catchError(this.handleError)
+        );
+    }
+
 
     postCreateFilm(film: FillMode): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}create`, film).pipe(
@@ -44,7 +51,7 @@ export class FilmService {
     }
 
     deleteFilm(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}films/delete/${id}`).pipe(
+        return this.http.delete<void>(`${this.apiUrl}/delete/${id}`).pipe(
             catchError(this.handleError)
         );
     }
