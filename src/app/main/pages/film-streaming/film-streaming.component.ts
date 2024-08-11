@@ -128,7 +128,7 @@ export class FilmStreamingComponent {
         createdAt: '11/11/1111',
         updatedAt: '22/22/2222',
         id: 'superid',
-        FilmName: 'không có tên',
+        filmName: 'không có tên',
         filmUrl: '',
         description: 'phim hỏng rồi qua web nước ngoài mà coi',
         thumbnailUrl: '',

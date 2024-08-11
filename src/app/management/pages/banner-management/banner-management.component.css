@@ -120,5 +120,39 @@ textarea {
     color: aliceblue;
     font-size: 25px;
 }
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
 
+.pagination-button {
+    background-color: #007bff; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Bỏ viền */
+    border-radius: 5px; /* Bo góc */
+    padding: 10px 15px; /* Đệm */
+    margin: 0 10px; /* Khoảng cách giữa các nút */
+    cursor: pointer; /* Con trỏ khi di chuột */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.pagination-button:disabled {
+    background-color: #ccc; /* Màu nền khi vô hiệu hóa */
+    cursor: not-allowed; /* Con trỏ không cho phép */
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #0056b3; /* Màu nền khi di chuột */
+}
+
+.pagination-info {
+    font-size: 16px; /* Kích thước chữ */
+    margin: 0 10px; /* Khoảng cách với các nút */
+}
+.red-text {
+    color: rgb(31, 13, 227); /* Màu đỏ */
+    font-weight: bold; /* In đậm nếu cần */
+}
 

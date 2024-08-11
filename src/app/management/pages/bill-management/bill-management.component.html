@@ -52,7 +52,7 @@
               <td>{{ bill.id }}</td>
               <td>{{ bill.issueDate | date }}</td>
               <td>{{ bill.userId }}</td>
-              <td>{{ bill.films[0].FilmName }}</td>
+              <td>{{ bill.films[0].filmName }}</td>
               <td>{{ bill.packageInfo.packageName}}</td>
               <td>
                 <span *ngIf="bill.paymentStatus" style="display: inline-block; width: 10px; height: 10px; background-color: #65de24; border-radius: 50%;"></span>

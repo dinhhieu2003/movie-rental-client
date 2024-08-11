@@ -26,7 +26,7 @@ export class BannerService {
       imageUrl: banner.imageUrl,
       idFilm: banner.film.id,
       isActive: banner.isActive,
-      isDeleted: banner.isDelete
+      isDeleted: banner.isDeleted
     }
     
     return this.http.post<BaseResponse>(`${this.apiUrl}/create`,{
@@ -34,7 +34,7 @@ export class BannerService {
       imageUrl: banner.imageUrl,
       idFilm: banner.film.id,
       isActive: banner.isActive,
-      isDeleted: banner.isDelete
+      isDeleted: banner.isDeleted
     } );
   }
 

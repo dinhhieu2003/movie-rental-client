@@ -32,7 +32,7 @@
                         
                         <div class="flex">
                             
-                            <span class="text-2xl font-semibold mr-2 text-blue-700">{{ banner.film.FilmName }}</span>
+                            <span class="text-2xl font-semibold mr-2 text-blue-700">{{ banner.film.filmName }}</span>
                             <div class="flex items-center">
                                 <ng-container *ngIf="banner.isActive; else falseIcon">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2 text-green-500">
@@ -63,9 +63,16 @@
                         </div>
                     </div>
                 </div>
-                <img style="object-fit: contain;" [src]="banner.imageUrl" alt="{{ banner.film.FilmName }}" class="category-image">
+                <img style="object-fit: contain;" [src]="banner.imageUrl" alt="{{ banner.film.filmName }}" class="category-image">
             </nz-card>
         </div>
+               <!-- Phân trang -->
+               <div class="pagination">
+                <button class="pagination-button" (click)="changePage(currentPage - 1)"  [disabled]="currentPage === 1">Trước</button>
+                <span class="pagination-info red-text">Trang {{ currentPage }}</span>
+                <button class="pagination-button" (click)="changePage(currentPage + 1)"  [disabled]="currentPage * itemsPerPage >= totalItems">Sau</button>
+            </div>
+    
     </div>
 
     <nz-modal [nzMaskClosable]="false" [nzKeyboard]="true" [(nzVisible)]="isVisibleAdd" nzWidth="1000px" [nzTitle]="'Thêm Banner'" (nzOnCancel)="handleAddCancel()" (nzOnOk)="handleAddOk()">

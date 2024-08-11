@@ -32,7 +32,13 @@ export class BannerManagementComponent {
   banners: Banner[] = [];
   isVisibleAdd = false; 
   isVisibleUpdate = false;  
-  isVisibleDelete = false;  
+  isVisibleDelete = false; 
+  
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalItems: number = 10; 
+
+  
   form!: FormGroup;
   newBanner = {
     id: '',
@@ -48,26 +54,29 @@ export class BannerManagementComponent {
     this.getAllBanners();
   }
   getAllBanners(): void {
-    this.bannerService.getAllBanners(0,5).subscribe(data => {
-      
+    this.bannerService.getAllBanners(this.currentPage-1,this.itemsPerPage).subscribe(data => {
+      this.listOfData = data.Data.content || []; 
+      this.totalItems = data.Data.totalElements; 
+      this.getPaginatedBanners();
+
       this.listOfData= [];
       this.filteredData = [...this.listOfData];
       this.banners = [...this.listOfData]; 
       
-      for (let i=0 ; i<data.Data.length ; i++){
+      for (let i=0 ; i<data.Data.content.length ; i++){
         let bannertamp:Banner= {
           id: '111111',
           isActive: false,
-          isDelete: false,
-          createAt: new Date(),
-          updateAt: new Date(),
+          isDeleted: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
           film: {
             isActive: false,
             isDeleted: false,
             createdAt: '',
             updatedAt: '',
             id: 'idFilmKhongCo',
-            FilmName: '',
+            filmName: '',
             filmUrl: '',
             description: '',
             thumbnailUrl: '',
@@ -91,20 +100,46 @@ export class BannerManagementComponent {
           imageUrl: 'abc'
         }
         
-        bannertamp.id= data.Data[i].id;
-        bannertamp.imageUrl= data.Data[i].imageUrl;
-        if(data.Data[i].film != null && 
-          data.Data[i].film.id != null )
-          bannertamp.film.id= data.Data[i].film.id;
-        bannertamp.createAt= data.Data[i].createAt;
-        bannertamp.updateAt= data.Data[i].updateAt;
-        bannertamp.isActive= data.Data[i].isActive;
-        bannertamp.isDelete= data.Data[i].isDelete;
+        bannertamp.id= data.Data.content[i].id;
+        bannertamp.imageUrl= data.Data.content[i].imageUrl;
+        if(data.Data.content[i].film != null && 
+          data.Data.content[i].film.id != null )
+          bannertamp.film.id= data.Data.content[i].film.id;
+        if(data.Data.content[i].film != null && 
+          data.Data.content[i].film.filmName != null )
+          bannertamp.film.filmName= data.Data.content[i].film.filmName;
+        bannertamp.createdAt= data.Data.content[i].createdAt;
+        bannertamp.updatedAt= data.Data.content[i].updatedAt;
+        bannertamp.isActive= data.Data.content[i].isActive;
+        bannertamp.isDeleted= data.Data.content[i].isDeleted;
         this.banners.push(bannertamp);
       }
     });
   }
+
+  changePage(page: number): void {
+    console.log("Current Page:", this.currentPage);
+    console.log("Total Items:", this.totalItems);
+    console.log("Items Per Page:", this.itemsPerPage);
+    console.log("Requested Page:", page);
+    if (page >= 1 && page <= Math.ceil(this.totalItems / this.itemsPerPage)) {
+        this.currentPage = page;
+
+        this.getAllBanners();
+        console.log("Updated Page:", this.currentPage);
+    }
+  }
+
+  getPaginatedBanners(): Banner[] {
+    console.log('listOfData:', this.listOfData, 'Type:', typeof this.listOfData);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.listOfData.slice(startIndex, endIndex);
+}
+
+
   showModalAdd(): void {
+    this.form.reset();
     this.isVisibleAdd = true;
   }
   handleAddOk(): void {
@@ -116,7 +151,7 @@ export class BannerManagementComponent {
       createdAt: '',
       updatedAt: '',
       id: this.form.value.film,
-      FilmName: '',
+      filmName: '',
       filmUrl: '',
       description: '',
       thumbnailUrl: '',
@@ -140,11 +175,11 @@ export class BannerManagementComponent {
 
     createBanner.isActive= this.form.value.isActive;
 
-    createBanner.isDelete= this.form.value.isDeleted;
+    createBanner.isDeleted= this.form.value.isDeleted;
     this.bannerService.createBanners(createBanner).subscribe({
       next: (response) => {
         alert(response.Message);
-        this.bannerService.getAllBanners(0,5);  
+        this.getAllBanners();  
         this.isVisibleAdd = false;
       },
       error: (error) => {

@@ -35,7 +35,7 @@ export class BillManagementComponent implements OnInit {
     { title: 'Invoice ID', compare: (a: Invoice, b: Invoice) => a.id.localeCompare(b.id), priority: 1 },
     { title: 'Issue Date', compare: (a: Invoice, b: Invoice) => a.issueDate.getTime() - b.issueDate.getTime(), priority: 2 },
     { title: 'User', compare: (a: Invoice, b: Invoice) => a.userId.localeCompare(b.userId), priority: 3 },
-    { title: 'Films', compare: (a: Invoice, b: Invoice) => a.films[0].FilmName.localeCompare(b.films[0].FilmName), priority: 4 },
+    { title: 'Films', compare: (a: Invoice, b: Invoice) => a.films[0].filmName.localeCompare(b.films[0].filmName), priority: 4 },
     { title: 'Package Info', compare: (a: Invoice, b: Invoice) => a.packageInfo.packageName.localeCompare(b.packageInfo.packageName), priority: 5 },
     { title: 'Payment Status', compare: (a: Invoice, b: Invoice) => Number(a.paymentStatus) - Number(b.paymentStatus), priority: 6 },
     { title: 'TotalPrice', compare: (a: Invoice, b: Invoice) => a.totalPrice - b.totalPrice, priority: 7 } 
@@ -63,7 +63,7 @@ export class BillManagementComponent implements OnInit {
             createdAt: '',
             updatedAt: '',
             id: '',
-            FilmName: '',
+            filmName: '',
             filmUrl: '',
             description: '',
             thumbnailUrl: '',
@@ -99,7 +99,7 @@ export class BillManagementComponent implements OnInit {
         invoicetamp.issueDate= data.Data[i].issueDate;
         if(data.Data[i].films.length !== 0){
       
-          invoicetamp.films[0].FilmName= data.Data[i].films[0].FilmName;
+          invoicetamp.films[0].filmName= data.Data[i].films[0].filmName;
         }
         if(data.Data[i].packageInfo != null &&data.Data[i].packageInfo.packageName != null ){
           invoicetamp.packageInfo.packageName= data.Data[i].packageInfo.packageName;
