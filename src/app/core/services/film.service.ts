@@ -6,11 +6,14 @@ import { environment } from '../../../environments/environments';
 import { FilmRequest } from '../models/FilmRequest';
 import { BaseResponse } from '../models/BaseResponse.model';
 import { MovieCard } from '../../main/models/movie-card';
+import { GenericRequest } from '../models/GenericRequest.model';
+import { FilmInfo, FilmResource } from '../../main/models/film';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FilmService {
+
     private apiUrl = environment.apiUrl + 'films';
 
     constructor(private http: HttpClient) { }
@@ -75,17 +78,17 @@ export class FilmService {
     //     );
 
     getFilmById(id: string): Observable<FilmRequest> {
-        const url: string = this.apiUrl + "auth/films/" + id
+        const url: string = environment.apiUrl + "auth/films/" + id
         return this.http.get<FilmRequest>(url)
     }
 
     getFilmRating(filmId: string): Observable<BaseResponse> {
-        const url: string = this.apiUrl + "film/rate/getRating/" + filmId;
+        const url: string = environment.apiUrl + "film/rating/" + filmId;
         return this.http.post<BaseResponse>(url, {});
     }
 
     setRatingForFilm(currentFilmId: string, score: number): Observable<BaseResponse> {
-        const url: string = this.apiUrl + "/film/rate/" + currentFilmId;
+        const url: string = environment.apiUrl + "film/rate/" + currentFilmId;
         let userId = localStorage.getItem("IdUser");
         const body = {
             filmId: currentFilmId,
@@ -94,8 +97,24 @@ export class FilmService {
         };
         return this.http.post<BaseResponse>(url, body);
     }
-    getTop5HotestFilm(): Observable<BaseResponse>{
-        const url = this.apiUrl + "auth/film/top5";
+    getTop5HotestFilm(): Observable<BaseResponse> {
+        const url = environment.apiUrl + "auth/film/top5";
         return this.http.get<BaseResponse>(url);
+    }
+    getFilmInfo(filmId: string): Observable<GenericRequest<FilmInfo>> {
+        const url: string = environment.apiUrl + "auth/film/info/" + filmId;
+        return this.http.get<GenericRequest<FilmInfo>>(url);
+    }
+    getFilmResource(filmId: string): Observable<GenericRequest<FilmResource>> {
+        const url: string = environment.apiUrl + "film/resource/" + filmId;
+        return this.http.get<GenericRequest<FilmResource>>(url);
+    }
+    getFilmActors(currentFilmId: string): Observable<GenericRequest<string[]>> {
+        const url: string = environment.apiUrl + "auth/film/actor/" + currentFilmId;
+        return this.http.get<GenericRequest<string[]>>(url);
+    }
+    getFilmGenres(currentFilmId: string): Observable<GenericRequest<string[]>> {
+        const url: string = environment.apiUrl + "auth/film/genre/" + currentFilmId;
+        return this.http.get<GenericRequest<string[]>>(url);
     }
 }
