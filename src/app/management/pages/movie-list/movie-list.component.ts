@@ -13,16 +13,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { FilmService } from '../../../core/services/film.service'
 import { FilmModel } from '../../../core/models/FilmModel'
-
-interface DataItem {
-  name: string;
-  quality: string;
-  category: string;
-  publishDate: number;
-  movieAccess: string;
-  status: boolean;
-  action: number;
-}
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'app-movie-list',
@@ -41,76 +32,147 @@ interface DataItem {
     ReactiveFormsModule,
     NzDatePickerModule,
     NzModalModule,
+    NzSwitchModule,
   ],
   templateUrl: './movie-list.component.html',
   styleUrls: ['./movie-list.component.css'],
 })
 export class MovieListComponent implements OnInit {
   valueSearch = '';
-  status = 'no action';
+  status = 'default';
   pageSize = 5;
 
-  listFilms: FilmModel[] = []
+  genres: string[] = [];
+  filteredData: FilmModel[] = [];
+  fullResponse: any; // Biến để lưu toàn bộ response
+  filmData: FilmModel[] = []; // Biến để lưu response.Data.content
 
-  form: FormGroup;
+  form!: FormGroup;
+  formUpdate!: FormGroup;
 
   constructor(private fb: FormBuilder, private filmService: FilmService) {
 
     this.form = this.fb.group({
-      movieName: [''],
-      description: [''],
-      movieAccess: [''],
-      languages: [''],
-      genres: [''],
-      contentRating: [''],
-      releaseDate: [null],
-      publishDate: [null],
-      duration: ['']
+      createdAt: [''],
+      updatedAt: [''],
+      isActive: [false],
+      isDeleted: [false],
+      subtitles: [[]],
+      narrations: [[]],
+      comments: [[]],
+      genres: [[]],
+      Id: [''],
+      FilmName: [''],
+      FilmUrl: [''],
+      Description: [''],
+      ThumbnailUrl: [''],
+      TrailerUrl: [''],
+      ReleaseDate: [''],
+      Duration: [''],
+      Actors: [''],
+      Director: [''],
+      Language: [''],
+      NumberOfViews: [{ value: 0, disabled: true }],
+      Rating: [{ value: 0, disabled: true }],  // Rating is a number, and disabled
+      Age: [0],
+      Price: [0],
+      LimitTime: ['']
+    });
+    this.formUpdate = this.fb.group({
+      createdAt: [''],
+      updatedAt: [''],
+      isActive: [false],
+      isDeleted: [false],
+      subtitles: [[]],
+      narrations: [[]],
+      comments: [[]],
+      genres: [[]],
+      Id: [''],
+      FilmName: [''],
+      FilmUrl: [''],
+      Description: [''],
+      ThumbnailUrl: [''],
+      TrailerUrl: [''],
+      ReleaseDate: [''],
+      Duration: [''],
+      Actors: [''],
+      Director: [''],
+      Language: [''],
+      NumberOfViews: [{ value: 0, disabled: true }],
+      Rating: [{ value: 0, disabled: true }],  // Rating is a number, and disabled
+      Age: [0],
+      Price: [0],
+      LimitTime: ['']
     });
 
 
+
   }
-
-  // listOfColumn = [
-  //   { title: 'Movie', compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name), priority: false },
-  //   { title: 'Quality', compare: (a: DataItem, b: DataItem) => a.quality.localeCompare(b.quality), priority: 3 },
-  //   { title: 'Category', compare: (a: DataItem, b: DataItem) => a.category.localeCompare(b.category), priority: 2 },
-  //   { title: 'Publish Date', compare: (a: DataItem, b: DataItem) => a.publishDate - b.publishDate, priority: 1 },
-  //   { title: 'Movie Access', compare: (a: DataItem, b: DataItem) => a.movieAccess.localeCompare(b.movieAccess), priority: 1 },
-  //   { title: 'Status', compare: (a: DataItem, b: DataItem) => Number(a.status) - Number(b.status), priority: 1 },
-  //   { title: 'Action', compare: (a: DataItem, b: DataItem) => a.action - b.action, priority: 1 }
-  // ];
-
-  // listOfData: DataItem[] = [
-  //   { name: 'Arrial 1999', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Day of Darkness', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Don Jon', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Mega Fun', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2012, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2005, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2016, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2013, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2017, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Night Mare', quality: '480/720/1080', category: 'Hello', publishDate: 2001, movieAccess: 'World', status: true, action: 1 },
-  //   { name: 'Portable', quality: '480/720/1080', category: 'Hello', publishDate: 2010, movieAccess: 'World', status: true, action: 1 }
-  // ];
-
-  // filteredData: DataItem[] = [...this.listOfData];
-
+  listOfColumn = [
+    { title: 'Movie', compare: (a: FilmModel, b: FilmModel) => a.FilmName.localeCompare(b.FilmName), priority: false },
+    { title: 'Actors', compare: (a: FilmModel, b: FilmModel) => a.Actors.localeCompare(b.Actors), priority: 2 },
+    { title: 'Director', compare: (a: FilmModel, b: FilmModel) => a.Director.localeCompare(b.Director), priority: 2 },
+    { title: 'Genres', compare: (a: FilmModel, b: FilmModel) => a.genres.join(', ').localeCompare(b.genres.join(', ')), priority: 2 },
+    { title: 'Release Date', compare: (a: FilmModel, b: FilmModel) => new Date(a.ReleaseDate).getTime() - new Date(b.ReleaseDate).getTime(), priority: 1 },
+    { title: 'Rating', compare: (a: FilmModel, b: FilmModel) => a.Rating - b.Rating, priority: 1 },
+    { title: 'Status', compare: (a: FilmModel, b: FilmModel) => Number(a.isActive) - Number(b.isActive), priority: 1 },
+    { title: 'Action', compare: (a: FilmModel, b: FilmModel) => Number(a.isActive) - Number(b.isActive), priority: 1 },
+  ];
 
   ngOnInit() {
     this.loadDeletedFilms();
-    this.loadNotDeletedFilms();
+    console.log(this.filmData); // Xem giá trị của filteredData
+
   }
 
   loadDeletedFilms() {
     this.filmService.getDeletedFilms().subscribe(
       (response) => {
-        const data = response.Data.content;
-        console.log(data); 
-       
+        this.fullResponse = response;
+        this.filmData = response.Data.content.map((film: Partial<FilmModel>) => ({
+          FilmName: film.FilmName || '',
+          FilmUrl: film.FilmUrl || '',
+          Id: film.Id || '',
+          comments: film.comments || [],
+          genres : (film.genres && film.genres.length > 0)
+            ? film.genres.map((genre: any) => {
+              // Kiểm tra và ghép lại chuỗi từ mảng các ký tự riêng lẻ
+              if (typeof genre === 'string' && genre.startsWith('{')) {
+                try {
+                  genre = JSON.parse(genre);
+                } catch (e) {
+                  console.error('Failed to parse genre string:', genre);
+                  return 'Unknown Genre';
+                }
+              }
+              return genre.genreName || 'Unknown Genre';
+            })
+            : ['N/A'],
+          isActive: film.isActive ?? false,
+          isDeleted: film.isDeleted ?? false,
+          narrations: film.narrations || [],
+          subtitles: film.subtitles || [],
+          updatedAt: film.updatedAt || 'N/A',
+          createdAt: film.createdAt || 'N/A',
+          Description: film.Description || 'N/A',
+          ThumbnailUrl: film.ThumbnailUrl || 'N/A',
+          TrailerUrl: film.TrailerUrl || 'N/A',
+          ReleaseDate: film.ReleaseDate || '',
+          Duration: film.Duration || 'N/A',
+          Actors: film.Actors || 'N/A',
+          Director: film.Director || 'N/A',
+          Language: film.Language || 'N/A',
+          NumberOfViews: film.NumberOfViews || 0,
+          Rating: film.Rating || 0,
+          Age: film.Age || 0,
+          Price: film.Price || 0,
+          LimitTime: film.LimitTime || 'N/A'
+        }));
+
+        this.filteredData = [...this.filmData];
+
+        console.log(this.filmData, 'filmData');
+        console.log(this.filteredData, 'filteredData');
       },
       (error) => {
         console.error('There was an error!', error);
@@ -118,12 +180,37 @@ export class MovieListComponent implements OnInit {
     );
   }
 
+
   // Phương thức lấy danh sách các film không bị xóa mềm
   loadNotDeletedFilms() {
     this.filmService.getNotDeletedFilms().subscribe(
       (response) => {
-        const data = response.Data.content;
-        console.log(data);
+        this.fullResponse = response;
+        this.filteredData = response.Data.content.map((film: Partial<FilmModel>) => ({
+          FilmName: film.FilmName || '',
+          FilmUrl: film.FilmUrl || '',
+          Id: film.Id || '',
+          comments: film.comments || [],
+          genres: (film.genres && film.genres.length > 0) ? film.genres : ['N/A'], isActive: film.isActive ?? false,  // Sử dụng '??' để phân biệt giữa 'false' và 'undefined'
+          isDeleted: film.isDeleted ?? false,
+          narrations: film.narrations || [],
+          subtitles: film.subtitles || [],
+          updatedAt: film.updatedAt || 'N/A',
+          createdAt: film.createdAt || 'N/A',
+          Description: film.Description || 'N/A',
+          ThumbnailUrl: film.ThumbnailUrl || 'N/A',
+          TrailerUrl: film.TrailerUrl || 'N/A',
+          ReleaseDate: film.ReleaseDate || '',
+          Duration: film.Duration || 'N/A',
+          Actors: film.Actors || 'N/A',
+          Director: film.Director || 'N/A',
+          Language: film.Language || 'N/A',
+          NumberOfViews: film.NumberOfViews || 0,
+          Rating: film.Rating || 0,
+          Age: film.Age || 0,
+          Price: film.Price || 0,
+          LimitTime: film.LimitTime || 'N/A'
+        }));
       },
       (error) => {
         console.error('There was an error!', error);
@@ -181,20 +268,49 @@ export class MovieListComponent implements OnInit {
     );
   }
 
+  loadGenres() {
+    this.filmService.getGenres().subscribe(
+      (response) => {
+        this.genres = response.Data.content.map((genre: any) => genre.genreName);
+      },
+      (error) => {
+        console.error('Error loading genres:', error);
+      }
+    );
+  }
+
+  // Lấy list film theo status
+  filterData() {
+    if (this.status === 'active') {
+      this.filteredData = this.filmData.filter(item => item.isActive);
+    } else if (this.status === 'no active') {
+      this.filteredData = this.filmData.filter(item => !item.isActive);
+    } else if (this.status === 'delete') {
+      this.loadNotDeletedFilms();
+    } else {
+      this.filteredData = [...this.filmData];
+    }
+  }
+  onStatusChange(newStatus: string): void {
+    this.status = newStatus;
+    this.filterData(); // Filter data whenever status changes
+  }
+
   // Lấy số lượng hiện thị của bản
   onPageSizeChange(newSize: number): void {
     this.pageSize = newSize;
   }
 
-  // onSearchChange(): void {
-  //   this.filteredData = this.listOfData.filter(item =>
-  //     item.name.toLowerCase().includes(this.valueSearch.toLowerCase())
-  //   );
-  // }
+  onSearchChange(): void {
+    this.filteredData = this.filmData.filter(item =>
+      item.FilmName.toLowerCase().includes(this.valueSearch.toLowerCase())
+    );
+  }
 
   // Modal add
   isVisibleAdd = false;
   showModalAdd(): void {
+    this.loadGenres();
     this.isVisibleAdd = true;
   }
   handleAddOk(): void {
@@ -208,8 +324,11 @@ export class MovieListComponent implements OnInit {
 
   // Modal update
   isVisibleUpdate = false;
-  showModalUpdate(): void {
+  showModalUpdate(movie: any): void {
     this.isVisibleUpdate = true;
+    this.formUpdate.patchValue(movie)
+    console.log(this.formUpdate, "222")
+
   }
   handleUpdateOk(): void {
     console.log('Button ok clicked!');
