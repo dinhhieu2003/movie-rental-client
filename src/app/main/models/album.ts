@@ -1,7 +1,7 @@
-import { Movie } from "./movie";
+import { MovieCard } from "./movie-card";
 
 export interface Album {
     id: string,
-    film: Movie[],
+    film: MovieCard[],
     albumName: string,
 }
