@@ -33,7 +33,13 @@ export class BannerManagementComponent {
   banners: Banner[] = [];
   isVisibleAdd = false; 
   isVisibleUpdate = false;  
-  isVisibleDelete = false;  
+  isVisibleDelete = false; 
+  
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalItems: number = 10; 
+
+  
   form!: FormGroup;
   newBanner = {
     id: '',
@@ -49,51 +55,108 @@ export class BannerManagementComponent {
     this.getAllBanners();
   }
   getAllBanners(): void {
-    this.bannerService.getAllBanners(0,5).subscribe(data => {
-      
+    this.bannerService.getAllBanners(this.currentPage-1,this.itemsPerPage).subscribe(data => {
+      this.listOfData = data.Data.content || []; 
+      this.totalItems = data.Data.totalElements; 
+      this.getPaginatedBanners();
+
       this.listOfData= [];
       this.filteredData = [...this.listOfData];
       this.banners = [...this.listOfData]; 
       
-      for (let i=0 ; i<data.Data.length ; i++){
+      for (let i=0 ; i<data.Data.content.length ; i++){
         let bannertamp:Banner= {
           id: '111111',
           isActive: false,
-          isDelete: false,
-          createAt: new Date(),
-          updateAt: new Date(),
-          film: getDefaultFilmData(),
+          isDeleted: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          Film: getDefaultFilmData(),
           imageUrl: 'abc'
         }
         
-        bannertamp.id= data.Data[i].id;
-        bannertamp.imageUrl= data.Data[i].imageUrl;
-        if(data.Data[i].film != null && 
-          data.Data[i].film.Id != null )
-          bannertamp.film.Id= data.Data[i].film.Id;
-        bannertamp.createAt= data.Data[i].createAt;
-        bannertamp.updateAt= data.Data[i].updateAt;
-        bannertamp.isActive= data.Data[i].isActive;
-        bannertamp.isDelete= data.Data[i].isDelete;
+        bannertamp.id= data.Data.content[i].id;
+        bannertamp.imageUrl= data.Data.content[i].imageUrl;
+        if(data.Data.content[i].Film != null && 
+          data.Data.content[i].Film.Id != null )
+          bannertamp.Film.Id= data.Data.content[i].Film.Id;
+        if(data.Data.content[i].Film != null && 
+          data.Data.content[i].Film.FilmName != null )
+          bannertamp.Film.FilmName= data.Data.content[i].Film.FilmName;
+        bannertamp.createdAt= data.Data.content[i].createdAt;
+        bannertamp.updatedAt= data.Data.content[i].updatedAt;
+        bannertamp.isActive= data.Data.content[i].isActive;
+        bannertamp.isDeleted= data.Data.content[i].isDeleted;
         this.banners.push(bannertamp);
       }
     });
   }
+
+  changePage(page: number): void {
+    console.log("Current Page:", this.currentPage);
+    console.log("Total Items:", this.totalItems);
+    console.log("Items Per Page:", this.itemsPerPage);
+    console.log("Requested Page:", page);
+    if (page >= 1 && page <= Math.ceil(this.totalItems / this.itemsPerPage)) {
+        this.currentPage = page;
+
+        this.getAllBanners();
+        console.log("Updated Page:", this.currentPage);
+    }
+  }
+
+  getPaginatedBanners(): Banner[] {
+    console.log('listOfData:', this.listOfData, 'Type:', typeof this.listOfData);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.listOfData.slice(startIndex, endIndex);
+}
+
+
   showModalAdd(): void {
+    this.form.reset();
     this.isVisibleAdd = true;
   }
   handleAddOk(): void {
+    console.log(this.form.value.Film)
     const createBanner: Banner = this.form.value;
     createBanner.imageUrl = this.form.value.imageUrl;
-    createBanner.film= getDefaultFilmData(this.form.value.film);
+  
+    createBanner.Film={
+      createdAt: '',
+      updatedAt: '',
+      isActive: true,
+      isDeleted: false,
+      subtitles: [],
+      narrations: [],
+      comments: [],
+      genres: [],
+      Id: this.form.value.Film,
+      FilmName: '',
+      FilmUrl: '',
+      Description: '',
+      ThumbnailUrl: '',
+      TrailerUrl: '',
+      ReleaseDate: '',
+      Duration: '',
+      Actors: [],
+      Director: '',
+      Language: '',
+      RatingScore: 0,
+      Age: 0,
+      Price: 0,
+      LimitTime: 0,
+      RentalType: ''
+  };
 
-    createBanner.isActive= this.form.value.isActive;
+    createBanner.isActive= this.form.value.isActive?true:false;
 
-    createBanner.isDelete= this.form.value.isDeleted;
+    createBanner.isDeleted= this.form.value.isDeleted?true:false;
     this.bannerService.createBanners(createBanner).subscribe({
       next: (response) => {
         alert(response.Message);
-        this.bannerService.getAllBanners(0,5);  
+        this.getAllBanners();  
+        console.log(response.Data);
         this.isVisibleAdd = false;
       },
       error: (error) => {
@@ -111,7 +174,7 @@ export class BannerManagementComponent {
     this.form.patchValue({
       id: id,
       imageUrl: imageUrl,
-      film: idFilm,
+      Film: idFilm,
       isActive: true,
       isDeleted: false} );
      
@@ -120,7 +183,7 @@ export class BannerManagementComponent {
     const id:string =<string> this.form.value.id;
     
     const imageUrl:string= <string> this.form.value.imageUrl;
-    const idFilm :string= <string> this.form.value.film;
+    const idFilm :string= <string> this.form.value.Film;
     const isActive:boolean=  this.form.value.isActive;
     const isDeleted :boolean= this.form.value.isDeleted;
     this.bannerService.updateBanner(imageUrl,idFilm,isActive,isDeleted,id).
@@ -169,9 +232,9 @@ export class BannerManagementComponent {
     this.form = this.fb.group({
       id: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      film: ['', Validators.required],
-      isActive: [false],
-      isDeleted: [false],
+      Film: ['', Validators.required],
+      isActive: false,
+      isDeleted: false,
       createdAt: [new Date(), Validators.required],
       updatedAt: [new Date(), Validators.required]
     });
