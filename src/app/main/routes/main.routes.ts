@@ -19,11 +19,13 @@ import { MoviesRentalListComponent } from "../pages/profile-management/movies-re
 import { MyMailComponent } from "../pages/profile-management/my-mail/my-mail.component";
 import { ManageLoginDevicesComponent } from "../pages/profile-management/manage-login-devices/manage-login-devices.component";
 import { FilmStreamingComponent } from "../pages/film-streaming/film-streaming.component";
+import { categoryResolver } from "../../core/services/main/category.resolver";
 
 export const mainRoutes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
+        resolve: {categories: categoryResolver},
         children: [
             {
                 path: '',
