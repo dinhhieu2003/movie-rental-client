@@ -1,4 +1,4 @@
-import { FilmData } from "./FilmServer";
+import { FilmData } from "../../main/models/film";
 
 export interface Banner{
     id: string,
