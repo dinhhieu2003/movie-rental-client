@@ -24,7 +24,7 @@ export class BannerService {
     let body :any= {
       
       imageUrl: banner.imageUrl,
-      idFilm: banner.film.id,
+      idFilm: banner.Film.Id,
       isActive: banner.isActive,
       isDeleted: banner.isDeleted
     }
@@ -32,7 +32,7 @@ export class BannerService {
     return this.http.post<BaseResponse>(`${this.apiUrl}/create`,{
       
       imageUrl: banner.imageUrl,
-      idFilm: banner.film.id,
+      idFilm: banner.Film.Id,
       isActive: banner.isActive,
       isDeleted: banner.isDeleted
     } );

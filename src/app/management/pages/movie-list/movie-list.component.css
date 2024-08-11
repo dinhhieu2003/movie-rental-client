@@ -1,13 +1,42 @@
  .input-search {
-     background-color: #373232;
+     background-color: #232323;
      color: rgb(0, 0, 0);
      margin-left: 10px;
      height: 30px;
  }
 
  .form-table th {
-     background-color: #373232;
+     background-color: #232323;
      color: aliceblue;
+ }
+
+ /* ng switch */
+ ::ng-deep .ant-switch.ant-switch-small .ant-switch-handle {
+     width: 12px;
+     height: 11px;
+     margin-top: -1px;
+ }
+
+ ::ng-deep .ant-switch.ant-switch-small.ant-switch-checked {
+     background-color: red;
+     border: 1px solid white;
+     height: 16px;
+     width: 30px;
+
+ }
+
+ ::ng-deep .ant-switch.ant-switch-small {
+     background-color: brown;
+     border: 1px solid white;
+     height: 16px;
+     width: 30px;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+ }
+
+ ::ng-deep .ant-switch.ant-switch-small .ant-switch-inner {
+     color: white;
  }
 
  ::ng-deep .ant-table {
@@ -23,33 +52,33 @@
      background-color: #6471e6;
  }
 
-/* Search  */
-.search-container {
-    display: flex;
-    align-items: center;
-}
+ /* Search  */
+ .search-container {
+     display: flex;
+     align-items: center;
+ }
 
-.input-search {
-    padding-right: 2rem;
-    border-radius: 4px;
-}
+ .input-search {
+     padding-right: 2rem;
+     border-radius: 4px;
+ }
 
-.search-icon {
-    width: 1.4rem;
-    height: 1.4rem;
-    pointer-events: none;
-}
+ .search-icon {
+     width: 1.4rem;
+     height: 1.4rem;
+     pointer-events: none;
+ }
 
-.relative {
-    position: relative;
-}
+ .relative {
+     position: relative;
+ }
 
-.absolute {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ccc;
-}
+ .absolute {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+     color: #ccc;
+ }
 
  ::ng-deep .ant-select:not(.ant-select-customize-input) .ant-select-selector {
      background-color: #000000;
@@ -66,12 +95,64 @@
  ::ng-deep .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
      color: aliceblue;
      font-weight: 600;
-     background-color: #3c30e6;
+     background-color: #1905ff;
  }
 
  ::ng-deep .ant-select-item-option:hover {
+     background-color: #1905ff;
+     color: white;
+ }
+
+ ::ng-deep .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
      background-color: #5a4df1;
      color: white;
+ }
+
+ /* Genre */
+ ::ng-deep .ant-modal-body .ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+     background-color: #141314;
+     color: aliceblue;
+ }
+
+ ::ng-deep .ant-select-clear {
+     background-color: #000;
+     color: aliceblue;
+ }
+
+ ::ng-deep .cdk-virtual-scrollable {
+     scrollbar-width: thin;
+     scrollbar-color: #0d2ebb #000000;
+     border-radius: 20px;
+ }
+
+ ::ng-deep .ant-select-multiple .ant-select-selection-item {
+     background-color: #121212;
+     color: aliceblue;
+ }
+
+ .custom-select {
+     max-height: 40px;
+     /* Chiều cao cố định của select */
+     overflow-y: auto;
+     /* Bật thanh cuộn dọc */
+ }
+
+ .custom-select .ant-select-selection-overflow {
+     max-height: 100%;
+     /* Đảm bảo chiều cao không vượt quá chiều cao của select */
+     overflow-y: auto;
+     /* Bật thanh cuộn dọc bên trong */
+ }
+
+ /* language */
+ ::ng-deep .ant-form-item-control-input-content .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+     background-color: #141314;
+     color: aliceblue;
+ }
+
+ .form-items-row-4 .ant-input[disabled] {
+     background-color: #121212;
+     color: aliceblue;
  }
 
  ::ng-deep .ant-select-item-option-content {
@@ -117,12 +198,12 @@
 
 
  input {
-     background-color: #373232;
+     background-color: #141314;
      color: aliceblue;
  }
 
  textarea {
-     background-color: #373232;
+     background-color: #141314;
      color: aliceblue;
  }
 
@@ -210,3 +291,7 @@
      background-color: #0d2ebb;
      color: #ffffff;
  }
+
+
+
+ /*  */

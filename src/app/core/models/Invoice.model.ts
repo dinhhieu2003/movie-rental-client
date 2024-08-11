@@ -1,4 +1,5 @@
-import { FilmData } from "./FilmServer"
+
+import { FilmData } from "../../main/models/film";
 import { PackageInfo } from "./PackageInfo.model";
 
 export interface Invoice{

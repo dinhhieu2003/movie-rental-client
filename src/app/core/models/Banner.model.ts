@@ -1,4 +1,5 @@
-import { FilmData } from "./FilmServer";
+import { FilmData } from "../../main/models/film";
+
 
 export interface Banner{
     isActive: boolean;
@@ -7,5 +8,5 @@ export interface Banner{
     updatedAt: Date;
     id: string;
     imageUrl: string;
-    film: FilmData;
+    Film: FilmData;
 }

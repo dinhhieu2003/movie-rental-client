@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VideoStreamingComponent } from './video-streaming.component';
+import { PaymentInfoService } from './paymentinfo.service.component';
 
-describe('VideoStreamingComponent', () => {
-  let component: VideoStreamingComponent;
-  let fixture: ComponentFixture<VideoStreamingComponent>;
+describe('PaymentinfoService', () => {
+  let component: PaymentInfoService;
+  let fixture: ComponentFixture<PaymentInfoService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VideoStreamingComponent]
+      imports: [PaymentInfoService]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(VideoStreamingComponent);
+    fixture = TestBed.createComponent(PaymentInfoService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -21,4 +21,3 @@ describe('VideoStreamingComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-

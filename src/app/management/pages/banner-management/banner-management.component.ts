@@ -9,6 +9,7 @@ import { NzModalCloseComponent, NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { Banner } from '../../../core/models/Banner.model';
 import { BannerService } from '../../../core/services/banner.service';
+import { getDefaultFilmData } from '../../../main/models/film';
 
 @Component({
   selector: 'app-banner',
@@ -70,44 +71,18 @@ export class BannerManagementComponent {
           isDeleted: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-          film: {
-            isActive: false,
-            isDeleted: false,
-            createdAt: '',
-            updatedAt: '',
-            id: 'idFilmKhongCo',
-            filmName: '',
-            filmUrl: '',
-            description: '',
-            thumbnailUrl: '',
-            trailerUrl: '',
-            releaseDate: '',
-            duration: '',
-            actors: '',
-            director: '',
-            language: '',
-            numberOfViews: 0,
-            rating: 0,
-            age: 0,
-            rentalType: '',
-            price: 0,
-            limitTime: 0,
-            subtitles: [],
-            narrations: [],
-            comments: [],
-            genres: []
-          },
+          Film: getDefaultFilmData(),
           imageUrl: 'abc'
         }
         
         bannertamp.id= data.Data.content[i].id;
         bannertamp.imageUrl= data.Data.content[i].imageUrl;
-        if(data.Data.content[i].film != null && 
-          data.Data.content[i].film.id != null )
-          bannertamp.film.id= data.Data.content[i].film.id;
-        if(data.Data.content[i].film != null && 
-          data.Data.content[i].film.filmName != null )
-          bannertamp.film.filmName= data.Data.content[i].film.filmName;
+        if(data.Data.content[i].Film != null && 
+          data.Data.content[i].Film.Id != null )
+          bannertamp.Film.Id= data.Data.content[i].Film.Id;
+        if(data.Data.content[i].Film != null && 
+          data.Data.content[i].Film.FilmName != null )
+          bannertamp.Film.FilmName= data.Data.content[i].Film.FilmName;
         bannertamp.createdAt= data.Data.content[i].createdAt;
         bannertamp.updatedAt= data.Data.content[i].updatedAt;
         bannertamp.isActive= data.Data.content[i].isActive;
@@ -143,43 +118,45 @@ export class BannerManagementComponent {
     this.isVisibleAdd = true;
   }
   handleAddOk(): void {
+    console.log(this.form.value.Film)
     const createBanner: Banner = this.form.value;
     createBanner.imageUrl = this.form.value.imageUrl;
-    createBanner.film={
-      isActive: false,
-      isDeleted: false,
+  
+    createBanner.Film={
       createdAt: '',
       updatedAt: '',
-      id: this.form.value.film,
-      filmName: '',
-      filmUrl: '',
-      description: '',
-      thumbnailUrl: '',
-      trailerUrl: '',
-      releaseDate: '',
-      duration: '',
-      actors: '',
-      director: '',
-      language: '',
-      numberOfViews: 0,
-      rating: 0,
-      age: 0,
-      rentalType: '',
-      price: 0,
-      limitTime: 0,
+      isActive: true,
+      isDeleted: false,
       subtitles: [],
       narrations: [],
       comments: [],
-      genres: []
-    };
+      genres: [],
+      Id: this.form.value.Film,
+      FilmName: '',
+      FilmUrl: '',
+      Description: '',
+      ThumbnailUrl: '',
+      TrailerUrl: '',
+      ReleaseDate: '',
+      Duration: '',
+      Actors: [],
+      Director: '',
+      Language: '',
+      RatingScore: 0,
+      Age: 0,
+      Price: 0,
+      LimitTime: 0,
+      RentalType: ''
+  };
 
-    createBanner.isActive= this.form.value.isActive;
+    createBanner.isActive= this.form.value.isActive?true:false;
 
-    createBanner.isDeleted= this.form.value.isDeleted;
+    createBanner.isDeleted= this.form.value.isDeleted?true:false;
     this.bannerService.createBanners(createBanner).subscribe({
       next: (response) => {
         alert(response.Message);
         this.getAllBanners();  
+        console.log(response.Data);
         this.isVisibleAdd = false;
       },
       error: (error) => {
@@ -197,7 +174,7 @@ export class BannerManagementComponent {
     this.form.patchValue({
       id: id,
       imageUrl: imageUrl,
-      film: idFilm,
+      Film: idFilm,
       isActive: true,
       isDeleted: false} );
      
@@ -206,7 +183,7 @@ export class BannerManagementComponent {
     const id:string =<string> this.form.value.id;
     
     const imageUrl:string= <string> this.form.value.imageUrl;
-    const idFilm :string= <string> this.form.value.film;
+    const idFilm :string= <string> this.form.value.Film;
     const isActive:boolean=  this.form.value.isActive;
     const isDeleted :boolean= this.form.value.isDeleted;
     this.bannerService.updateBanner(imageUrl,idFilm,isActive,isDeleted,id).
@@ -255,9 +232,9 @@ export class BannerManagementComponent {
     this.form = this.fb.group({
       id: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      film: ['', Validators.required],
-      isActive: [false],
-      isDeleted: [false],
+      Film: ['', Validators.required],
+      isActive: false,
+      isDeleted: false,
       createdAt: [new Date(), Validators.required],
       updatedAt: [new Date(), Validators.required]
     });

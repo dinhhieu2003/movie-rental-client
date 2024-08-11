@@ -12,6 +12,10 @@ body {
   padding: 0;
 }
 
+h1{
+  color: #1d4ed8;
+}
+
 .app-layout {
   height: 100vh;
   background: #f0f2f5;
@@ -35,20 +39,20 @@ nz-content {
   z-index: 10;
   min-height: 100vh;
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
-  background-color: #212020;
+  background-color: #141314;
 }
 
 .dashboard {
-  background-color: #212020;
+  background-color: #141314;
 }
 
 .header-trigger {
-  height: 64px;
+  height: 70px;
   padding: 20px 24px;
   font-size: 20px;
   cursor: pointer;
   transition: all .3s, padding 0s;
-  color: #1189f9;
+  color: #1956ff;
 }
 
 .trigger:hover {
@@ -61,7 +65,7 @@ nz-content {
   padding-left: 24px;
   overflow: hidden;
   line-height: 64px;
-  background: #212020;
+  background: #141314;
   transition: all .3s;
 }
 
@@ -92,7 +96,7 @@ nz-header {
   position: relative;
   height: 64px;
   padding: 0;
-  background: #212020;
+  background: #141314;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 }
 
@@ -102,7 +106,7 @@ nz-content {
 
 .inner-content {
   padding: 10px;
-  background: #212020;
+  background: #141314;
   height: auto;
   min-height: 100px
 }
@@ -112,15 +116,23 @@ nz-content {
 }
 
 li {
-  background-color: #212020;
+  background-color: #141314;
 }
 
 ::ng-deep .ant-layout-footer {
-  background-color: #212020;
+  background-color: #141314;
   height: 50px;
   padding: 14px;
 }
 
 .span-icon {
-  color: #2563eb;
+  color: #1d4ed8;
+}
+
+/* CSS */
+.dashboard .ant-menu-item-selected {
+  background-color: #0d3fc8 !important;
+  /* Màu nền mới */
+  color: white !important;
+  /* Màu chữ mới */
 }
