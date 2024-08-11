@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommentData, getDefaultCommentData } from '../../models/comment';
 import { FilmService } from '../../../core/services/film.service';
 import { getDefaultMovieCard, MovieCard } from '../../models/movie-card';
-import { FilmData, getDefaultFilmData } from '../../models/film';
+import { FilmData, FilmInfo, FilmResource, getDefaultFilmData } from '../../models/film';
 
 enum PageIndex {
   ForEpisode,
@@ -31,7 +31,11 @@ export class FilmStreamingComponent {
   hoverIndex: number = -1;
   pageNumber: number[];
   MaxPageNumber: number[];
-  filmData!: FilmData;
+  filmInfo !: FilmInfo;
+  filmResource !: FilmResource;
+  filmActors !: string[];
+  filmGenres !: string[];
+  currentFilmId: string = "no id found";
   topHot !: MovieCard[];
   constructor(
     private activateRoute: ActivatedRoute,
@@ -43,12 +47,29 @@ export class FilmStreamingComponent {
     this.readonlyFields = Array<boolean>(10).fill(true);
     this.comments = Array.from({ length: 10 }, () => ({ ...getDefaultCommentData() }));
     this.newComment = this.getNewCommentDeffault();
-    this.filmData = getDefaultFilmData(this.activateRoute.snapshot.paramMap.get("id"));
+    this.setDefaultValue();
+    const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
+    if (id) {
+      this.currentFilmId = id;
+    }
     this.topHot = Array.from({ length: 5 }, () => ({ ...getDefaultMovieCard() }));
     this.getDataFromServer()
   }
+
+  setDefaultValue(): void {
+    const filmData = getDefaultFilmData();
+    this.filmResource.FilmUrl = filmData.FilmUrl;
+    this.filmInfo.FilmName = filmData.FilmName;
+    this.filmInfo.TrailerUrl = filmData.TrailerUrl;
+    this.filmActors = filmData.Actors;
+
+  }
+
   async getDataFromServer() {
-    this.getFilmDataFromServer();
+    this.getFilmInfoFromServer();
+    this.getFilmResourceFromServer();
+    this.getFilmGenresFromServer();
+    this.getFilmActorsFromServer();
     this.getCommentsFromServer();
     this.getRatingFromServer();
     this.getTop5Film();
@@ -58,7 +79,7 @@ export class FilmStreamingComponent {
     this.readonlyFields[index] = !this.readonlyFields[index];
     if (this.readonlyFields[index] === true) {
       this.comments[index].text = this.comments[index].text.replaceAll('\n', "  ");
-      this.commentService.updateComment(this.filmData.Id, this.comments[index].commentId, this.comments[index].text);
+      this.commentService.updateComment(this.currentFilmId, this.comments[index].commentId, this.comments[index].text);
     }
 
   }
@@ -85,21 +106,21 @@ export class FilmStreamingComponent {
     this.hoverIndex = index;
   }
   leaveStarListener() {
-    this.hoverIndex = this.filmData.RatingScore - 1;
+    this.hoverIndex = this.filmInfo.RatingScore - 1;
   }
   selectStar(score: number) {
-    this.filmService.setRatingForFilm(this.filmData.Id, score + 1);
+    this.filmService.setRatingForFilm(this.currentFilmId, score + 1);
   }
   sendCommentToServer(): void {
-    if( containsVietnameseChars(this.newComment.text) === false){
+    if (containsVietnameseChars(this.newComment.text) === false) {
       return;
     }
     this.comments.unshift(...this.comments.splice(-1));
     this.comments[0] = { ...this.newComment };
-    this.commentService.createComment(this.filmData.Id, this.newComment.text).subscribe({
+    this.commentService.createComment(this.currentFilmId, this.newComment.text).subscribe({
       next: (response) => {
         this.pageNumber[PageIndex.ForComment] = 1;
-        this.commentService.get10CommentsByFilmId(this.filmData.Id, 0)
+        this.commentService.get10CommentsByFilmId(this.currentFilmId, 0)
       },
       error: (error) => {
         console.error(error);
@@ -150,7 +171,7 @@ export class FilmStreamingComponent {
   }
   getCommentsFromServer() {
 
-    this.commentService.get10CommentsByFilmId(this.filmData.Id, this.pageNumber[PageIndex.ForComment] - 1).subscribe({
+    this.commentService.get10CommentsByFilmId(this.currentFilmId, this.pageNumber[PageIndex.ForComment] - 1).subscribe({
       next: (response) => {
         this.MaxPageNumber[PageIndex.ForComment] = response.Data.totalPages;
 
@@ -176,25 +197,25 @@ export class FilmStreamingComponent {
 
   getFilmDataFromServer(): void {
 
-    const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
+    // const id: string | null = this.activateRoute.snapshot.paramMap.get("id");
 
-    if (id) {
-      this.filmService.getFilmById(id).subscribe({
-        next: (response) => {
+    // if (id) {
+    //   this.filmService.getFilmById(id).subscribe({
+    //     next: (response) => {
 
-          this.filmData = { ...response.Data };
+    //       this.filmData = { ...response.Data };
 
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
-    }
+    //     },
+    //     error: (error) => {
+    //       console.error(error);
+    //     }
+    //   });
+    // }
   }
   getRatingFromServer(): void {
-    this.filmService.getFilmRating(this.filmData.Id).subscribe({
+    this.filmService.getFilmRating(this.currentFilmId).subscribe({
       next: (response) => {
-        this.filmData.RatingScore = response.Data;
+        this.filmInfo.RatingScore = response.Data;
         this.selectStar(response.Data);
         this.leaveStarListener();
 
@@ -205,12 +226,50 @@ export class FilmStreamingComponent {
     });
 
   }
-  getTop5Film(): void{
+  getTop5Film(): void {
     this.filmService.getTop5HotestFilm().subscribe({
       next: (response) => {
-        
         this.topHot = response.Data;
-
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  getFilmInfoFromServer(): void {
+    this.filmService.getFilmInfo(this.currentFilmId).subscribe({
+      next: (response) => {
+        this.filmInfo = response.Data;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  getFilmGenresFromServer(): void {
+    this.filmService.getFilmGenres(this.currentFilmId).subscribe({
+      next: (response) => {
+        this.filmGenres = response.Data;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  getFilmActorsFromServer(): void {
+    this.filmService.getFilmActors(this.currentFilmId).subscribe({
+      next: (response) => {
+        this.filmActors = response.Data;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+  getFilmResourceFromServer(): void {
+    this.filmService.getFilmResource(this.currentFilmId).subscribe({
+      next: (response) => {
+        this.filmResource = response.Data;
       },
       error: (error) => {
         console.error(error);

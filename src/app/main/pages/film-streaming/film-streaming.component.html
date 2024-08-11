@@ -19,7 +19,7 @@
     </div>
     <!-- "https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4" -->
     <div class="video-player">
-        <video controls style="width: 100%;height: 100%; object-fit: contain;" [src]="filmData.FilmUrl">
+        <video controls style="width: 100%;height: 100%; object-fit: contain;" [src]="filmResource.FilmUrl">
         </video>
 
         <!-- <iframe loading="lazy" width="100%" height="100%" [src]="currentMovie.link" frameborder="0"
@@ -27,10 +27,10 @@
     </div>
     <div class="detail-film-container">
         <div class="name-detail">
-            <h1 style="color: white;" class="text-white text-4xl mt-4 font-bold" [innerText]="filmData.FilmName"></h1>
-            <p class="text-lg m-2"><i class="fa-solid fa-calendar text-white-100"></i> {{filmData.ReleaseDate}}</p>
-            <p class="text-lg m-2"><i class="fa-solid fa-language text-white-100"></i> {{filmData.Language}}</p>
-            <p class="summary" [innerText]="filmData.Description"></p>
+            <h1 style="color: white;" class="text-white text-4xl mt-4 font-bold" [innerText]="filmInfo.FilmName"></h1>
+            <p class="text-lg m-2"><i class="fa-solid fa-calendar text-white-100"></i> {{filmInfo.ReleaseDate}}</p>
+            <p class="text-lg m-2"><i class="fa-solid fa-language text-white-100"></i> {{filmInfo.Language}}</p>
+            <p class="summary" [innerText]="filmInfo.Description"></p>
             <div id="rating" (mouseleave)="leaveStarListener()">
                 <i class="fa fa-star" style="font-size:36px; color:rgb(48, 156, 245); text-align: left;">
                 </i> Đánh Giá
@@ -104,9 +104,9 @@
             <span class="avatar-item">
                 <img class="avatar-image"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRElYmoWSMGy7ve2ixoedXlQvlFtppU7h0_Cw&usqp=CAU">
-                <p class="mt-2">{{filmData.Director}}</p>
+                <p class="mt-2">{{filmInfo.Director}}</p>
             </span>
-            @for (actor of filmData.Actors; track $index) {
+            @for (actor of filmActors; track $index) {
             <span class="avatar-item">
                 <img class="avatar-image"
                     src="https://i.pinimg.com/474x/3f/3a/d1/3f3ad18a365a1668940d93b6cfc20591.jpg" />

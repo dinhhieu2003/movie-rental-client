@@ -56,6 +56,19 @@ export function getDefaultFilmData(id: string | null = null): FilmData {
     };
 }
 
+export function getDeffaultFilmInfo():FilmInfo{
+    return {
+        FilmName: "không có tên",
+        Description: string,
+        TrailerUrl: string,
+        ReleaseDate: string,
+        Director: string,
+        Language: string,
+        Age: number,
+        Price: number,
+        RatingScore: number};
+}
+
 export interface FilmInfo {
     FilmName: string,
     Description: string,
@@ -64,7 +77,8 @@ export interface FilmInfo {
     Director: string,
     Language: string,
     Age: number,
-    Price: number
+    Price: number,
+    RatingScore: number
 }
 
 export interface FilmResource {
