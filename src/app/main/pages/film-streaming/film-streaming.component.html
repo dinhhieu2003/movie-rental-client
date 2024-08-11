@@ -1,10 +1,10 @@
 <div class="content-page">
-    <!-- Fake video content -->
+    <!-- Fake video content
     <ul class="circles">
         @for(i of [].constructor(10);track $index){
         <li></li>
         }
-    </ul>
+    </ul> -->
     <div id="myModal" class="modal" [hidden]="(deleteCommentIndex < 0)" (click)="closeModal()">
 
         <!-- Modal content -->
@@ -19,19 +19,18 @@
     </div>
     <!-- "https://file-examples.com/storage/fe3f15b9da66a36baa1b51a/2017/04/file_example_MP4_480_1_5MG.mp4" -->
     <div class="video-player">
-        <video controls autoplay style="width: 100%;height: 100%; object-fit: contain;"
-            [src]="filmData.filmUrl">
+        <video controls style="width: 100%;height: 100%; object-fit: contain;" [src]="filmData.FilmUrl">
         </video>
-    
+
         <!-- <iframe loading="lazy" width="100%" height="100%" [src]="currentMovie.link" frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen hidden></iframe> -->
     </div>
     <div class="detail-film-container">
         <div class="name-detail">
             <h1 style="color: white;" class="text-white text-4xl mt-4 font-bold" [innerText]="filmData.FilmName"></h1>
-            <p class="text-2xl m-2" [innerText]="'Mùa 1'"></p>
-            <p class="text-xl m-2">{{filmData.releaseDate}} - 1/1 Tập - {{filmData.language}}</p>
-            <p class="summary" [innerText]="filmData.description"></p>
+            <p class="text-lg m-2"><i class="fa-solid fa-calendar text-white-100"></i> {{filmData.ReleaseDate}}</p>
+            <p class="text-lg m-2"><i class="fa-solid fa-language text-white-100"></i> {{filmData.Language}}</p>
+            <p class="summary" [innerText]="filmData.Description"></p>
             <div id="rating" (mouseleave)="leaveStarListener()">
                 <i class="fa fa-star" style="font-size:36px; color:rgb(48, 156, 245); text-align: left;">
                 </i> Đánh Giá
@@ -41,15 +40,35 @@
                     [ngClass]="{'hover': ($index <= hoverIndex)}">
                     ★
                 </span>
+
                 }
             </div>
         </div>
-        <div class="director-detail mt-5">
-            <p class="mt-4 text-2xl"><b>Thể Loại: </b>
+        <div class="genres-detail mt-5">
+            <!-- <button class="interact-button text-lg mr-3" (click)="currentMovieDetail.isFollowed = !currentMovieDetail.isFollowed"><i [ngClass]="{
+                'fa': true,
+                'fa-heart': currentMovieDetail.isFollowed,
+                'fa-heart-o': !currentMovieDetail.isFollowed
+              }" [style.color]="currentMovieDetail.isFollowed ? 'red' : ''"> Theo dõi</i>
+            </button>
+
+            <button class="interact-button text-lg"><i class="fa fa-share-alt" style="font-size:24px"></i>
+                Chia sẻ</button> -->
+
+            <button class="interact-button text-lg mr-3"><i class="fa-solid fa-coins text-yellow-500"></i> Thuê Ngay
+            </button>
+            <button class="interact-button text-lg"><i class="fa-solid fa-cart-plus" style="font-size:24px"></i>
+                Thêm Giỏ</button>
+            <iframe style="margin-top: 20px; width:100%; height: auto; aspect-ratio: 16/9;"
+                src="https://www.youtube.com/embed/6fkSDkOgx0c?si=G_BbT5C4QvyjJMjI" title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <!-- <p class="mt-4 text-2xl"><b>Thể Loại: </b>
                 @for (genre of filmData.genres; track $index) {
                 {{genre}},
                 }
-            </p>
+            </p> -->
         </div>
     </div>
     <!-- <ng-container *ngTemplateOutlet="videoList;
@@ -69,7 +88,7 @@
         }
     ">
     </ng-container> -->
-<!-- 
+    <!-- 
     <ng-container *ngTemplateOutlet="videoList;
         context:{
         titleSection: 'Khá Liên Quan',
@@ -79,31 +98,35 @@
     ">
     </ng-container> -->
 
-
     <div class="title">
-        <h1>Diễn Viên</h1>
+        <h1>Đội Ngũ Sản Xuất</h1>
         <div class="avatar-list">
-            @for (actor of filmData.actors; track $index) {
+            <span class="avatar-item">
+                <img class="avatar-image"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRElYmoWSMGy7ve2ixoedXlQvlFtppU7h0_Cw&usqp=CAU">
+                <p class="mt-2">{{filmData.Director}}</p>
+            </span>
+            @for (actor of filmData.Actors; track $index) {
             <span class="avatar-item">
                 <img class="avatar-image"
                     src="https://i.pinimg.com/474x/3f/3a/d1/3f3ad18a365a1668940d93b6cfc20591.jpg" />
-                <p>{{actor}}</p>
+                <p class="mt-2">{{actor}}</p>
                 <!-- <p>({{actor.role}})</p> -->
             </span>
             }
 
         </div>
 
-    <!-- </div>
+    </div>
     <ng-container *ngTemplateOutlet="videoList;
         context:{
            titleSection: 'Phim siêu nóng',
            items: topHot,
-           pageNumberIndex:3  
+           pageNumberIndex:-1  
         }
     ">
     </ng-container>
- -->
+
 
 
     <div class="title">
@@ -112,9 +135,9 @@
             <div style="flex-grow: 1; margin-right: 10px;">
                 <div class="new-comment-container">
                     <img class="avatar-comment" [src]="newComment.imgURL">
-                    <p class="user-name">{{newComment.name}}</p>
-                    <textarea placeholder="Phim này nhà tôi làm. Mọi người chia sẻ nhiều vào nhé !!" rows="2"
-                        maxlength="1000"
+                    <p class="user-name">{{newComment.userName}}</p>
+                    <textarea name="user-comment-text"
+                        placeholder="Phim này nhà tôi làm. Mọi người chia sẻ nhiều vào nhé !!" rows="2" maxlength="1000"
                         onmouseleave='this.style.height = "";this.style.height = this.scrollHeight + "px"'
                         class="message" [(ngModel)]="newComment.text"></textarea>
                     <button class="send-new-comment-button" (click)="sendCommentToServer()">Gửi</button>
@@ -129,16 +152,17 @@
                         ">
                 </ng-container>
                 }
-                <span class="video-list-control">
-                    <button (click)="decreasePageNumber(3)"><i class="fa fa-arrow-left"
+                <span class="video-list-control" [hidden]="MaxPageNumber[3] <= 0">
+                    <button (click)="changePageNumber(3,-1)"><i class="fa fa-arrow-left"
                             style="font-size:24px"></i></button>
-                    <input class="page-jump" style="height: min-content;" min="1" type="number" required size="4" [(ngModel)]="pageNumber[3]">
+                    <input class="page-jump" name="page-jump-field" style="height: min-content;" min="1" type="number"
+                        required size="4" [(ngModel)]="pageNumber[3]"> / {{MaxPageNumber[3]}}
                     <button class="jump-page-button">NHẢY</button>
-                    <button (click)="increasePageNumber(3)"><i class="fa fa-arrow-right"
+                    <button (click)="changePageNumber(3,1)"><i class="fa fa-arrow-right"
                             style="font-size:24px"></i></button>
                 </span>
             </div>
-            
+
         </div>
 
 
@@ -159,11 +183,12 @@
 
 <ng-template #listControl let-pageNumberIndex="pageNumberIndex">
     <span class="video-list-control">
-        <button (click)="decreasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-left"
+        <button (click)="changePageNumber(pageNumberIndex,-1)"><i class="fa fa-arrow-left"
                 style="font-size:24px"></i></button>
-        <input min="1" type="number" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
+        <input min="1" type="number" name="page-jump-field" required size="4" [(ngModel)]="pageNumber[pageNumberIndex]">
+        / {{MaxPageNumber[pageNumberIndex]}}
         <button class="jump-page-button">NHẢY</button>
-        <button (click)="increasePageNumber(pageNumberIndex)"><i class="fa fa-arrow-right"
+        <button (click)="changePageNumber(pageNumberIndex,1)"><i class="fa fa-arrow-right"
                 style="font-size:24px"></i></button>
     </span>
 </ng-template>
@@ -171,14 +196,15 @@
 <ng-template #videoList let-titleSection="titleSection" let-items="items" let-pageNumberIndex="pageNumberIndex">
     <div class="title">
         <h1>{{titleSection}}</h1>
-
+        @if(pageNumberIndex > -1){
         <ng-container *ngTemplateOutlet="listControl; context:{pageNumberIndex:pageNumberIndex}">
         </ng-container>
+        }
 
         <div class="video-list">
             @for (item of items; track $index;) {
             <ng-container
-                *ngTemplateOutlet="itemTemplate; context: {className: 'video-item', imageClass: 'video-thumbnail', imageSource:item.thumbnailImage, itemName:item.title,itemId:item.id}">
+                *ngTemplateOutlet="itemTemplate; context: {className: 'video-item', imageClass: 'video-thumbnail', imageSource:item.ThumbnailUrl, itemName:item.FilmName,itemId:item.Id}">
             </ng-container>
             }
         </div>
@@ -189,15 +215,15 @@
     <div class="comment-container" [hidden]="comments[index].commentId ===''">
 
         <img class="avatar-comment" [src]="comments[index].imgURL">
-        <p class="user-name">{{comments[index].name}}</p>
-        <p class="date">{{comments[index].createAt}}</p>
+        <p class="user-name" [(innerText)]="comments[index].userName"></p>
+        <p class="date" [(innerText)]="comments[index].createdAt"></p>
         @if(comments[index].isMyComment){
         <button class="edit-comment-button" (click)="toggleEditMode(index)">Sửa</button>
         <button class="delete-comment-button" (click)="openModal(index)">xóa</button>
         }
-        <textarea maxlength="1000" class="message" [(ngModel)]="comments[index].text"
+        <textarea name="comment-text" maxlength="1000" class="message" [(ngModel)]="comments[index].text"
             [(readOnly)]="readonlyFields[index]"></textarea>
-        
+
     </div>
 
 
