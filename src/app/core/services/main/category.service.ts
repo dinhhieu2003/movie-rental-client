@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environments';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { BaseResponse } from '../../models/BaseResponse.model';
 import { HttpClient } from '@angular/common/http';
+import { Category } from '../../../main/models/category';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ export class CategoryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllCategory(): Observable<BaseResponse> {
+  getAllCategory(): Observable<Category[]> {
     let url = this.apiUrl + "getAllActive";
-    return this.httpClient.get<BaseResponse>(url);
+    return this.httpClient.get<BaseResponse>(url).pipe(map(data => data.Data.content));
   }
 
   getCategory(id: string): Observable<BaseResponse> {
