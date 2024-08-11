@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { CommentData, getDefaultCommentData } from '../../models/comment';
 import { FilmService } from '../../../core/services/film.service';
 import { getDefaultMovieCard, MovieCard } from '../../models/movie-card';
-import { FilmData, FilmInfo, FilmResource, getDefaultFilmData } from '../../models/film';
+import { FilmData, FilmInfo, FilmResource, getDefaultFilmData, getDefaultFilmResource, getDeffaultFilmInfo } from '../../models/film';
+import { CartService } from '../../../core/services/main/cart.service';
 
 enum PageIndex {
   ForEpisode,
@@ -40,7 +41,8 @@ export class FilmStreamingComponent {
   constructor(
     private activateRoute: ActivatedRoute,
     private commentService: CommentService,
-    private filmService: FilmService
+    private filmService: FilmService,
+    private cartService: CartService
   ) {
     this.pageNumber = Array<number>(5).fill(1);
     this.MaxPageNumber = Array<number>(5).fill(10);
@@ -57,12 +59,8 @@ export class FilmStreamingComponent {
   }
 
   setDefaultValue(): void {
-    const filmData = getDefaultFilmData();
-    this.filmResource.FilmUrl = filmData.FilmUrl;
-    this.filmInfo.FilmName = filmData.FilmName;
-    this.filmInfo.TrailerUrl = filmData.TrailerUrl;
-    this.filmActors = filmData.Actors;
-
+    this.filmInfo = getDeffaultFilmInfo();
+    this.filmResource = getDefaultFilmResource();
   }
 
   async getDataFromServer() {
@@ -188,6 +186,17 @@ export class FilmStreamingComponent {
           this.comments[i].commentId = "";
           ++i;
         }
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  addToCart(): void {
+    this.cartService.addToCart(this.currentFilmId).subscribe({
+      next: (response) => {
+        alert(response.Message);
       },
       error: (error) => {
         console.error(error);

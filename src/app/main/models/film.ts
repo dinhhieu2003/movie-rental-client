@@ -56,17 +56,26 @@ export function getDefaultFilmData(id: string | null = null): FilmData {
     };
 }
 
-export function getDeffaultFilmInfo():FilmInfo{
+export function getDeffaultFilmInfo(): FilmInfo {
     return {
         FilmName: "không có tên",
-        Description: string,
-        TrailerUrl: string,
-        ReleaseDate: string,
-        Director: string,
-        Language: string,
-        Age: number,
-        Price: number,
-        RatingScore: number};
+        Description: "phim hỏng rồi qua web nước ngoài mà coi",
+        TrailerUrl: "https://www.youtube.com/embed/6fkSDkOgx0c?si=G_BbT5C4QvyjJMjI",
+        ReleaseDate: "2024",
+        Director: "Vô Danh",
+        Language: "Việt",
+        Age: 0,
+        Price: 0,
+        RatingScore: 0
+    };
+}
+
+export function getDefaultFilmResource(): FilmResource {
+    return {
+        subtitles: [],
+        narrations: [],
+        FilmUrl: "https://cdn.pixabay.com/video/2017/06/05/9584-220312371_large.mp4"
+    };
 }
 
 export interface FilmInfo {
