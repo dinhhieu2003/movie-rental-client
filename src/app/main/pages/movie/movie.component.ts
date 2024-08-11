@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CarouselComponent } from '../../components/carousel/carousel.component';
 import { AlbumComponent } from "../../components/album/album.component";
 import { Album } from '../../models/album';
-import { Movie } from '../../models/movie';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../../../core/services/main/category.service';
-import { response } from 'express';
 
 @Component({
   selector: 'app-movie',
@@ -59,7 +57,6 @@ export class MovieComponent implements OnInit{
     this.categoryService.getCategory(id).subscribe({
       next: (response) => {
         this.listAlbum = response.Data.albums;
-        console.log(this.listAlbum);
       }
     })
   }

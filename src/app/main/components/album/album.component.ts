@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, viewChild } from '@angular/core';
-import { Movie } from '../../models/movie';
 import { Album } from '../../models/album';
 import { RouterLink } from '@angular/router';
+import { MovieCard } from '../../models/movie-card';
 
 @Component({
   selector: 'app-album',
@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 export class AlbumComponent implements OnInit{
   slider = viewChild.required<ElementRef>("slider");
   defaultTransform: number = 0;
-  @Input() listMovie: Movie[] = [];
+  @Input() listMovie: MovieCard[] = [];
   @Input() title: string = "";
   @Input() idAlbum: string = "";
 

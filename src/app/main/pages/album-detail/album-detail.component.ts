@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Movie } from '../../models/movie';
 import { AlbumService } from '../../../core/services/main/album.service';
+import { MovieCard } from '../../models/movie-card';
 
 @Component({
   selector: 'app-album-detail',
@@ -12,7 +12,7 @@ import { AlbumService } from '../../../core/services/main/album.service';
 })
 export class AlbumDetailComponent implements OnInit{
   private idAlbum: string = "";
-  films: Movie[] = [];
+  films: MovieCard[] = [];
   albumName: string = "";
   constructor(private activatedRoute: ActivatedRoute, 
     private albumService: AlbumService,

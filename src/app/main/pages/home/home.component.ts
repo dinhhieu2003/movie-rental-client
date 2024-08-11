@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CarouselComponent } from '../../components/carousel/carousel.component';
 import { AlbumComponent } from "../../components/album/album.component";
 import { Album } from '../../models/album';
-import { Movie } from '../../models/movie';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

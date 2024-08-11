@@ -14,4 +14,9 @@ export class CartService {
     let url = this.apiUrl + "/view";
     return this.httpClient.get<BaseResponse>(url);
   }
+
+  addToCart(filmId: string) {
+    let url = this.apiUrl + `/add/${filmId}`;
+    return this.httpClient.post<BaseResponse>(url, {});
+  }
 }
