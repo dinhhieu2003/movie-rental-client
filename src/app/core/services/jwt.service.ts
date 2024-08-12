@@ -1,10 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
-import { DOCUMENT } from '@angular/common'
-import { Observable } from 'rxjs';
+import { jwtDecode } from "jwt-decode";
+
+interface jwtPayload {
+  role: string,
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class JwtService {
 
   constructor() {
@@ -50,5 +54,15 @@ export class JwtService {
   logout() {
     this.removeToken();
     this.removeUserInfo();
+  }
+
+  getRole() {
+    let role = "";
+    let token = this.getToken();
+    if(token) {
+      let decoded = jwtDecode<jwtPayload>(token);
+      role = decoded.role;
+    }
+    return role;
   }
 }

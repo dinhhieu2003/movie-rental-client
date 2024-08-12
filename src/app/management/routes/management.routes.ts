@@ -6,10 +6,12 @@ import { UserManagementComponent } from "../pages/user-management/user-managemen
 import { BillManagementComponent } from "../pages/bill-management/bill-management.component";
 import { BannerManagementComponent } from "../pages/banner-management/banner-management.component";
 import { GenreMovieComponent } from "../pages/genre-movie/genre-movie.component";
+import { adminGuard } from "../../core/guard/admin.guard";
 
 
 export const managementRoutes: Routes = [
     { path: '', component: DashboardComponent,
+        canActivate: [adminGuard],
         children: [
             { path: 'film-management', component: MovieListComponent},
             { path: 'category-management', component: CategoryMovieComponent},
