@@ -6,15 +6,16 @@ import { AuthService } from '../../core/services/auth.service';
 import { LoginRequest } from '../../core/models/LoginRequest.model';
 import { JwtService } from '../../core/services/jwt.service';
 import { log } from 'node:console';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, NzSpinModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-
+  isLoading = false;
   code: string = "";
   email: string = "";
   error: string = "";
@@ -136,17 +137,19 @@ export class LoginComponent {
     this.error = "";
     this.validateEmail();
     this.validatePassword(2);
+    this.isLoading = true;
     if (this.error !== "") {
       alert(this.error);
+      this.isLoading = false;
       return;
     }
     // Handle sign-in logic here
     let loginRequest: LoginRequest = { Email: this.email, Password: this.passwords[2] };
-    console.log(loginRequest);
     this.authService.login(loginRequest).subscribe({
       next: (response) => {
         this.jwtService.saveToken(response.Data.Token, response.Data.ExpiredAt);
         this.jwtService.saveUserInfo(response.Data.FullName, response.Data.Role, response.Data.IdUser, response.Data.Avatar);
+        this.isLoading = false;
         if (response.Data.Role == "ADMIN" || response.Data.Role == "EMPLOYEE") {
           this.router.navigate(["management"]);
         } else {
@@ -156,6 +159,8 @@ export class LoginComponent {
       },
       error: (error) => {
         console.error(error);
+        this.isLoading = false;
+        alert(error.error.Message);
       }
     });
   }
