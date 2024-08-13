@@ -19,10 +19,11 @@ export class JwtService {
     localStorage.setItem("ExpiredAt", Expired);
   }
 
-  saveUserInfo(fullName: string, role: string, idUser: string) {
+  saveUserInfo(fullName: string, role: string, idUser: string, avatar: string) {
     localStorage.setItem("IdUser", idUser);
     localStorage.setItem("FullName", fullName);
     localStorage.setItem("Role", role);
+    localStorage.setItem("Avatar", avatar);
   }
 
   getUserInfo() {
