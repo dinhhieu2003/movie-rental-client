@@ -13,9 +13,9 @@ export class CategoryService {
 
     constructor(private http: HttpClient) { }
 
-    // Lấy tất cả các category
+    // Lấy tất cả các category chưa xóa mềm
     getFindAllCategories(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getAll`).pipe(
+        return this.http.get<any>(`${this.apiUrl}/getAll?page=0&size=500`).pipe(
             catchError(this.handleError));
     }
 

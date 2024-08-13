@@ -14,7 +14,7 @@ import { FilmInfo, FilmResource } from '../../main/models/film';
 })
 export class FilmService {
 
-    private apiUrl = environment.apiUrl + 'films';
+    private apiUrl = environment.apiUrl + 'film';
 
     constructor(private http: HttpClient) { }
 
@@ -26,7 +26,7 @@ export class FilmService {
 
     // Lấy all films chưa xóa mềm
     getNotDeletedFilms(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getNotdelete`).pipe(
+        return this.http.get<any>(`${this.apiUrl}/notDelete`).pipe(
             catchError(this.handleError)
         );
     }

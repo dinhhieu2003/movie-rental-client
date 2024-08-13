@@ -5,36 +5,16 @@
 }
 
 .category-card {
-    width: 100%;
-    background-color: black;
-}
-
-.card-content {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    width: 100%;
+    background-color: black;
+
 }
 
-.card-info {
-    flex: 1;
-    padding: 16px;
-    background-color: #000;
-    color: white;
-}
-
-.category-image {
-    width: 50%;
-    height: 277px;
-    object-fit: cover;
-}
-
-.additional-info {
-    margin-top: 16px;
-    color: aliceblue;
-}
-
-.additional-info p {
-    margin: 4px 0;
+::ng-deep .ant-card-body {
+    width: 100%;
 }
 
 ::ng-deep .ant-switch.ant-switch-small .ant-switch-handle {
@@ -61,8 +41,38 @@
     color: #ffffff;
 }
 
+/* paging */
+ ::ng-deep .ant-pagination .ant-pagination-item {
+     background-color: #000000;
+     border-color: #1890ff;
+     color: #1890ff;
+ }
+
+ ::ng-deep .ant-pagination .ant-pagination-item-active {
+     border-color: #1890ff;
+ }
+
+ ::ng-deep .ant-pagination .ant-pagination-prev .ant-pagination-item-link {
+     background-color: #333333;
+     border-color: #1890ff;
+     color: #ffffff;
+ }
+
+ ::ng-deep .ant-pagination .ant-pagination-next .ant-pagination-item-link {
+     background-color: #333333;
+     border-color: #1890ff;
+     color: #ffffff;
+ }
+
+ ::ng-deep .ant-pagination .ant-pagination-disabled .ant-pagination-item-link {
+     background-color: #333333;
+     border-color: #1890ff;
+     color: #1890ff;
+ }
+
 /* --------------------- */
 
+/* Modal */
 fieldset {
     border: 1px solid rgb(62, 83, 107);
     padding-left: 15px;
@@ -95,6 +105,7 @@ fieldset {
     background-color: black;
     border-bottom: 2px solid rgb(62, 83, 107);
 }
+
 ::ng-deep .ant-modal-footer {
     border-top: 2px solid rgb(62, 83, 107);
 }
@@ -127,7 +138,8 @@ textarea {
     background-color: #0d2ebb;
     color: #ffffff;
 }
-.span-add{
+
+.span-add {
     color: aliceblue;
     font-size: 25px;
 }
