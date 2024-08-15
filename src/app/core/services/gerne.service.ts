@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environments';
 import { GenreModel } from '../models/GerneModel';
 
@@ -17,6 +17,18 @@ export class GenreService {
     getAllSoftDeletedGenres(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/getAllSoftDelete`).pipe(
             catchError(this.handleError)
+        );
+    }
+
+    // Lấy ra tất cả thể loại đang không active và không bao gồm genre đã xoá mềm
+    getAllInActive(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/getAllInActive?page=0&size=20`).pipe(
+            catchError((error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    return of({ Data: { content: [] } });
+                }
+                return throwError(error);
+            })
         );
     }
 

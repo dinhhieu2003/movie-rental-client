@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +8,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { GenreModel } from '../../../core/models/GerneModel';
 import { GenreService } from '../../../core/services/gerne.service';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-genre-movie',
@@ -21,7 +21,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     NzSwitchModule,
     NzModalModule,
     NzFormModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzSelectModule
   ],
   templateUrl: './genre-movie.component.html',
   styleUrl: './genre-movie.component.css'
@@ -29,6 +30,8 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 export class GenreMovieComponent implements OnInit {
 
   pageSize = 5;
+  status = 'default';
+
 
   valueSearch = ''
   isVisibleAdd = false;
@@ -44,19 +47,18 @@ export class GenreMovieComponent implements OnInit {
   constructor(private fbAdd: FormBuilder, private fbUpdate: FormBuilder,
     private genreService: GenreService) {
     this.createForm();
-    // this.showModalUpdate(this.newGenre);
   }
 
   createForm(): void {
     this.form = this.fbAdd.group({
-      genreName: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
+      genreName: ['', Validators.required],
       isActive: [true],
       isDeleted: [false],
       filmsId: this.fbAdd.array([])
     });
     this.formUpdate = this.fbUpdate.group({
-      id: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
-      genreName: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
+      id: ['', Validators.required],
+      genreName: ['', Validators.required],
       isActive: [false, Validators.required],
       isDeleted: [false],
       filmsId: this.fbAdd.array([])
@@ -140,6 +142,37 @@ export class GenreMovieComponent implements OnInit {
     );
   }
 
+  //
+  onStatusChange(newStatus: string): void {
+    if (newStatus === 'default') {
+      this.filteredGenre = [...this.genreData]
+    } else if (newStatus === 'no active') {
+      this.genreService.getAllInActive().subscribe(
+        (response) => {
+          if (response.Data === null) {
+            this.filteredGenre = []; 
+          } else {
+            this.filteredGenre = response.Data.content;
+          }
+        },
+        (error) => {
+          if (error.status === 404) {
+            this.filteredGenre = []; 
+          } else {
+          }
+        }
+      );
+    } else if (newStatus === 'delete') {
+      this.genreService.getAllSoftDeletedGenres().subscribe(
+        (response) => {
+          this.filteredGenre = response.Data.content;
+        },
+        (error) => {
+        }
+      );
+    }
+  }
+
 
 
   // Model add
@@ -179,10 +212,9 @@ export class GenreMovieComponent implements OnInit {
   handleUpdateOk(): void {
     if (this.formUpdate.valid) {
       const { id, ...genre } = this.formUpdate.value;
-      // Giả sử bạn có genreId cần update, bạn có thể truyền vào hàm updateGenre
       const genreId = this.formUpdate.value.id;
       console.log(genreId)
-      this.updateGenre(genreId, genre); // Gọi hàm cập nhật genre
+      this.updateGenre(genreId, genre); 
 
       this.formUpdate.reset({
         genreName: '',
@@ -204,7 +236,7 @@ export class GenreMovieComponent implements OnInit {
   }
 
   // Model delete
-  showModalDelete(id:string): void {
+  showModalDelete(id: string): void {
     this.formUpdate.value.id = id;
     this.isVisibleDelete = true;
   }

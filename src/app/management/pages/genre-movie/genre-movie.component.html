@@ -32,6 +32,18 @@
                 Add Gerne
             </button>
         </div>
+        <div class="ml-3 mb-3">
+            <nz-select [(ngModel)]="status" (ngModelChange)="onStatusChange($event)">
+                <nz-option nzValue="default" nzLabel="Default"></nz-option>
+                <nz-option nzValue="no active" nzLabel="No Active"></nz-option>
+                <nz-option nzValue="delete" nzLabel="Delete"></nz-option>
+            </nz-select>
+        
+            <button
+                class="pt-1 pb-1 pl-2 pr-2 ml-4 bg-blue-700 text-white hover:bg-blue-900 border border-transparent hover:border-blue-300 rounded"
+                nz-button nzType="primary" nzSize="default">Apply</button>
+        
+        </div>
         <div
             class="card-container grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 m-1 border-solid border-slate-300 border rounded-xl ring-offset ring-0">
             <nz-card *ngFor="let genre of filteredGenre" class="category-card">
