@@ -22,7 +22,7 @@ export class GenreService {
 
     // Lấy tất cả các genre
     getAllGenres(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/getAll`).pipe(
+        return this.http.get<any>(`${this.apiUrl}/getAll?page=0&size=20`).pipe(
             catchError(this.handleError)
         );
     }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzTableModule } from 'ng-zorro-antd/table';
 import { CommonModule } from '@angular/common';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { GenreModel } from '../../../core/models/GerneModel';
 import { GenreService } from '../../../core/services/gerne.service';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @Component({
   selector: 'app-genre-movie',
@@ -27,6 +28,8 @@ import { GenreService } from '../../../core/services/gerne.service';
 })
 export class GenreMovieComponent implements OnInit {
 
+  pageSize = 5;
+
   valueSearch = ''
   isVisibleAdd = false;
   isVisibleUpdate = false;
@@ -34,13 +37,9 @@ export class GenreMovieComponent implements OnInit {
   form!: FormGroup;
   formUpdate!: FormGroup;
 
-  newGenre = {
-    name: '',
-    description: '',
-    image: '',
-    categoryname: '',
-    isActive: true
-  };
+  genreData: GenreModel[] = [];
+  filteredGenre: GenreModel[] = [];
+
 
   constructor(private fbAdd: FormBuilder, private fbUpdate: FormBuilder,
     private genreService: GenreService) {
@@ -50,29 +49,29 @@ export class GenreMovieComponent implements OnInit {
 
   createForm(): void {
     this.form = this.fbAdd.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      categoryname: [''],
-      isActive: [false]
+      genreName: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
+      isActive: [true],
+      isDeleted: [false],
+      filmsId: this.fbAdd.array([])
     });
     this.formUpdate = this.fbUpdate.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      categoryname: [''],
-      isActive: [false]
+      id: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
+      genreName: ['', Validators.required], // Thay đổi từ 'name' thành 'genreName'
+      isActive: [false, Validators.required],
+      isDeleted: [false],
+      filmsId: this.fbAdd.array([])
     });
   }
 
   ngOnInit(): void {
     this.getAllGenres();
-    this.getAllSoftDeletedGenres();
   }
 
   // Lấy tất cả các genre đã bị xóa mềm
   getAllSoftDeletedGenres() {
     this.genreService.getAllSoftDeletedGenres().subscribe(
       (response) => {
-        console.log(response);
+        this.genreData = response.Data.content;
       },
       (error) => {
         console.error('There was an error!', error);
@@ -84,7 +83,8 @@ export class GenreMovieComponent implements OnInit {
   getAllGenres() {
     this.genreService.getAllGenres().subscribe(
       (response) => {
-        console.log(response);
+        this.genreData = response.Data.content;
+        this.filteredGenre = [...this.genreData]
       },
       (error) => {
         console.error('There was an error!', error);
@@ -148,14 +148,14 @@ export class GenreMovieComponent implements OnInit {
   }
   handleAddOk(): void {
     if (this.form.valid) {
+      const genre: GenreModel = this.form.value;
+      this.createGenre(genre); // Gọi hàm tạo genre mới
+
       this.form.reset({
-        name: '',
-        description: '',
-        categoryname: '',
-        image: '',
-        isActive: false
+        genreName: '',
+        isActive: true
       });
-      this.isVisibleAdd = false
+      this.isVisibleAdd = false;
 
     } else {
       Object.values(this.form.controls).forEach(control => {
@@ -175,18 +175,20 @@ export class GenreMovieComponent implements OnInit {
     // this.newGenre = { ...genre }; 
     this.formUpdate.patchValue(genre)
     this.isVisibleUpdate = true;
-    console.log(this.newGenre.name)
   }
   handleUpdateOk(): void {
     if (this.formUpdate.valid) {
+      const { id, ...genre } = this.formUpdate.value;
+      // Giả sử bạn có genreId cần update, bạn có thể truyền vào hàm updateGenre
+      const genreId = this.formUpdate.value.id;
+      console.log(genreId)
+      this.updateGenre(genreId, genre); // Gọi hàm cập nhật genre
+
       this.formUpdate.reset({
-        name: '',
-        description: '',
-        categoryname: '',
-        image: '',
+        genreName: '',
         isActive: false
       });
-      this.isVisibleUpdate = false
+      this.isVisibleUpdate = false;
 
     } else {
       Object.values(this.formUpdate.controls).forEach(control => {
@@ -202,67 +204,31 @@ export class GenreMovieComponent implements OnInit {
   }
 
   // Model delete
-  showModalDelete(): void {
+  showModalDelete(id:string): void {
+    this.formUpdate.value.id = id;
     this.isVisibleDelete = true;
   }
   handleDeleteOk(): void {
+    const genreId = this.formUpdate.value.id;
+
+    if (genreId) {
+      this.softDeleteGenre(genreId);
+      console.log(`Soft delete genre with ID: ${genreId}`, 12);
+    } else {
+      console.error('ID is missing. Cannot delete genre.');
+    }
+
+    // Đóng modal xóa
     this.isVisibleDelete = false;
   }
   handleDeleteCancel(): void {
     this.isVisibleDelete = false;
   }
 
-  //
-  originalGenre = [
-    {
-      name: 'Hành Động',
-      description: 'Phim có nhiều cảnh hành động, pha mạo hiểm, kịch tính.',
-      categoryname: 'Hành động và phiêu lưu',
-      isActive: true,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg"
-    },
-    {
-      name: 'Hài Kịch',
-      description: 'Phim hài hước, nhẹ nhàng, giải trí.',
-      categoryname: 'Hài kịch',
-      isActive: true,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg",
-    },
-    {
-      name: 'Tình Cảm',
-      description: 'Phim xoay quanh các mối quan hệ tình cảm, cảm xúc con người.',
-      categoryname: 'Tình cảm',
-      isActive: true,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg"
-    },
-    {
-      name: 'Kinh Dị',
-      description: 'Phim gây sợ hãi, hồi hộp với yếu tố siêu nhiên hoặc bí ẩn.',
-      categoryname: 'Kinh dị',
-      isActive: false,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg"
-    },
-    {
-      name: 'Viễn Tưởng',
-      description: 'Phim với những yếu tố khoa học viễn tưởng, công nghệ, tương lai.',
-      categoryname: 'Khoa học viễn tưởng',
-      isActive: true,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg"
-    },
-    {
-      name: 'Hoạt Hình',
-      description: 'Phim dành cho trẻ em và người lớn, thường có yếu tố hoạt hình, đồ họa.',
-      categoryname: 'Hoạt hình',
-      isActive: true,
-      image: "https://www.uplevo.com/img/designbox/poster-phim-the-dark-knight-rises.jpg"
-    },
-  ];
-
-  filteredGenre = [...this.originalGenre];
 
   onSearchChange(): void {
-    this.filteredGenre = this.originalGenre.filter(item =>
-      item.name.toLowerCase().includes(this.valueSearch.toLowerCase())
+    this.filteredGenre = this.genreData.filter(item =>
+      item.genreName.toLowerCase().includes(this.valueSearch.toLowerCase())
     );
   }
 

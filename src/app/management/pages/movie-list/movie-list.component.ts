@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angul
 import { RouterLink } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { FilmService } from '../../../core/services/film.service'
 import { FilmModel } from '../../../core/models/FilmModel'
@@ -28,7 +27,6 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
     RouterLink,
     NzInputModule,
     NzFormModule,
-    NzDrawerModule,
     ReactiveFormsModule,
     NzDatePickerModule,
     NzModalModule,
