@@ -122,3 +122,9 @@
         <i [class]="'fa fa-eye' + (showPasswordButtons[index] ? '-slash' : '')" aria-hidden="true"></i>
     </button>
 </ng-template>
+
+@if(isLoading) {
+    <div class="spin-container flex justify-center items-center h-full w-full z-10">
+        <nz-spin class="absolute z-50" nzSimple [nzSize]="'large'"></nz-spin>
+    </div>
+}
