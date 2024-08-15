@@ -49,6 +49,11 @@ export const mainRoutes: Routes = [
             },
 
             {
+                path: 'video/:id',
+                component: FilmStreamingComponent,
+            },
+
+            {
                 path: 'checkout',
                 component: CheckoutComponent,
             },
@@ -86,17 +91,4 @@ export const mainRoutes: Routes = [
             },
         ]
     },
-    {
-        path: 'video/:id',
-        component: MainLayoutComponent,
-        children: [
-            {
-                path: '',
-                component: FilmStreamingComponent,
-            },
-        ]
-    },
-    
-
-    
 ];
