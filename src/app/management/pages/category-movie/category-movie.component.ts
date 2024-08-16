@@ -44,26 +44,15 @@ export class CategoryMovieComponent implements OnInit {
   isVisibleDelete = false;
   form!: FormGroup;
 
-  newCategory = {
-    name: '',
-    description: '',
-    image: '',
-    category: '',
-    album: '',
-    isActive: true
-  };
-
   constructor(private fb: FormBuilder, private categoryService: CategoryService) {
     this.createForm();
   }
   createForm(): void {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
-      image: ['', Validators.required],
-      category: ['', Validators.required],
-      album: ['', Validators.required],
-      isActive: [false]
+      isActive: [false],
+      albums: ['', Validators.required],
+      banners: ['', Validators.required],
     });
   }
 
@@ -72,76 +61,6 @@ export class CategoryMovieComponent implements OnInit {
 
   }
 
-  // Phương thức lấy tất cả các category
-  // findAllCategories() {
-  //   this.categoryService.getFindAllCategories().subscribe(
-  //     (response) => {
-  //       this.categoryData = response.Data.content.map((category: any) => ({
-  //         id: category.id || '',
-  //         isActive: category.isActive ?? false,
-  //         isDeleted: category.isDeleted ?? false,
-  //         categoryName: category.categoryName || 'N/A',
-  //         banners: category.banners || [],
-  //         albums: (category.albums && category.albums.length > 0)
-  //           ? category.albums.map((album: any) => ({
-  //             id: album.id || '',
-  //             createdAt: album.createdAt || 'N/A',
-  //             updatedAt: album.updatedAt || 'N/A',
-  //             isActive: album.isActive ?? false,
-  //             isDeleted: album.isDeleted ?? false,
-  //             albumName: album.albumName || 'N/A',
-  //             films: (album.film && album.film.length > 0)
-  //               ? album.film.map((film: any) => ({
-  //                 Id: film.Id || '',
-  //                 FilmName: film.FilmName || 'N/A',
-  //                 FilmUrl: film.FilmUrl || 'N/A',
-  //                 Description: film.Description || 'N/A',
-  //                 ThumbnailUrl: film.ThumbnailUrl || 'N/A',
-  //                 TrailerUrl: film.TrailerUrl || 'N/A',
-  //                 ReleaseDate: film.ReleaseDate || '',
-  //                 Duration: film.Duration || 'N/A',
-  //                 Actors: film.Actors || [],
-  //                 Director: film.Director || 'N/A',
-  //                 Language: film.Language || 'N/A',
-  //                 NumberOfViews: film.NumberOfViews || 0,
-  //                 Rating: film.Rating || 0,
-  //                 Age: film.Age || 0,
-  //                 Price: film.Price || 0,
-  //                 LimitTime: film.LimitTime || 'N/A',
-  //                 isActive: film.isActive ?? false,
-  //                 isDeleted: film.isDeleted ?? false,
-  //                 subtitles: film.subtitles || [],
-  //                 narrations: film.narrations || [],
-  //                 comments: film.comments || [],
-  //                 genres: (film.genres && film.genres.length > 0)
-  //                   ? film.genres.map((genre: any) => {
-  //                     if (typeof genre === 'string' && genre.startsWith('{')) {
-  //                       try {
-  //                         genre = JSON.parse(genre);
-  //                       } catch (e) {
-  //                         console.error('Failed to parse genre string:', genre);
-  //                         return 'Unknown Genre';
-  //                       }
-  //                     }
-  //                     return genre.genreName || 'Unknown Genre';
-  //                   })
-  //                   : ['N/A']
-  //               }))
-  //               : []
-  //           }))
-  //           : []
-  //       }));
-  //       this.filteredCategories = [...this.categoryData];
-  //       if (this.filteredCategories.albums && this.filteredCategories.albums.length > 0)
-  //           console.log(this.filteredCategories.albums , this.filteredCategories.categoryName)
-  //       this.updatePagedCategories();
-
-  //     },
-  //     (error) => {
-  //       console.error('There was an error!', error);
-  //     }
-  //   );
-  // }
   findAllCategories() {
     this.categoryService.getFindAllCategories().subscribe(
       (response) => {
@@ -149,29 +68,26 @@ export class CategoryMovieComponent implements OnInit {
           isActive: category.isActive,
           isDeleted: category.isDeleted,
           categoryName: category.categoryName,
-          banners: (category.banners && category.banners.length > 0)
+          banners: (category.banners && Array.isArray(category.banners) && category.banners.length > 0)
             ? category.banners.map((banner: any) => ({
-              imageUrl: banner.imageUrl || 'No Image Available',
-              filmName: banner.Film?.FilmName || 'Unknown Film Name'
+              imageUrl: banner && banner.imageUrl ? banner.imageUrl : ' ',
+              filmName: banner && banner.Film ? banner.Film.FilmName : '  '
             }))
-            : [{ imageUrl: 'No Image Available', filmName: 'Unknown Film Name' }],
-          albums: (category.albums && category.albums.length > 0)
-            ? category.albums.map((album: any) => album.albumName || 'Unknown Album Name')
+            : [{ imageUrl: ' ', filmName: '  ' }],
+          albums: (category.albums && Array.isArray(category.albums) && category.albums.length > 0)
+            ? category.albums.map((album: any) => album.albumName || ' ')
             : ['N/A'],
         }));
 
         this.filteredCategories = [...this.categoryData];
-        this.filteredCategories.forEach(category => {
-          console.log(category.albums);
-        });
         this.updatePagedCategories();
-
       },
       (error) => {
         console.error('There was an error!', error);
       }
     );
   }
+
 
   // Phương thức lấy tất cả các category đã bị xóa mềm
   getAllSoftDeletedCategories() {

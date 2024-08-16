@@ -135,37 +135,20 @@
                             formControlName="name" />
                     </nz-form-control>
                 </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label nzRequired>Description</nz-form-label>
-                    <nz-form-control>
-                        <textarea nz-input placeholder="Enter description" [nzAutosize]="{ minRows: 2, maxRows: 7 }"
-                            formControlName="description"></textarea>
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label nzRequired>Image URL</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input placeholder="Enter image URL" formControlName="image" />
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label nzRequired>Category</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input placeholder="Enter category" formControlName="category" />
-                    </nz-form-control>
-                </nz-form-item>
-                <nz-form-item>
-                    <nz-form-label nzRequired>Album</nz-form-label>
-                    <nz-form-control>
-                        <input nz-input placeholder="Enter album" formControlName="album" />
-                    </nz-form-control>
-                </nz-form-item>
                 <nz-form-item class="flex items-center">
                     <nz-form-label class="mr-4">Active</nz-form-label>
                     <nz-form-control>
                         <nz-switch formControlName="isActive"></nz-switch>
                     </nz-form-control>
                 </nz-form-item>
+                        
+                <nz-form-item>
+                    <nz-form-label nzRequired>Album</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Enter album" formControlName="album" />
+                    </nz-form-control>
+                </nz-form-item>
+               
 
             </form>
         </fieldset>
